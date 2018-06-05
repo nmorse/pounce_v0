@@ -6,7 +6,7 @@ import time
 # import random
 
 from pounce import runtime as pounce
-from pounce import parsed_tests as testing
+#from pounce import parsed_tests as testing
 
  
 # Digital input with pullup
@@ -24,8 +24,13 @@ io = { 'red': red }
 
 def _readIO(s, pl):
     global io
-    s.append(io.copy())
+    io_values = {}
+    #s.append(io.copy())
+    for key in io:
+        io_values[key] = io[key].value
+    s.append(io_values)
     return [s, pl]
+
 def _writeIO(s, pl):
     global io
     nextio = s.pop()
@@ -58,7 +63,7 @@ nt = time.monotonic() + rate
 while True: #loop forever
     t = time.monotonic()
     if nt < t:
-        pounce.run(['>io', 'red', 'value', 'toggle', 'red', 'set', 'io>'])
+        pounce.run(['>io', 'red', 'get', 'toggle', 'red', 'set', 'io>'])
         nt += rate
     # test for the case where we have fallen behind the schedualed timer.
     # this means the above process is spending too much time before the next timer
