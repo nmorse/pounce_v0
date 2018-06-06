@@ -145,8 +145,9 @@ def isfunction(candidate):
 #    pl = jp.parse(program_script)
 #    return run(pl, vs)
 
-def run(pl, debug = False, vs = []):
+def run(pl, debug = False, test_value_stack = []):
     global words
+    vs = []
     while pl != None and len(pl) > 0:
         next = pl[0];
         pl = pl[1:]

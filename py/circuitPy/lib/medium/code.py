@@ -55,31 +55,16 @@ pounce.words['io>'] =  _writeIO
 pounce.words['>milli'] =  _milli
 pounce.words['sleep>'] =  _sleep
 pounce.words['toggle'] = [False, True, 'if-else']
+pounce.words['start-delay'] = [2, '+']
 pounce.words['later'] = [0.5, '+']
 pounce.words['flash'] = ['>io', 'red', 'get', 'toggle', 'red', 'set', 'io>']
+pounce.words['blink'] = ['dup', '>milli', '<', ['later', 'flash'], 'if', 'blink']
 
 print('Pounce loaded. Ready to:')
 
 #testsPassed = testing.runTests()
-pounce.words['blink'] = ['dup', '>milli', '<', ['later', 'flash'], 'if', 'blink']
 
-print('Running "Toggle red LED every 0.5 seconds."')
-rate = 0.5
-nt = time.monotonic() + rate
-
-pounce.run(['>milli', 2, '+', 'blink'])
-#pounce.run([0, 'blink'])
+print('After a ', pounce.run([0, 'start-delay'])[0], ' second delay "Toggle red LED every', pounce.run([0, 'later'])[0] ,'seconds."')
 
 
-#while True: #loop forever
-    #t = time.monotonic()
-    #if nt < t:
-    #    pounce.run([0, 'blink'])
-    #    nt += rate
-    # test for the case where we have fallen behind the schedualed timer.
-    # this means the above process is spending too much time before the next timer
-    # is due.
-#    if nt+1.0 < t:
-#        time.sleep(5)
-#        nt = time.monotonic() + rate
-
+pounce.run(['>milli', 'start-delay', 'blink'])
