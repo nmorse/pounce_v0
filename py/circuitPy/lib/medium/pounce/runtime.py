@@ -1,3 +1,4 @@
+import time
 # the pounce language runtime
 
 def _dup(s, pl):
@@ -36,6 +37,16 @@ def _eq(s, pl):
     a = s.pop()
     b = s.pop()
     s.append(a == b)
+    return [s, pl]
+def _gt(s, pl):
+    a = s.pop()
+    b = s.pop()
+    s.append(b > a)
+    return [s, pl]
+def _lt(s, pl):
+    a = s.pop()
+    b = s.pop()
+    s.append(b < a)
     return [s, pl]
 def _ift(s, pl):
     then_block = s.pop()
@@ -98,6 +109,8 @@ words = {
   '*': _prod,
   'n*': _n_prod,
   '==': _eq,
+  '<': _lt,
+  '>': _gt,
   'if': _ift,
   'if-else': _ifte,
   'get': _get,
@@ -132,13 +145,15 @@ def isfunction(candidate):
 #    pl = jp.parse(program_script)
 #    return run(pl, vs)
 
-def run(pl, debug = False):
+def run(pl, debug = False, vs = []):
     global words
-    vs = []
     while pl != None and len(pl) > 0:
         next = pl[0];
         pl = pl[1:]
-        if debug: print('about to', vs, next)
+        if debug:
+            print('about to', vs, next)
+            time.sleep(1)
+        
         if isValue(next, words) or isArray(next) or isDict(next):
             if next == 'true':
                 vs.append(True)
@@ -147,7 +162,10 @@ def run(pl, debug = False):
             else:
                 vs.append(next)
         elif next in words.keys():
-            if debug: print('   ---  applying ', vs, next, pl)
+            if debug:
+                print('   ---  applying ', vs, next, pl)
+                time.sleep(1)
+            
             if isfunction(words[next]):
                 (vs, pl) = words[next](vs, pl)
             else:
