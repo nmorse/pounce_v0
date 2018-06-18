@@ -1,9 +1,23 @@
 import time
 # the pounce language runtime
 
+def _def(s, pl):
+    global words
+    # [words the define a new-function] new-funcion def
+    new_word = s.pop()
+    new_definition = s.pop()
+    words[new_word] = new_definition
+    return [s, pl]
+def _define(s, pl):
+    global words
+    # [param1 param2] [words the define a new-function] new-funcion define
+    new_word = s.pop()
+    new_definition = s.pop()
+    new_params = s.pop()
+    words[new_word] = new_definition
+    return [s, pl]
 def _dup(s, pl):
-    a = s.pop()
-    s.append(a)
+    a = s[-1]
     s.append(a)
     return [s, pl]
 def _add(s, pl):
@@ -103,6 +117,8 @@ def _drop(s, l):
     return [s, l]
 
 words = {
+  'def': _def,
+  'define': _define,
   'dup': _dup,
   '+': _add,
   '-': _sub,
@@ -133,7 +149,7 @@ def isNumber(e):
 def isArray(a):
     return isinstance(a, (list,))
 
-def isDict(a):
+def isRecord(a):
     return isinstance(a, (dict,))
 
 #from inspect import isfunction
@@ -155,7 +171,7 @@ def run(pl, debug = False, test_value_stack = []):
             print('about to', vs, next)
             time.sleep(1)
         
-        if isValue(next, words) or isArray(next) or isDict(next):
+        if isValue(next, words) or isArray(next) or isRecord(next):
             if next == 'true':
                 vs.append(True)
             elif next == 'false':
@@ -169,11 +185,16 @@ def run(pl, debug = False, test_value_stack = []):
             
             if isfunction(words[next]):
                 (vs, pl) = words[next](vs, pl)
+            elif isinstance(words[next], str):
+                pl = jp.parse(words[next]) + pl
+            elif isRecord(words[next]):
+                if 'args' in words[next].keys():
+                    arg_rec = {}
+                    while len(words[next].args) > 0:
+                        arg_rec[words[next].args.pop()] = s.pop()
+                    (vs, pl) =  words[next].func(vs, pl, arg_rec)
             else:
-                if isinstance(words[next], str):
-                    pl = jp.parse(words[next]) + pl
-                else:
-                    pl = words[next] + pl
+                pl = words[next] + pl
         else:
             print('unknown term or word:', next)
     return vs
