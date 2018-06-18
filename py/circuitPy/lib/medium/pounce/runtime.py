@@ -101,10 +101,11 @@ def _set(s, l): # (dict value key -- dict)
 def _apply(s, l): # (dict key fun -- dict)
     fun = s.pop()
     key = s[-1]
-    s, l = _get(s, l)
-    s = run(fun, s)
-    s.append(key)
-    s, l = _set(s, l)
+    l.insert(0, ['get', fun, key, 'set'])
+    #l.insert(0, 'get')
+    #l.insert(0, fun)
+    #l.insert(0, key)
+    #l.insert(0, 'set')
     return [s, l]
 def _swap(s, l):
     a = s.pop()
