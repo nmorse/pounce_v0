@@ -101,11 +101,11 @@ def _set(s, l): # (dict value key -- dict)
 def _apply(s, l): # (dict key fun -- dict)
     fun = s.pop()
     key = s[-1]
-    l.insert(0, ['get', fun, key, 'set'])
-    #l.insert(0, 'get')
-    #l.insert(0, fun)
-    #l.insert(0, key)
-    #l.insert(0, 'set')
+    #l.insert(0, ['get', fun, key, 'set'])
+    l.insert(0, 'set')
+    l.insert(0, key)
+    l = fun+l                                     # concat arrays so that the program list (l) has words on it, not a list
+    l.insert(0, 'get')
     return [s, l]
 def _swap(s, l):
     a = s.pop()
@@ -181,7 +181,7 @@ def run(pl, debug = False, test_value_stack = []):
                 vs.append(next)
         elif next in words.keys():
             if debug:
-                print('   ---  applying ', vs, next, pl)
+                print('applying', vs, next, pl)
                 time.sleep(1)
             
             if isfunction(words[next]):
