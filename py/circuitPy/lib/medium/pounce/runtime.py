@@ -3,19 +3,19 @@ import time
 
 def _def(s, pl):
     global words
-    # [words the define a new-function] new-funcion def
+    # usage: [words that the define a new-function] new-funcion-name def
     new_word = s.pop()
     new_definition = s.pop()
     words[new_word] = new_definition
     return [s, pl]
-#def _define(s, pl):
-#    global words
-#    # [param1 param2] [words the define a new-function] new-funcion define
-#    new_word = s.pop()
-#    new_definition = s.pop()
-#    new_params = s.pop()
-#    words[new_word] = new_definition
-#    return [s, pl]
+def _define(s, pl):
+    global words
+    # [param1 param2] [words the define a new-function] new-funcion define
+    new_word = s.pop()
+    new_definition = s.pop()
+    new_params = s.pop()
+    words[new_word] = new_definition
+    return [s, pl]
 def _dup(s, pl):
     a = s[-1]
     s.append(a)
@@ -120,12 +120,12 @@ def _dip(s, l):
     f = s.pop()
     a = s.pop()
     l.insert(0, a)
-    l = fun+l                                     # concat arrays so that the program list (l) has words on it, not a list
+    l = f+l
     return [s, l]
 
 words = {
   'def': _def,
-#  'define': _define,
+  'define': _define,
   'dup': _dup,
   '+': _add,
   '-': _sub,
@@ -177,7 +177,7 @@ def run(pl, debug = False, test_value_stack = []):
         pl = pl[1:]
         if debug:
             print('about to', vs, next)
-            time.sleep(1)
+            time.sleep(0.3)
         
         if isValue(next, words) or isArray(next) or isRecord(next):
             if next == 'true':
@@ -189,7 +189,7 @@ def run(pl, debug = False, test_value_stack = []):
         elif next in words.keys():
             if debug:
                 print('applying', vs, next, pl)
-                time.sleep(1)
+                time.sleep(0.3)
             
             if isfunction(words[next]):
                 (vs, pl) = words[next](vs, pl)

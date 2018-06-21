@@ -6,14 +6,15 @@ import board
 from digitalio import DigitalInOut, Direction, Pull
 import time
 
-from pounce import runtime as pounce
+#from pounce import runtime as pounce
 
 # Digital input with pullup
 red = DigitalInOut(board.D13)
 red.direction = Direction.OUTPUT
 #green = DigitalInOut(board.D2)
 #green.direction = Direction.OUTPUT
-io = { 'red': red }
+io = {'red': red}
+words = {}
 
 def _readIO(s, pl):
     global io
@@ -33,17 +34,19 @@ def _writeIO(s, pl):
     # red.value = a['red']
     return [s, pl]
 
-def _milli(s, pl):
+def _seconds(s, pl):
     s.append(time.monotonic())
+    #print('time.monotonic', time.monotonic())
     return [s, pl]
 
 def _sleep(s, pl):
     seconds = s.pop()
+    print('sleep', seconds)
+    print('stack', s)
     time.sleep(seconds)
     return [s, pl]
 
-
-pounce.words['>io'] = _readIO
-pounce.words['io>'] =  _writeIO
-pounce.words['>milli'] =  _milli
-pounce.words['sleep>'] =  _sleep
+words['>io'] = _readIO
+words['io>'] =  _writeIO
+words['>sec'] =  _seconds
+words['sleep>'] =  _sleep
