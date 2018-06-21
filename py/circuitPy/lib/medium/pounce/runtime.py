@@ -8,14 +8,14 @@ def _def(s, pl):
     new_definition = s.pop()
     words[new_word] = new_definition
     return [s, pl]
-def _define(s, pl):
-    global words
-    # [param1 param2] [words the define a new-function] new-funcion define
-    new_word = s.pop()
-    new_definition = s.pop()
-    new_params = s.pop()
-    words[new_word] = new_definition
-    return [s, pl]
+#def _define(s, pl):
+#    global words
+#    # [param1 param2] [words the define a new-function] new-funcion define
+#    new_word = s.pop()
+#    new_definition = s.pop()
+#    new_params = s.pop()
+#    words[new_word] = new_definition
+#    return [s, pl]
 def _dup(s, pl):
     a = s[-1]
     s.append(a)
@@ -116,10 +116,16 @@ def _swap(s, l):
 def _drop(s, l):
     a = s.pop()
     return [s, l]
+def _dip(s, l):
+    f = s.pop()
+    a = s.pop()
+    l.insert(0, a)
+    l = fun+l                                     # concat arrays so that the program list (l) has words on it, not a list
+    return [s, l]
 
 words = {
   'def': _def,
-  'define': _define,
+#  'define': _define,
   'dup': _dup,
   '+': _add,
   '-': _sub,
@@ -134,7 +140,8 @@ words = {
   'set': _set,
   'app': _apply,
   'swap': _swap,
-  'drop': _drop
+  'drop': _drop,
+  'dip': _dip
 }
 
 
