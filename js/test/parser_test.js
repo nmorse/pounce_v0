@@ -1,4 +1,4 @@
-const tests = [
+let parser_tests = [
   ['hello world', ['hello', 'world']],
   ['"hello world"', ['hello world']],
   ['abc def eee ', ['abc', 'def', 'eee']],
@@ -41,21 +41,21 @@ function cmpLists (a, b) {
 console.log('Starting parser tests:');
 let testCount = 0;
 let testsFailed = 0;
-tests.forEach((test, i) => {
+parser_tests.forEach((test, i) => {
     const ps = test[0];
     const expected_stack = test[1];
     
     //console.log('starting parse test for: ', ps);
-    result_stack = parse(ps);
+    const result_stack = parse(ps);
     testCount += 1;
     if (!deepCompare(result_stack, expected_stack)) {
         testsFailed += 1
         console.log(result_stack, ' expected:', expected_stack)
         console.log('---- Failed parse test for: ', ps)
-        tests[i][2] = result_stack;
+        parser_tests[i][2] = result_stack;
     }
     else {
-        tests[i][2] = true;
+        parser_tests[i][2] = true;
     }
 });
 

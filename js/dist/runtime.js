@@ -127,7 +127,7 @@ var words = {
     }
     return [s, pl];
   },
-  'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ]. 'if'],
+  'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ], 'if'],
   'fact': ['count-down', 'n*']
 };
 
