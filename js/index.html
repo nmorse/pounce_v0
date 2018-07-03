@@ -27,19 +27,42 @@
         <h2> Pounce Tests </h2>
         <div id="testing">
           <p>Test driven development is good practice for a Pounce developer and also for the development of Pounce itself. So here we go, first we test the Pounce parser and then the Pounce runtime. </p>
-          <button v-on:click="showParserTests = !showParserTests">toggle parser test results</button>
+          <button v-on:click="showParserTests = !showParserTests">toggle parser test results</button> Out of {{ total_tests }} tests, {{ failed_tests }} tests failed.
           <table id="parser_testing" v-show="showParserTests">
             <tr v-for="t in parser_tests">
-              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{t[2]}}</td>
+              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td>
             </tr>
           </table>
+        </div>
+        <div id="try_pounce">
+          Try the parser by entering some Pounce script here: <br/>
+          <input v-model="ps" v-on:keyup="runPounce()" /> <br/>
+          and the parser output is the AST program list: <br/>
+          {{ pl }}
+          <div v-for="ele in vs">
+            {{ ele }}
+          </div>
         </div>
         <script>
           var testing = new Vue({
             el: '#testing',
             data: {
               "showParserTests": false
-          ,    "parser_tests": parser_tests
+            , "parser_tests": parser_tests
+            , "total_tests": parser_tests.length
+            , "failed_tests": parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
+            }
+          });
+          var try_pounce = new Vue({
+            el: '#try_pounce',
+            data: {
+              "ps": ""
+            , "pl": []
+            , "vs": ['a']
+            , "runPounce": function () {
+              this.pl = parse(this.ps);
+              
+            }
             }
           });
           //var parser_testing = new Vue({

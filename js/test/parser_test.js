@@ -46,13 +46,13 @@ parser_tests.forEach((test, i) => {
     const expected_stack = test[1];
     
     //console.log('starting parse test for: ', ps);
-    const result_stack = parse(ps);
+    const result_pl = parse(ps);
     testCount += 1;
-    if (!deepCompare(result_stack, expected_stack)) {
+    if (!deepCompare(result_pl, expected_stack)) {
         testsFailed += 1
-        console.log(result_stack, ' expected:', expected_stack)
+        console.log(result_pl, ' expected:', expected_stack)
         console.log('---- Failed parse test for: ', ps)
-        parser_tests[i][2] = result_stack;
+        parser_tests[i][2] = result_pl;
     }
     else {
         parser_tests[i][2] = true;
