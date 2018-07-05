@@ -20,7 +20,14 @@ let parser_tests = [
   ['{ a:5.5 b:2.1} .456 +', [{"a":5.5, "b":2.1}, 0.456, '+']],
   [' { a:5.5  b:2.1 } .456 + { a:5.5  b:2.1 } ', [{"a":5.5, "b":2.1}, 0.456, '+', {"a":5.5, "b":2.1}]],
   ['{a:[1 2 3] 3b_g:{a:1 y:3}}', [{"a":[1, 2, 3], "3b_g":{"a":1, "y":3}}]],
-  ['[{a:[1 2 3] 3b_g:{a:1 y:3}} abc] cdef', [[{"a":[1, 2, 3], "3b_g":{"a":1, "y":3}}, 'abc'], 'cdef']]
+  ['[{a:[1 2 3] 3b_g:{a:1 y:3}} abc] cdef', [[{"a":[1, 2, 3], "3b_g":{"a":1, "y":3}}, 'abc'], 'cdef']],
+  ['.0.', ['.0.']],
+  ['.0', [0]],
+  ['0.', [0]],
+  ['.0..', ['.0..']],
+  ['5...', ['5...']],
+  ['5.', [5]],
+  ['.5', [0.5]]
 ];
 
 function cmpLists (a, b) {
@@ -52,7 +59,8 @@ parser_tests.forEach((test, i) => {
         testsFailed += 1
         console.log(result_pl, ' expected:', expected_stack)
         console.log('---- Failed parse test for: ', ps)
-        parser_tests[i][2] = result_pl;
+        parser_tests[i][2] = false;
+        parser_tests[i][3] = result_pl;
     }
     else {
         parser_tests[i][2] = true;

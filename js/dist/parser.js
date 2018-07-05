@@ -3,14 +3,19 @@ function number_or_str(s) {
   var num;
   if (!isNaN(parseFloat(s))) {
     num = parseFloat(s);
-    return num;
+    if ((''+num).length === s.length || s[s.length - 1] == '.' || s[s.length - 1] == '0' || s[0] == '.') {
+      if (s.indexOf('.') === s.lastIndexOf('.')) {
+        return num;
+      }
+    }
   }
-  else if (!isNaN(parseInt(s, 10))) {
-    return parseInt(s, 10);
+  if (!isNaN(parseInt(s, 10))) {
+    num = parseInt(s, 10);
+    if ((''+num).length === s.length) {
+      return num;
+    }
   }
-  else {
-    return s;
-  }
+  return s;
 }
 
 function parse_next(s, i, ls) {

@@ -30,7 +30,7 @@
           <button v-on:click="showParserTests = !showParserTests">toggle parser test results</button> Out of {{ total_tests }} tests, {{ failed_tests }} tests failed.
           <table id="parser_testing" v-show="showParserTests">
             <tr v-for="t in parser_tests">
-              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td>
+              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
             </tr>
           </table>
         </div>
