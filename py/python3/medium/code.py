@@ -1,9 +1,12 @@
 
 from pounce import runtime as pounce
-import environment as env
-pounce.words.update(env.words)
+#import environment as env
+#pounce.words.update(env.words)
 
 #from pounce import parsed_tests as testing
+
+from pounce import parser as parser
+from test import parser_test as parser_testing
 
 pounce.words['delayS'] = [0.5]
 pounce.words['nap'] = ['dup', '>sec', '-', 'dup', 0.1, '-', 'delayS', '<', ['sleep>'], 'if']
@@ -26,7 +29,7 @@ pounce.words['blink2'] = ['dup', '>sec', '<',
 print('Pounce loaded. Ready to:')
 
 #testsPassed = testing.runTests()
+testsPassed = parser_testing.runTests(parser)
 
-print('After a ', pounce.run([0, 'start-delay'])[0], ' second delay "Toggle red LED every', pounce.run([0, 'later'])[0] ,'seconds."')
-
-pounce.run(['>sec', 'start-delay', 'blink2'])
+#print('After a ', pounce.run([0, 'start-delay'])[0], ' second delay "Toggle red LED every', pounce.run([0, 'later'])[0] ,'seconds."')
+#pounce.run(['>sec', 'start-delay', 'blink2'])
