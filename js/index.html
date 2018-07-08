@@ -4,26 +4,28 @@
     <script src="dist/parser.js"></script>
     <script src="test/parser_test.js"></script>
     <script src="dist/runtime.js"></script>
+    <script src="test/runtime_test.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   </head>
     <body>
+      <div id="intro">
         <h1> Pounce </h1>
-        <p>Pounce is a 'forth', 'joy' and 'cat' derivative programming language, inspired in part by each. Pounce returns the accessability of this kind of development language back to some modern environments/platforms:</p>
-        <ul><li>the Web -- In your browser you can try it out, see examples and do quite advanced things with Pounce.</li>
-            <li>server-side -- Your server or any computer can run Pounce (either interpreted in Python or compiled to C# or other server-side languages).  </li>
-            <li>microprocessors -- From Arduino to M0-4 processors You have choices of running Pounce interpretors written in 'C' or if you can run python, you can try the Pounce environment written in Python.</li>
+        <p>Pounce is stack based, concatanative programming language. . Pounce returns the accessability of this style of development to everyone with a computer:</p>
+        <ul><li><em>the Web</em> -- In your browser you can try it out, see examples and do quite advanced things with Pounce.</li>
+            <li><em>server-side</em> -- Your server or any computer can run Pounce (either interpreted in Python or compiled to C# or other server-side languages).  </li>
+            <li><em>microprocessors</em> -- From Arduino to M0-4 processors You have choices of running Pounce interpretors written in 'C' or if you can run python, you can try the Pounce environment written in Python.</li>
         </ul>
-        <p>Pounce is a stack-based, concatenative language that uses post-fix notation. Okay this different (really different) from all the main-stream laguages that you know. Pounce is not new, its really just a remix of languages invented over the last 40 years. but it does not look or feel old. These languages have aged well. In part because of simplicity, which has been lost in most all other languages.</p>
+        <p>Pounce is a very different language, different from all the main-stream programming laguages that you know, but Pounce is not new. Its a 'Forth', 'Joy' and 'Cat' derivative, inspired by parts each, its really just a remix of several concatinative languages invented over the last {{ pounce(' 1968 years-since 1 - 10 / floor 10 * ') }} plus years. 'Forth' is now {{ pounce('1968 years-since') }} years old, but it does not look or feel old. These languages have aged well. In part because of simplicity, which has been squandered in most all other programming language families.</p>
         <p>Simplicity was the primary motivation behind all of these languages. First of all: These languages have almost a complete lack of syntax, so that reduces what you will have to learn. Second, initially every thing will seem backwards or reversed. Post-fix notation or (or RPN) is used to write almost all code. Yeup, post-fix is strange and for the first ten minutes it will seem unneccasary, but latter you will see some very legitimate reasons for its use, we promice.</p>
-        <p>Of Course 'Backwards' is in the eye of the beholder, Looking at these two program snipits of a bowling game, which seems more 'backwards' to you?</p>
+        <p>Of Course 'Backwards' is in the eye of the beholder, Looking at these two code snipits of a bowling game, I ask you, which seems more 'backwards?'</p>
 <pre>
   roleBallAt(Pins.set(TEN_PINS));
   
   TEN_PINS Pins.set roleBallAt
 </pre>
         <p>The first is similar to your usual fimiliar programming langage. The verbs (or actions) come first and the nouns come second. We are accustumed to this, but think about running a real bowling ally and what it takes to execute this code. It would be backwards to start at the left of the script and <em>roll a ball</em> at pins that had not been <em>set up</em> yet. The second example is in post-fix notation and it starts with the nouns and ends with verbs. It reads from left to right, <em>with ten pins, set them up</em> and then <em>role a ball</em> at them. It takes some getting used to, but the question of which one is backwards, may flip for you.</p>
-        
+      </div>
         <h2> Pounce Tests </h2>
         <div id="testing">
           <p>Test driven development is good practice for a Pounce developer and also for the development of Pounce itself. So here we go, first we test the Pounce parser and then the Pounce runtime. </p>
@@ -33,24 +35,47 @@
               <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
             </tr>
           </table>
+          <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
+          <table id="runtime_testing" v-show="showRuntimeTests">
+            <tr v-for="t in runtime_tests">
+              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
+            </tr>
+          </table>
         </div>
         <div id="try_pounce">
-          Try the parser by entering some Pounce script here: <br/>
+          Try the Pounce by entering some Pounce code: <br/>
           <input v-model="ps" v-on:keyup="runPounce()" /> <br/>
-          and the parser output is the AST program list: <br/>
+          and the Pounce output: <br/>
           {{ pl }}
           <div v-for="ele in vs">
             {{ ele }}
           </div>
         </div>
         <script>
+          var date_now = new Date();
+          words['years-since'] = parse(date_now.getFullYear() + ' - -1 *');
+          words['floor'] = (s, pl) => {
+            const num = s.pop();
+            s.push(Math.floor(num));
+            return [s, pl];
+          };
+          var intro = new Vue({
+            el: '#intro',
+            data: {
+              "pounce": (ps) => run(parse(ps), [], words)[0]
+            }
+          });
           var testing = new Vue({
             el: '#testing',
             data: {
               "showParserTests": false
             , "parser_tests": parser_tests
             , "total_tests": parser_tests.length
-            , "failed_tests": parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
+            , "failed_tests": parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
+              "showRuntimeTests": false
+            , "runtime_tests": runtime_tests
+            , "totalRuntime_tests": runtime_tests.length
+            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
             }
           });
           var try_pounce = new Vue({
@@ -58,19 +83,13 @@
             data: {
               "ps": ""
             , "pl": []
-            , "vs": ['a']
+            , "vs": []
             , "runPounce": function () {
               this.pl = parse(this.ps);
-              
+              this.vs = run(this.pl, [], words).reverse();
             }
             }
           });
-          //var parser_testing = new Vue({
-          //  el: '#parser_testing',
-          //  data: {
-          //    "parser_tests": parser_tests
-          //  }
-          //});
         </script>
     </body>
 </html>

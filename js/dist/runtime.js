@@ -5,11 +5,16 @@ function run(pl, stack, words) {
   var term;
   var num;
   while (pl.length > 0) {
-    [term, pl] = getNextGrouping(pl);
+    term = pl.shift();
     if (typeof term === 'string' && typeof words[term] === 'function') {
       console.log('pre-execute ', stack, term, pl);
-      [stack, pl=pl] = words[g](stack, pl);
+      [stack, pl=pl] = words[term](stack, pl);
       console.log('post-execute ', stack, pl);
+    }
+    else if (typeof term === 'string' && typeof words[term] === 'object') {
+      console.log('unquote list ', stack, term, pl);
+      pl = words[term].concat(pl);
+      console.log('post-unquote ', stack, pl);
     }
     else {
       num = tryConvertToNumber(term);
@@ -53,21 +58,37 @@ var words = {
     s.push(a, a);
     return [s];
   },
+  'swap': function(s) {
+    let a = s.pop();
+    let b = s.pop();
+    s.push(a, b);
+    return [s];
+  },
+  'drop': function(s) {
+    let a = s.pop();
+    return [s];
+  },
   '+': function(s) {
-    var a = s.pop();
-    var b = s.pop();
+    let a = s.pop();
+    let b = s.pop();
     s.push(a + b);
     return [s];
   },
   '-': function(s) {
-    var a = s.pop();
-    var b = s.pop();
+    let a = s.pop();
+    let b = s.pop();
     s.push(b - a);
     return [s];
   },
+  '/': function(s) {
+    let a = s.pop();
+    let b = s.pop();
+    s.push(b / a);
+    return [s];
+  },
   '*': function(s) {
-    var a = s.pop();
-    var b = s.pop();
+    let a = s.pop();
+    let b = s.pop();
     s.push(a * b);
     return [s];
   },
@@ -87,14 +108,14 @@ var words = {
     return [s];
   },
   '==': function(s) {
-    var a = s.pop();
-    var b = s.pop();
+    let a = s.pop();
+    let b = s.pop();
     s.push(a === b);
     return [s];
   },
   'if': function(s, pl) {
-    var then_block = s.pop();
-    var expression = s.pop();
+    let then_block = s.pop();
+    let expression = s.pop();
     if (expression) {
       if (isArray(then_block)) {
         pl = then_block.concat(pl);
@@ -106,9 +127,9 @@ var words = {
     return [s, pl];
   },
   'if-else': function(s, pl) {
-    var else_block = s.pop();
-    var then_block = s.pop();
-    var expression = s.pop();
+    const else_block = s.pop();
+    const then_block = s.pop();
+    const expression = s.pop();
     if (expression) {
       if (isArray(then_block)) {
         pl = then_block.concat(pl);

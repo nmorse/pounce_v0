@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script src="../dist/parser.js"></script>
+    <script src="../test/parser_test.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+    <body>
+      <h1> Pounce Parser Tests</h1>
+      <div id="parser_testing">
+        <table id="parser_testing" v-show="showParserTests">
+          <tr v-for="t in parser_tests">
+            <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
+          </tr>
+        </table>
+      </div>
+      <script>
+        var parser_testing = new Vue(
+          {
+            el: '#parser_testing',
+            data: {
+              "showParserTests": true
+            , "parser_tests": parser_tests
+            , "total_tests": parser_tests.length
+            , "failed_tests": parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
+            }
+          });
+      </script>
+    </body>
+</html>
