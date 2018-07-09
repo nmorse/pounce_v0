@@ -11,7 +11,7 @@
     <body>
       <div id="intro">
         <h1> Pounce </h1>
-        <p>Pounce is stack based, concatanative programming language. . Pounce returns the accessability of this style of development to everyone with a computer:</p>
+        <p>Pounce is a stack based, concatanative programming language. Pounce returns the accessability of this style of development to everyone with a computer:</p>
         <ul><li><em>the Web</em> -- In your browser you can try it out, see examples and do quite advanced things with Pounce.</li>
             <li><em>server-side</em> -- Your server or any computer can run Pounce (either interpreted in Python or compiled to C# or other server-side languages).  </li>
             <li><em>microprocessors</em> -- From Arduino to M0-4 processors You have choices of running Pounce interpretors written in 'C' or if you can run python, you can try the Pounce environment written in Python.</li>
@@ -47,6 +47,7 @@
           <input v-model="ps" v-on:keyup="runPounce()" /> <br/>
           and the Pounce output: <br/>
           {{ pl }}
+          {{ words }}
           <div v-for="ele in vs">
             {{ ele }}
           </div>
@@ -84,6 +85,7 @@
               "ps": ""
             , "pl": []
             , "vs": []
+            , "words": words
             , "runPounce": function () {
               this.pl = parse(this.ps);
               this.vs = run(this.pl, [], words).reverse();

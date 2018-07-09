@@ -53,49 +53,55 @@ function tryConvertToNumber(w) {
 
 var stack = [];
 var words = {
+  'def': function(s) {
+    const key = s.pop();
+    const fn = s.pop();
+    words[key] = fn;
+    return [s];
+  },
   'dup': function(s) {
-    var a = s.pop();
+    const a = s.pop();
     s.push(a, a);
     return [s];
   },
   'swap': function(s) {
-    let a = s.pop();
-    let b = s.pop();
+    const a = s.pop();
+    const b = s.pop();
     s.push(a, b);
     return [s];
   },
   'drop': function(s) {
-    let a = s.pop();
+    s.pop();
     return [s];
   },
   '+': function(s) {
-    let a = s.pop();
-    let b = s.pop();
+    const a = s.pop();
+    const b = s.pop();
     s.push(a + b);
     return [s];
   },
   '-': function(s) {
-    let a = s.pop();
-    let b = s.pop();
+    const a = s.pop();
+    const b = s.pop();
     s.push(b - a);
     return [s];
   },
   '/': function(s) {
-    let a = s.pop();
-    let b = s.pop();
+    const a = s.pop();
+    const b = s.pop();
     s.push(b / a);
     return [s];
   },
   '*': function(s) {
-    let a = s.pop();
-    let b = s.pop();
+    const a = s.pop();
+    const b = s.pop();
     s.push(a * b);
     return [s];
   },
   'n*': function(s, pl) {
     if (s.length >= 2) {
-      let a = s.pop();
-      let b = s.pop();
+      const a = s.pop();
+      const b = s.pop();
       if (isNumber(a) && isNumber(b)) {
         s.push(a * b);
         pl.unshift('n*');
@@ -108,14 +114,14 @@ var words = {
     return [s];
   },
   '==': function(s) {
-    let a = s.pop();
-    let b = s.pop();
+    const a = s.pop();
+    const b = s.pop();
     s.push(a === b);
     return [s];
   },
   'if': function(s, pl) {
-    let then_block = s.pop();
-    let expression = s.pop();
+    const then_block = s.pop();
+    const expression = s.pop();
     if (expression) {
       if (isArray(then_block)) {
         pl = then_block.concat(pl);
