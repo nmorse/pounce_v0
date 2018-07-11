@@ -42,7 +42,7 @@ function parse_next(s, i, ls) {
 
 function parse_word (s, i, ls) {
   const orig_i = i;
-  while (i < ls && s[i] !== ' ' && s[i] !== ']' && s[i] !== '}') {
+  while (i < ls && s[i] !== ' ' && s[i] !== '[' && s[i] !== ']' && s[i] !== '{' && s[i] !== '}') {
     i += 1;
   }
   const word = number_or_str(s.substring(orig_i, i));
@@ -119,10 +119,12 @@ function parse(s) {
   let i = 0;
   let ls = s.length;
   let w = '';
-  while (i < ls) {
-    //print ('parsing', s, i, ls)
+  let word_count = 0;
+  while (i < ls && word_count < 10000) {
+    console.log('parsing--', s, i, ls);
     [w, i] = parse_next(s, i, ls);
-    //print ('got ',w)
+    word_count += 1;
+    console.log('parse-got',w);
     if (w !== '' && w !== null && typeof w !== undefined) {
       l.push(w);
     }
