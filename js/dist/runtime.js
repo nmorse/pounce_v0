@@ -60,14 +60,14 @@ var words = {
     return [s];
   },
   'dup': function(s) {
-    const a = s.pop();
-    s.push(a, a);
+    const a = s[s.length - 1];
+    s.push(a);
     return [s];
   },
   'dup2': function(s) {
-    const a = s.pop();
-    const b = s.pop();
-    s.push(b, b, a, a);
+    const a = ss[s.length - 1];
+    const b = ss[s.length - 2];
+    s.push(b, a);
     return [s];
   },
   'swap': function(s) {
