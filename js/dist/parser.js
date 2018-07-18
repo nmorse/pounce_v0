@@ -1,3 +1,11 @@
+// Pounce parser
+// (^("[^"]*")|^('[^']*')|\s("[^"]*")|\s('[^']*'))*(\s?(//.*)?)$ no nevermind
+// Comments (single line) are 'C' type '//' double slash.
+// Quoted strings are Javascript like (i.e. either single or double quote)
+// List of data or code are square brackets.
+// Records (i.e. hash-lists, dictionaries...) are in curly brackets.
+// numbers are digits and optionally one decimal point (.) (no scientific notation at this time)
+// all else is a word...
 
 function number_or_str(s) {
   var num;

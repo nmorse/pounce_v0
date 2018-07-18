@@ -1,4 +1,4 @@
-
+ 
 
 
 function run(pl, stack, words) {
@@ -64,6 +64,12 @@ var words = {
     s.push(a, a);
     return [s];
   },
+  'dup2': function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(b, b, a, a);
+    return [s];
+  },
   'swap': function(s) {
     const a = s.pop();
     const b = s.pop();
@@ -118,6 +124,31 @@ var words = {
     const b = s.pop();
     s.push(a === b);
     return [s];
+  },
+  '>': function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(a > b);
+    return [s];
+  },
+  '<': function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(a < b);
+    return [s];
+  },
+  'case': function(s, pl) {
+    const case_record = s.pop();
+    const expression = s.pop();
+    if (case_record[expression]) {
+      if (isArray(case_record[expression])) {
+        pl = case_record[expression].concat(pl);
+      }
+      else {
+        pl.unshift(case_record[expression]);
+      }
+    }
+    return [s, pl];
   },
   'if': function(s, pl) {
     const then_block = s.pop();

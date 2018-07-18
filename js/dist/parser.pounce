@@ -1,0 +1,3 @@
+[f l] cut f '"' == [f l quote] if
+
+{name: args:[pl ps] p:''
