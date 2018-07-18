@@ -44,7 +44,7 @@
         </div>
         <div id="try_pounce">
           Try the Pounce by entering some Pounce code: <br/>
-          <input v-model="ps" v-on:keyup="runPounce()" /> <br/>
+          <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" /> <br/>
           and the Pounce output: <br/>
           {{ pl }}
           {{ words }}
