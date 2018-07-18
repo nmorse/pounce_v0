@@ -60,13 +60,15 @@ var words = {
     return [s];
   },
   'dup': function(s) {
-    const a = s[s.length - 1];
+    const top = s.length - 1; 
+    const a = s[top];
     s.push(a);
     return [s];
   },
   'dup2': function(s) {
-    const a = ss[s.length - 1];
-    const b = ss[s.length - 2];
+   const top = s.length - 1;
+    const a = s[top];
+    const b = s[top - 1];
     s.push(b, a);
     return [s];
   },
