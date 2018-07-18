@@ -130,13 +130,25 @@ var words = {
   '>': function(s) {
     const a = s.pop();
     const b = s.pop();
-    s.push(a > b);
+    s.push(b > a);
+    return [s];
+  },
+  '>=': function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(b >= a);
     return [s];
   },
   '<': function(s) {
     const a = s.pop();
     const b = s.pop();
-    s.push(a < b);
+    s.push(b < a);
+    return [s];
+  },
+  '<=': function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(b <= a);
     return [s];
   },
   'case': function(s, pl) {
