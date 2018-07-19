@@ -59,8 +59,20 @@ var words = {
     words[key] = fn;
     return [s];
   },
+  'split-last': function(s) {
+    const str = s.pop();
+    const last = str.slice(-1);
+    const first_part = str.slice(0, -1);
+    s.push(first_part, last);
+    return [s];
+  },
+  'length': function(s) {
+    const str = s.pop();
+    s.push(str.length);
+    return [s];
+  },
   'dup': function(s) {
-    const top = s.length - 1; 
+    const top = s.length - 1;
     const a = s[top];
     s.push(a);
     return [s];
