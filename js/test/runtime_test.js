@@ -14,7 +14,7 @@ let runtime_tests = [
   ["'abc ' split-last", ['abc', ' ']],
   ['abcdef length', [6]],
   ['"1a1" length', [3]],
-  ['', []],
+  ['[a 1] 3 push', [['a', 1, 3]]],
   ['', []],
   ['', []],
   ['', []],

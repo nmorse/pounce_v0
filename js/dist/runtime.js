@@ -1,4 +1,4 @@
- 
+  
 
 
 function run(pl, stack, words) {
@@ -69,6 +69,13 @@ var words = {
   'length': function(s) {
     const str = s.pop();
     s.push(str.length);
+    return [s];
+  },
+  'push': function(s) {
+    const item = s.pop();
+    const top = s.length - 1;
+    const list = s[top];
+    list.push(item);
     return [s];
   },
   'dup': function(s) {

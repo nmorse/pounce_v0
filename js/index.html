@@ -11,20 +11,20 @@
     <body>
       <div id="intro">
         <h1> Pounce </h1>
-        <p>Pounce is a stack based, concatanative programming language. Pounce returns the accessability of this style of development any type of computer:</p>
-        <ul><li><em>browser</em> -- In your browser you can try it out, see examples and do quite advanced things with Pounce.</li>
-            <li><em>server-side</em> -- On your server (or any computer that can run python,) can run Pounce (interpreted in Python works now with plans to port it to compiled languages).  </li>
-            <li><em>microprocessors</em> -- From Arduino to M0-4 processors You have choices of running Pounce interpretors written in 'C' or if you can run python, you can try the Pounce environment written in Python.</li>
+        <p>Pounce is a stack based, concatanative programming language. Pounce returns the accessability of this style of development to almost any computer:</p>
+        <ul><li><em>In browsers</em> -- In your browser you can try it out, see examples and do quite advanced things with Pounce.</li>
+            <li><em>On server-side</em> -- On your server (or any computer that can run python,) can run Pounce (interpreted in Python works now with plans to port it to compiled languages).  </li>
+            <li><em>For microprocessors</em> -- From Arduino to M0-4 processors You have choices of running Pounce interpretors written in 'C' or if you can run python, you can try the Pounce environment written in Python.</li>
         </ul>
-        <p>Pounce takes after 'Forth', 'Joy' and 'Cat' which are all similar to eachother, but very different from all the main-stream programming laguages that we  know and use. This differnet approach seems novel, but it's not new. Concatinative languages have evolved over the last {{ pounce(' 1970 years-since 1 - 10 / floor 10 * ') }} plus years. 'Forth' is now {{ pounce('1970 years-since') }} years old, but it does not look or feel old. All these languages have aged well, in part because of simplicity, which has been mostly squandered in all other programming languages.</p>
-        <p>Simplicity was the primary motivation behind all of these languages. First of all: These languages have almost a complete lack of syntax, so that reduces what you must learn. Second, Post-fix notation or (or RPN) is used to eliminate the need for brackets and parenthasis for blocks and control struture. Yeup, post-fix is strange and for the first ten minutes it will seem backwards*, but latter you will see some very legitimate reasons for its use, we promice.</p>
-        <p>* Of Course 'Backwards' is in the eye of the beholder, Looking at these two code snipits of a bowling game, I ask you, which seems more 'backwards?'</p>
+        <p>Pounce takes after 'Forth', 'Joy' and 'Cat' which are all Concatenative language, but this style is very different from the main-stream programming laguages that we  know and use. This differnet approach will seem novel, but it's not new. Concatinative languages have evolved over the last <em>{{ pounce(' 1970 years-since 1 - 10 / floor 10 * ') }} plus</em> years. 'Forth' is now {{ pounce('1970 years-since') }} years old, but it does not look or feel old. All these languages have aged well, in part due to their simplicity.</p>
+        <p>Simplicity was the primary motivation behind all of these languages. But how can they be simple and expresive? First of all: These languages have almost a complete lack of syntax, so that reduces what you must learn. Second, Post-fix notation or (or RPN) is used to eliminate the need for brackets and parenthasis for blocks and control struture. Yea there is a little syntax and post-fix is strange at first. For the first ten minutes it seems backwards*, but later you will see some very legitimate reasons for its use, we promice. [Through the Looking Glass]</p>
+        <p>* Of Course 'Backwards' is in the eye of the beholder, Looking at these two psudo-code snipits of a bowling game, I ask you, which seems to be 'backwards?'</p>
 <pre>
   roleBallAt(Pins.set(TEN_PINS));
   
   TEN_PINS Pins.set roleBallAt
 </pre>
-        <p>The first is similar to your usual fimiliar programming langage. The verbs (or actions) come first and the nouns come second. We are accustumed to this, but think about running a real bowling ally and what it takes to execute this code. It would be backwards to start at the left of the script and <em>roll a ball</em> at pins that had not been <em>set up</em> yet. The second example is in post-fix notation and it starts with the nouns and ends with verbs. It reads from left to right, <em>with ten pins, set them up</em> and then <em>role a ball</em> at them. It takes some getting used to, but the question of which one is backwards, may flip for you. [through the looking glass]</p>
+        <p>The first is similar to most of the usual fimiliar programming langage. The verbs (or actions) come first and the nouns come second. We are accustumed to this, but think about running a real bowling ally and what it takes to execute this code. It would be backwards to start at the left of the script and <em>roll a ball</em> at pins that had not been <em>set up</em> yet. The second example is in post-fix notation and it starts with the nouns and ends with verbs. It reads from left to right, <em>with ten pins, set them up</em> and then <em>role a ball</em> at them. It takes some getting used to, but the question of which one is backwards, may flip for you. [through the looking glass]</p>
       </div>
         <h2> Pounce Tests </h2>
         <div id="testing">
@@ -38,7 +38,7 @@
           <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
           <table id="runtime_testing" v-show="showRuntimeTests">
             <tr v-for="t in runtime_tests">
-              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
+              <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
             </tr>
           </table>
         </div>
@@ -66,6 +66,10 @@
               "pounce": (ps) => run(parse(ps), [], words)[0]
             }
           });
+          function loadExample(s) {
+            try_pounce.ps = s;
+            try_pounce.runPounce();
+          }
           var testing = new Vue({
             el: '#testing',
             data: {
@@ -76,7 +80,8 @@
               "showRuntimeTests": false
             , "runtime_tests": runtime_tests
             , "totalRuntime_tests": runtime_tests.length
-            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
+            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
+            "loadExample": loadExample
             }
           });
           var try_pounce = new Vue({
