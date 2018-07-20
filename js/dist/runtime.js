@@ -1,6 +1,8 @@
-  
+// Pounce runtime interpreter
 
-
+// run expects the a program list (pl) in list form,
+// a stack that usually would be empty, but may be primed with an existing state
+// and a dictionary of words.
 function run(pl, stack, words) {
   var term;
   var num;
@@ -39,15 +41,26 @@ function isNumber (value) {
 }
 
 function tryConvertToNumber(w) {
-  if (isNumber(parseFloat(w))) {
-    return parseFloat(w);
+  return number_or_str(w);
+}
+
+function number_or_str(s) {
+  var num;
+  if (!isNaN(parseFloat(s))) {
+    num = parseFloat(s);
+    if ((''+num).length === s.length || s[s.length - 1] == '.' || s[s.length - 1] == '0' || s[0] == '.') {
+      if (s.indexOf('.') === s.lastIndexOf('.')) {
+        return num;
+      }
+    }
   }
-  else if (isNumber(parseInt(w, 10))) {
-    return parseInt(w, 10);
+  if (!isNaN(parseInt(s, 10))) {
+    num = parseInt(s, 10);
+    if ((''+num).length === s.length) {
+      return num;
+    }
   }
-  else {
-    return w;
-  }
+  return s;
 }
 
 
@@ -76,6 +89,13 @@ var words = {
     const top = s.length - 1;
     const list = s[top];
     list.push(item);
+    return [s];
+  },
+  'pop': function(s) {
+    const top = s.length - 1;
+    const list = s[top];
+    const item = list.pop();
+    s.push(item);
     return [s];
   },
   'dup': function(s) {
