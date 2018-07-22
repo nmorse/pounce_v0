@@ -1,0 +1,60 @@
+
+<html>
+  <head>
+    <script src="dist/parser.js"></script>
+    <script src="test/parser_test.js"></script>
+    <script src="dist/runtime.js"></script>
+    <script src="test/runtime_test.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+    <body>
+        <div id="testing">
+          <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
+          <table id="runtime_testing" v-show="showRuntimeTests">
+            <tr v-for="t in runtime_tests">
+              <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
+            </tr>
+          </table>
+        </div>
+        <div id="try_pounce">
+          Try Pounce: <br/>
+          <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" /> <br/>
+          and the Pounce output: <br/>
+          {{ pl }}
+          {{ words }}
+          <div v-for="ele in vs">
+            {{ ele }}
+          </div>
+        </div>
+        <script>
+          function loadExample(s) {
+            try_pounce.ps = s;
+            try_pounce.runPounce();
+          }
+          var testing = new Vue({
+            el: '#testing',
+            data: {
+              "showRuntimeTests": false
+            , "runtime_tests": runtime_tests
+            , "totalRuntime_tests": runtime_tests.length
+            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
+            "loadExample": loadExample
+            }
+          });
+          var try_pounce = new Vue({
+            el: '#try_pounce',
+            data: {
+              "ps": ""
+            , "pl": []
+            , "vs": []
+            , "words": words
+            , "runPounce": function () {
+              this.pl = parse(this.ps);
+              this.vs = run(this.pl, [], words).reverse();
+            }
+            }
+          });
+        </script>
+    </body>
+</html>

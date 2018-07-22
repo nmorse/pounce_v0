@@ -1,3 +1,18 @@
-[f l] cut f '"' == [f l quote] if
 
-{name: args:[pl ps] p:''
+
+{ word:parse-pounce
+  args:[
+    {ps:"string of pounce code" pl:[any]}
+  ]
+  description:'pounce bootstrap parser'
+}
+[ps get-^ split-last branch-on-char] define
+
+branch-on-char
+{ word:branch-on-char
+  args:[
+    char
+  ]
+  description:'pounce bootstrap parser'
+}
+[ps get-^ split-last branch-on-char] define

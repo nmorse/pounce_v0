@@ -98,6 +98,32 @@ var words = {
     s.push(item);
     return [s];
   },
+  'i': function(s, pl) {
+    const block = s.pop();
+    if (isArray(block)) {
+      pl = block.concat(pl);
+    }
+    else {
+      pl.unshift(block);
+    }
+    return [s, pl];
+  },
+  'dip': function(s, pl) {
+    const item = s.pop();
+    const block = s.pop();
+    if (isArray(block)) {
+      pl = block.concat(pl);
+    }
+    else {
+      pl.unshift(block);
+    }
+    pl.unshift(item);
+    return [s, pl];
+  },
+  'drop': function(s) {
+    s.pop();
+    return [s];
+  },
   'dup': function(s) {
     const top = s.length - 1;
     const a = s[top];
@@ -115,10 +141,6 @@ var words = {
     const a = s.pop();
     const b = s.pop();
     s.push(a, b);
-    return [s];
-  },
-  'drop': function(s) {
-    s.pop();
     return [s];
   },
   '+': function(s) {
