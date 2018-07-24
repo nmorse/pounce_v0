@@ -16,21 +16,24 @@
             </tr>
           </table>
         </div>
-        <div id="try_pounce">
-          {{ pl }}
-          {{ words }}
-          <div style="flex-flow: row nowrap;">
-            <div style="flex-flow: column nowrap;">
-              <div v-for="ele in vs" style="border: lightgray solid 1px; padding: 1px;">
+        <div id="try_pounce" style="border: lightgray solid 1px; margin: 2px 1px;">
+            <div style="display: flex; flex-flow: column nowrap;border: lightgray solid 1px; margin: 2px 1px;">
+              <div style="display: flex; flex-flow: row nowrap; border: lightgray solid 1px; margin: 2px 1px;">
+
+                  <div  style="border: lightgray solid 1px; margin: 2px 1px; padding: 0px 5px; width:100px;">
+                    pounce
+                  </div>
+
+                  <div  style="border: lightgray solid 1px; margin: 2px 1px; width:500px;">
+
+                    <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" style="width:400px" /> <br/>
+                  </div>
+              </div>
+              <div v-for="ele in vs" style="border: lightgray solid 1px; margin: 2px 1px; width:100px;">
                 {{ ele }}
               </div>
             </div>
-            <div  style="border: lightgray solid 1px; padding: 1px;">
-              Try Pounce: <br/>
-              <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" /> <br/>
-            <div>
           </div>
-        </div>
         <script>
           function loadExample(s) {
             try_pounce.ps = s;
