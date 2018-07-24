@@ -2,7 +2,6 @@
 <html>
   <head>
     <script src="dist/parser.js"></script>
-    <script src="test/parser_test.js"></script>
     <script src="dist/runtime.js"></script>
     <script src="test/runtime_test.js"></script>
 
@@ -18,13 +17,18 @@
           </table>
         </div>
         <div id="try_pounce">
-          Try Pounce: <br/>
-          <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" /> <br/>
-          and the Pounce output: <br/>
           {{ pl }}
           {{ words }}
-          <div v-for="ele in vs" style="flex-flow: column nowrap;">
-            {{ ele }}
+          <div style="flex-flow: row nowrap;">
+            <div style="flex-flow: column nowrap;">
+              <div v-for="ele in vs" style="border: lightgray solid 1px; padding: 1px;">
+                {{ ele }}
+              </div>
+            </div>
+            <div  style="border: lightgray solid 1px; padding: 1px;">
+              Try Pounce: <br/>
+              <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" /> <br/>
+            <div>
           </div>
         </div>
         <script>
