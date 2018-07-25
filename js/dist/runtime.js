@@ -72,7 +72,14 @@ var words = {
     words[key] = fn;
     return [s];
   }},
-  'str-split-last': {fn: function(s) {
+  'str-first': {fn: function(s) {
+    const str = s.pop();
+    const first = str.slice(0, 1);
+    const last_part = str.slice(1);
+    s.push(last_part, first);
+    return [s];
+  }},
+  'str-last': {fn: function(s) {
     const str = s.pop();
     const last = str.slice(-1);
     const first_part = str.slice(0, -1);
@@ -234,6 +241,23 @@ var words = {
     const a = s.pop();
     const b = s.pop();
     s.push(b <= a);
+    return [s];
+  }},
+  'and': {fn: function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(b && a);
+    return [s];
+  }},
+  'or': {fn: function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(b || a);
+    return [s];
+  }},
+  'not': {fn: function(s) {
+    const a = s.pop();
+    s.push(!a);
     return [s];
   }},
   'case': {fn: function(s, pl) {

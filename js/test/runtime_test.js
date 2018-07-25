@@ -12,8 +12,9 @@ let runtime_tests = [
   ['[0] {0:[wow] +:[555]} case', ['wow']],
   ['[+] {0:[wow] +:[555]} case', [555]],
   ['2 6 dup2', [2, 6, 2, 6]],
-  ['abc str-split-last', ['ab', 'c']],
-  ["'abc ' str-split-last", ['abc', ' ']],
+  ['abc str-last', ['ab', 'c']],
+  ["'abc ' str-last", ['abc', ' ']],
+  ["'abc ' str-first", ['bc ', 'a']],
   ['abcdef str-length', [6]],
   ['"1a1" str-length', [3]],
   ['[a 1] 3 push', [['a', 1, 3]]],
@@ -34,21 +35,6 @@ let runtime_tests = [
   ['', []]
 ];
 
-function cmpLists (a, b) {
-  let same = true;
-  if (a.length === b.length) {
-    a.forEach((a_ele, i) => {
-      if (a[i] !== b[i]) {
-        same = false;
-      }
-    });
-  }
-  else {
-    same = false;
-  }
-  return same;
-}
-    
 console.log('Starting runtime tests:');
 let RTtestCount = 0;
 let RTtestsFailed = 0;
