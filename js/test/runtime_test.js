@@ -24,6 +24,7 @@ let runtime_tests = [
   ['7 [dup +] apply', [14]],
   ['[B] [A] dip', ['A', ['B']]],
   ['[C] [B] [A] dip2', ['A', ['C'], ['B']]],
+  ['3 [A] [B] [2 +] dip2', [5, ['A'], ['B']]],
   ['[A] apply', ['A']],
   ['A un-apply', [['A']]],
   ['1 1 [dup2 +] dup dip dup dip', [1, 1, 2, 3, ['dup2', '+']]],

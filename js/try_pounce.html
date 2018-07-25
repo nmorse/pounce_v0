@@ -6,65 +6,91 @@
     <script src="test/runtime_test.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    
+    <style>
+      .box {
+        border: lightgray solid 1px;
+        margin: 2px 1px;
+        padding: 0px 5px;
+      }
+      .col-container {
+        display: flex;
+        flex-flow: column nowrap;
+      }
+      .row-container {
+        display: flex;
+        flex-flow: row nowrap;
+      }
+    </style>
   </head>
     <body>
-        <div id="testing">
-          <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
-          <table id="runtime_testing" v-show="showRuntimeTests">
-            <tr v-for="t in runtime_tests">
-              <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
-              <td><code>{{t[1]}}</code></td>
-              <td>{{ (t[2])? 'passed': 'failed' }}</td>
-              <td><code>{{t[3]}}</code></td>
-            </tr>
-          </table>
-        </div>
-        <div id="try_pounce" style="border: lightgray solid 1px; margin: 2px 1px;">
-            <div style="display: flex; flex-flow: column nowrap;border: lightgray solid 1px; margin: 2px 1px;">
-              <div style="display: flex; flex-flow: row nowrap; border: lightgray solid 1px; margin: 2px 1px;">
-
-                  <div  style="border: lightgray solid 1px; margin: 2px 1px; padding: 0px 5px; width:100px;">
-                    pounce
-                  </div>
-
-                  <div  style="border: lightgray solid 1px; margin: 2px 1px; width:500px;">
-
-                    <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" style="width:400px" /> <br/>
-                  </div>
+      <div class="box" id="try_pounce">
+        <div class="col-container box">
+          <div class="row-container box">
+            <div class="box" style="min-width:100px;">
+              pounce
+            </div>
+            <div class="col-container box">
+              <div class="box">
+                help goes here
               </div>
-              <div v-for="ele in vs" style="border: lightgray solid 1px; margin: 2px 1px; width:100px;">
-                {{ ele }}
+              <div class="box">
+                <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" style="width:400px" />
               </div>
             </div>
           </div>
-        <script>
-          function loadExample(s) {
-            try_pounce.ps = s;
-            try_pounce.runPounce();
+          <div class="row-container box">
+            <div class="col-container box">
+              <div v-for="ele in vs" class="box" style="min-width:100px;">
+                {{ ele }}
+              </div>
+            </div>
+            <div class="col-container box">
+              {{ words }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="testing">
+        <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
+        <table id="runtime_testing" v-show="showRuntimeTests">
+          <tr v-for="t in runtime_tests">
+            <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
+            <td><code>{{t[1]}}</code></td>
+            <td>{{ (t[2])? 'passed': 'failed' }}</td>
+            <td><code>{{t[3]}}</code></td>
+          </tr>
+        </table>
+      </div>
+      <script>
+        function loadExample(s) {
+          try_pounce.ps = s;
+          try_pounce.runPounce();
+          testing.showRuntimeTests = false;
+        }
+        var testing = new Vue({
+          el: '#testing',
+          data: {
+            "showRuntimeTests": false
+          , "runtime_tests": runtime_tests
+          , "totalRuntime_tests": runtime_tests.length
+          , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
+          "loadExample": loadExample
           }
-          var testing = new Vue({
-            el: '#testing',
-            data: {
-              "showRuntimeTests": false
-            , "runtime_tests": runtime_tests
-            , "totalRuntime_tests": runtime_tests.length
-            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
-            "loadExample": loadExample
-            }
-          });
-          var try_pounce = new Vue({
-            el: '#try_pounce',
-            data: {
-              "ps": ""
-            , "pl": []
-            , "vs": []
-            , "words": words
-            , "runPounce": function () {
-              this.pl = parse(this.ps);
-              this.vs = run(this.pl, [], words).reverse();
-            }
-            }
-          });
-        </script>
+        });
+        var try_pounce = new Vue({
+          el: '#try_pounce',
+          data: {
+            "ps": ""
+          , "pl": []
+          , "vs": []
+          , "words": words
+          , "runPounce": function () {
+            this.pl = parse(this.ps);
+            this.vs = run(this.pl, [], words).reverse();
+          }
+          }
+        });
+      </script>
     </body>
 </html>
