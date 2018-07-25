@@ -109,15 +109,15 @@ var words = {
     return [s, pl];
   },
   'dip': function(s, pl) {
-    const item = s.pop();
     const block = s.pop();
+    const item = s.pop();
+    pl = [item].concat(pl);
     if (isArray(block)) {
       pl = block.concat(pl);
     }
     else {
       pl.unshift(block);
     }
-    pl.unshift(item);
     return [s, pl];
   },
   'drop': function(s) {
