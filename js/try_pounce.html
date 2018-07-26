@@ -15,7 +15,7 @@
       }
       .col-container {
         display: flex;
-        flex-flow: column nowrap;
+        flex-flow: column wrap;
       }
       .row-container {
         display: flex;
@@ -24,29 +24,31 @@
     </style>
   </head>
     <body>
-      <div class="box" id="try_pounce">
-        <div class="col-container box">
-          <div class="row-container box">
+      <div class="" id="try_pounce">
+        <div class="col-container">
+          <div class="row-container">
             <div class="box" style="min-width:100px;">
-              pounce
+              Pounce
             </div>
-            <div class="col-container box">
-              <div class="box">
-                help goes here
+            <div class="col-container">
+              <div>
+                &nbsp;
               </div>
-              <div class="box">
-                <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" style="width:400px" />
+              <div>
+                <input v-model="ps" v-on:keyup="runPounce()" placeholder="Enter Pounce words here" spellcheck="false" style="width:608px; margin:2px;" />
               </div>
             </div>
           </div>
-          <div class="row-container box">
-            <div class="col-container box">
-              <div v-for="ele in vs" class="box" style="min-width:100px;">
-                {{ ele }}
+          <div class="row-container">
+            <div class="col-container box" style="min-width:100px;">
+              <div v-for="ele in vs" class="box">
+                {{ ele }} &nbsp;
               </div>
             </div>
-            <div class="col-container box">
-              {{ words }}
+            <div class="col-container box" style="height:300px; width: 600px;">
+              <div v-for="(value, key) in words" class="box" style="width:100px;">
+                {{ key }}: {{ value.desc }}
+              </div>
             </div>
           </div>
         </div>
