@@ -3,7 +3,23 @@
 // run expects the a program list (pl) in list form,
 // a stack that usually would be empty, but may be primed with an existing state
 // and a dictionary of words.
-function run(pl, stack, words) {
+
+function clone (o) {
+  let newObj = (o instanceof Array) ? [] : {};
+  let i;
+  for (i in o) {
+    if (i == 'clone') continue;
+    if (o[i] && typeof o[i] == "object") {
+      newObj[i] = clone(o[i]);
+    } else {
+      newObj[i] = o[i];
+    }
+  }
+  return newObj;
+};
+
+
+function run(pl, stack, words, record_histrory = false) {
   var term;
   var num;
   while (pl.length > 0) {
@@ -15,8 +31,14 @@ function run(pl, stack, words) {
     }
     else if (typeof term === 'string' && words[term] && words[term].fn && typeof words[term].fn === 'function') {
       console.log('pre-execute ', stack, term, pl);
+      if (record_histrory) {
+        record_histrory.unshift({stack:clone(stack).reverse(), term:term, pl:clone(pl).reverse()});
+      }
       [stack, pl=pl] = words[term].fn(stack, pl);
-      console.log('post-execute ', stack, pl);
+      console.log('post-execute ', stack, pl );
+//      if (record_histrory) {
+//        record_histrory.unshift({stack:clone(stack).reverse(), pl:clone(pl).reverse()});
+//      }
     }
     else {
       num = tryConvertToNumber(term);
@@ -25,6 +47,16 @@ function run(pl, stack, words) {
       }
       else {
         stack.push(num);
+      }
+      if (record_histrory && pl.length > 0) {
+        if (record_histrory.length === 0) {
+          record_histrory.unshift({stack:clone(stack).reverse(), pl:clone(pl).reverse()});
+        }
+        if (record_histrory[0].term) {
+          record_histrory.unshift({stack:clone(stack).reverse(), pl:clone(pl).reverse()});
+        } else {
+          record_histrory[0] = {stack:clone(stack).reverse(), pl:clone(pl).reverse()};
+        }
       }
     }
   }

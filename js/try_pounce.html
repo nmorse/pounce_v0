@@ -10,8 +10,8 @@
     <style>
       .box {
         border: lightgray solid 1px;
-        margin: 2px 1px;
-        padding: 0px 5px;
+        margin: 1px 1px;
+        padding: 0px 4px;
       }
       .col-container {
         display: flex;
@@ -20,6 +20,10 @@
       .row-container {
         display: flex;
         flex-flow: row nowrap;
+        overflow-x: scroll;
+      }
+      .scroll {
+         overflow-x: scroll;
       }
     </style>
   </head>
@@ -45,9 +49,26 @@
                 {{ ele }} &nbsp;
               </div>
             </div>
-            <div class="col-container box" style="height:300px; width: 600px;">
-              <div v-for="(value, key) in words" class="box" style="width:100px;">
-                {{ key }}: {{ value.desc }}
+              <!--
+                <div class="col-container box" style="height:300px; width: 600px;">
+                  <div v-for="(value, key) in words" class="box" style="width:100px;">
+                    {{ key }}: {{ value.desc }}
+                  </div>
+                </div>
+              -->
+            <div class="row-container" style="min-height:300px;">
+              <div v-for="h_instance in vs_history" class="col-container box">
+                <!--
+                -->
+                <div v-for="pl_item in h_instance.pl" class="box" style="width:100px; background-color:rgba(200, 20, 20, 0.3);">
+                  {{ pl_item }}
+                </div>
+                <div v-if="h_instance.term" class="box" style="width:100px; background-color:rgba(20, 20, 200, 0.3);">
+                  {{ h_instance.term }}
+                </div>
+                <div v-for="item in h_instance.stack" class="box" style="width:100px;">
+                  {{ item }}
+                </div>
               </div>
             </div>
           </div>
@@ -84,13 +105,19 @@
           el: '#try_pounce',
           data: {
             "ps": ""
+          , "last_ps": ""
           , "pl": []
           , "vs": []
+          , "vs_history": []
           , "words": words
           , "runPounce": function () {
-            this.pl = parse(this.ps);
-            this.vs = run(this.pl, [], words).reverse();
-          }
+              if (this.ps !== this.last_ps) {
+                this.last_ps = this.ps;
+                this.vs_history = [];
+                this.pl = parse(this.ps);
+                this.vs = run(this.pl, [], words, this.vs_history).reverse();
+              }
+            }
           }
         });
       </script>
