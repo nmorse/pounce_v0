@@ -11,6 +11,7 @@ let runtime_tests = [
   ['alpha {beta:b alpha:a} case', ['a']],
   ['[0] {0:[wow] +:[555]} case', ['wow']],
   ['[+] {0:[wow] +:[555]} case', [555]],
+  ['c {a:A b:B} case', [false]],
   ['2 6 dup2', [2, 6, 2, 6]],
   ['abc str-last', ['ab', 'c']],
   ["'abc ' str-last", ['abc', ' ']],
@@ -32,6 +33,9 @@ let runtime_tests = [
   ['1 1 15 [dup2 +] dup dip2 swap 1 - swap dup dip2', [1, 1, 2, 3, 14, ['dup2', '+']]],
   ['[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def', []],
   ['1 [3 +] 6 repeat', [19]],
+  ['10 20 30 40 2 bubble-up', [10, 30, 40, 20]],
+  ['{a:5 b:3} b get', [{'a':5, 'b':3}, 3]],
+  ['{a:5 b:3} b get 8 + a set', [{'a':11, 'b':3}]],
   ['', []]
 ];
 

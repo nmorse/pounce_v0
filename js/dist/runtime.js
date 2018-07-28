@@ -292,16 +292,41 @@ var words = {
     s.push(!a);
     return [s];
   }},
+  'bubble-up': {fn: function(s) {
+    const i = s.pop();
+    const item = s.splice(-i-1, 1);
+    s.push(item[0]);
+    return [s];
+  }},
+  'get': {fn: function(s) {
+    const key = s.pop();
+    const rec = s[s.length - 1];
+    s.push(rec[key])
+    return [s];
+  }},
+  'set': {fn: function(s) {
+    const key = s.pop();
+    const value = s.pop();
+    let rec = s[s.length - 1];
+    rec[key] = value;
+    return [s];
+  }},
   'case': {fn: function(s, pl) {
     const case_record = s.pop();
-    const expression = s.pop();
-    if (case_record[expression]) {
-      if (isArray(case_record[expression])) {
-        pl = case_record[expression].concat(pl);
+    let key = s.pop();
+    if (key === " ") {
+      key = "' '";
+    }
+    if (case_record[key]) {
+      if (isArray(case_record[key])) {
+        pl = case_record[key].concat(pl);
       }
       else {
-        pl.unshift(case_record[expression]);
+        pl.unshift(case_record[key]);
       }
+    }
+    else {
+      s.push(false);
     }
     return [s, pl];
   }},
