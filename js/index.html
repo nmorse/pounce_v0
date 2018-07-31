@@ -41,21 +41,12 @@
           <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
           <table id="runtime_testing" v-show="showRuntimeTests">
             <tr v-for="t in runtime_tests">
-              <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
+              <td><code>{{t[0]}}</code></td><td><code>{{t[1]}}</code></td><td>{{ (t[2])? 'passed': 'failed' }}</td><td><code>{{t[3]}}</code></td>
             </tr>
           </table>
         </div>
-        <div id="try_pounce">
-          Try the Pounce by entering some Pounce code: <br/>
-          <input v-model="ps" v-on:keyup="runPounce()" spellcheck="false" /> <br/>
-          and the Pounce output: <br/>
-          {{ pl }}
-          {{ words }}
-          <div v-for="ele in vs">
-            {{ ele }}
-          </div>
-        </div>
-        <script>
+
+      <script>
           var date_now = new Date();
           words['years-since'] = parse(date_now.getFullYear() + ' - -1 *');
           words['floor'] = (s, pl) => {
@@ -69,10 +60,6 @@
               "pounce": (ps) => run(parse(ps), [], words)[0]
             }
           });
-          function loadExample(s) {
-            try_pounce.ps = s;
-            try_pounce.runPounce();
-          }
           var testing = new Vue({
             el: '#testing',
             data: {
@@ -83,21 +70,7 @@
               "showRuntimeTests": false
             , "runtime_tests": runtime_tests
             , "totalRuntime_tests": runtime_tests.length
-            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
-            "loadExample": loadExample
-            }
-          });
-          var try_pounce = new Vue({
-            el: '#try_pounce',
-            data: {
-              "ps": ""
-            , "pl": []
-            , "vs": []
-            , "words": words
-            , "runPounce": function () {
-              this.pl = parse(this.ps);
-              this.vs = run(this.pl, [], words).reverse();
-            }
+            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
             }
           });
         </script>
