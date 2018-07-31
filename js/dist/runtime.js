@@ -189,14 +189,14 @@ var words = {
   }},
   'dup': {fn: function(s) {
     const top = s.length - 1;
-    const a = s[top];
+    const a = cloneItem(s[top]);
     s.push(a);
     return [s];
   }},
   'dup2': {fn: function(s) {
-   const top = s.length - 1;
-    const a = s[top];
-    const b = s[top - 1];
+    const top = s.length - 1;
+    const a = cloneItem(s[top]);
+    const b = cloneItem(s[top - 1]);
     s.push(b, a);
     return [s];
   }},
@@ -369,3 +369,26 @@ var words = {
   'fact': ['count-down', 'n*']
 };
 
+function cloneItem(item) {
+  return cloneObject(item);
+  // return JSON.parse(JSON.stringify(item));
+}
+
+function cloneObject(obj) {
+  let clone = {};
+  if (typeof obj !== "object") {
+    return obj;
+  }
+  else {
+    if (isArray(obj)) {
+      clone = [];
+    }
+    for(let i in obj) {
+      if(obj[i] !== null &&  typeof(obj[i]) === "object")
+        clone[i] = cloneObject(obj[i]);
+      else
+        clone[i] = obj[i];
+    }
+    return clone;
+  }
+}

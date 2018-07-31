@@ -19,6 +19,7 @@ let runtime_tests = [
   ['abcdef str-length', [6]],
   ['"1a1" str-length', [3]],
   ['[a 1] 3 push', [['a', 1, 3]]],
+  ['[a 1] dup 3 push', [['a', 1], ['a', 1, 3]]],
   ['[a 1 3] pop', [['a', 1], 3]],
   ['[] str-length', [0]],
   ['[[]] str-length', [1]],
@@ -36,6 +37,7 @@ let runtime_tests = [
   ['10 20 30 40 2 bubble-up', [10, 30, 40, 20]],
   ['{a:5 b:3} b get', [{'a':5, 'b':3}, 3]],
   ['{a:5 b:3} b get 8 + a set', [{'a':11, 'b':3}]],
+  ['{a:5 b:3} dup b get 8 + a set', [{'a':5, 'b':3}, {'a':11, 'b':3}]],
   ['', []]
 ];
 
