@@ -36,10 +36,11 @@
             </div>
             <div class="col-container">
               <div>
-                &nbsp;
+                &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run Pounce only to cursor</label>
               </div>
               <div>
-                <input v-model="ps" v-on:keyup="runPounce()" placeholder="Enter Pounce words here" spellcheck="false" style="width:608px; margin:2px;" />
+                <input v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
+                   style="width:608px; margin:2px;" v-focus />
               </div>
             </div>
           </div>
@@ -91,6 +92,56 @@
           try_pounce.runPounce();
           testing.showRuntimeTests = false;
         }
+        var try_pounce = new Vue({
+          el: '#try_pounce',
+          data: {
+            "ps": ""
+          , "last_ps": ""
+          , "pl": []
+          , "vs": []
+          , "vs_history": []
+          , "words": words
+          , "runUpToCursor": false
+          },
+          methods: {
+           "runPounce": function (e) {
+              if (this.runUpToCursor) {
+                this.runPounceFromCursor(e);
+              }
+              else {
+                if (this.ps !== this.last_ps) {
+                  this.last_ps = this.ps;
+                  this.vs_history = [];
+                  this.pl = parse(this.ps);
+                  this.vs = run(this.pl, [], words, this.vs_history).reverse();
+                }
+              }
+            }
+          , "runPounceFromCursor": function (e) {
+              if (e && e.target) {
+                //console.log(e.target.selectionStart, e.target.selectionEnd);
+                //console.log(this.ps.slice(0, e.target.selectionStart));
+                const new_ps = this.ps.slice(0, e.target.selectionStart);
+                if (new_ps !== this.last_ps) {
+                  this.last_ps = new_ps;
+                  this.vs_history = [];
+                  this.pl = parse(new_ps);
+                  this.vs = run(this.pl, [], words, this.vs_history).reverse();
+                }
+              }
+            }
+            , "focusEditor" : function () {
+              this.focus();
+            }
+          },
+          directives: {
+            focus: {
+              update: function(el) {
+                Vue.nextTick(() => el.focus());               // <======== changed this line
+              }
+            }
+          }
+        });
         var testing = new Vue({
           el: '#testing',
           data: {
@@ -101,25 +152,7 @@
           "loadExample": loadExample
           }
         });
-        var try_pounce = new Vue({
-          el: '#try_pounce',
-          data: {
-            "ps": ""
-          , "last_ps": ""
-          , "pl": []
-          , "vs": []
-          , "vs_history": []
-          , "words": words
-          , "runPounce": function () {
-              if (this.ps !== this.last_ps) {
-                this.last_ps = this.ps;
-                this.vs_history = [];
-                this.pl = parse(this.ps);
-                this.vs = run(this.pl, [], words, this.vs_history).reverse();
-              }
-            }
-          }
-        });
+
       </script>
     </body>
 </html>
