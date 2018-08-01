@@ -110,10 +110,7 @@
               }
               else {
                 if (this.ps !== this.last_ps) {
-                  this.last_ps = this.ps;
-                  this.vs_history = [];
-                  this.pl = parse(this.ps);
-                  this.vs = run(this.pl, [], words, this.vs_history).reverse();
+                  this.executePounceScript(this.ps);
                 }
               }
             }
@@ -123,15 +120,46 @@
                 //console.log(this.ps.slice(0, e.target.selectionStart));
                 const new_ps = this.ps.slice(0, e.target.selectionStart);
                 if (new_ps !== this.last_ps) {
-                  this.last_ps = new_ps;
-                  this.vs_history = [];
-                  this.pl = parse(new_ps);
-                  this.vs = run(this.pl, [], words, this.vs_history).reverse();
+                  this.executePounceScript(new_ps);
                 }
               }
             }
-            , "focusEditor" : function () {
-              this.focus();
+          , "focusEditor" : function () {
+              //this.focus();
+              console.log('deadwood here?');
+            }
+          , "executePounceScript" : function (pounce_script) {
+              if (this.scan_recall(pounce_script)) {
+                return;
+              }
+              this.last_ps = pounce_script;
+              this.vs_history = [];
+              this.pl = parse(pounce_script);
+              this.vs = run(this.pl, [], words, this.vs_history).reverse();
+            }
+          , 'scan_recall': function (ps) {
+                if (ps.indexOf(' recall') >= 1) {
+                  const pl = parse(ps);
+                  if (pl.length === 2) {
+                    let key = pl[0][0];
+                    this.ps = '[' + unParse(words[key]) + '] [' + key + '] de-f';
+                    return true;
+                  }
+                }
+                return false;
+              
+                
+              //  'recall': {fn: function(s) {
+              //    const key = s.pop();
+              //    if (isArray(words[key])) {
+              //      s.push(words[key]);
+              //      s.push(key);
+              //    }
+              //    else {
+              //      s.push('recall error: requested word is internal (i.e. defined as a function) and is not divisable into words');
+              //    }
+              //    return [s];
+              //  }},
             }
           },
           directives: {

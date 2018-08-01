@@ -16,7 +16,25 @@ function clone (o) {
     }
   }
   return newObj;
-};
+}
+
+function unParse (pl) {
+  let ps = '';
+  for (let i in pl) {
+    if (pl[i] && typeof pl[i] == "object") {
+      if (isArray(pl[i])) {
+        ps += ' [' + unParse(pl[i]) + ']';
+      }
+      else {
+        ps += ' {' + unParse(pl[i]) + '}';
+      }
+    }
+    else {
+      ps += ' ' + pl[i];
+    }
+  }
+  return ps;
+}
 
 
 function run(pl, stack, words, record_histrory = false) {
@@ -98,6 +116,7 @@ function number_or_str(s) {
 
 var stack = [];
 var words = {
+  
   'def': {fn: function(s) {
     const key = s.pop();
     const fn = s.pop();
