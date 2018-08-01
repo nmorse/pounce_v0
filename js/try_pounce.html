@@ -143,23 +143,13 @@
                   if (pl.length === 2) {
                     let key = pl[0][0];
                     this.ps = '[' + unParse(words[key]) + '] [' + key + '] de-f';
+                    this.vs = [];
                     return true;
                   }
                 }
                 return false;
               
-                
-              //  'recall': {fn: function(s) {
-              //    const key = s.pop();
-              //    if (isArray(words[key])) {
-              //      s.push(words[key]);
-              //      s.push(key);
-              //    }
-              //    else {
               //      s.push('recall error: requested word is internal (i.e. defined as a function) and is not divisable into words');
-              //    }
-              //    return [s];
-              //  }},
             }
           },
           directives: {
