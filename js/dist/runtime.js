@@ -319,7 +319,7 @@ var words = {
   }},
   'get': {fn: function(s) {
     const key = s.pop();
-    const rec = s[s.length - 1];
+    const rec = cloneItem(s[s.length - 1]);
     s.push(rec[key])
     return [s];
   }},
