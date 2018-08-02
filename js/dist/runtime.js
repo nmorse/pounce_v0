@@ -152,7 +152,7 @@ var words = {
   'pop': {fn: function(s) {
     const top = s.length - 1;
     const list = s[top];
-    const item = list.pop();
+    const item = cloneItem(list.pop());
     s.push(item);
     return [s];
   }},
