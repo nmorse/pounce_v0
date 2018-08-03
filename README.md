@@ -1,13 +1,13 @@
 
 # Introducing the Pounce Programming Language
 Pounce is a concatenative programming language that works in the Browser, Server and IoT.
-The aim of Pounce is to encourage programmers to try conatenative programming. Since Pounce works in your browser, so you can try it out easily. If you like this style of programming, you can also try out other Pounce interpreters written in Python and C. Pounce interpreters are being developed in parallel, to be as consistent as possible across various platforms.
+The aim of Pounce is to encourage programmers to try conatenative programming. Since Pounce works in your browser, you can try it out easily. If you like this style of programming, you can also try out other Pounce interpreters written in Python and C. Pounce interpreters are being developed in parallel, to be as consistent as possible across various platforms.
 Pounce is currently in an Alpha development phase, so it's not production ready, but the core is fairly stable. Look for updates on development posted here.
 
 ## Concatenative Programming is... 
 It's a different approach to programming, that is for sure. Concatenative programming (CP) is all about the __composition__ of functions, by concatenation.
 
-The magic sauce is the use of __post-fix__ notation to make the composition of functions natural, so natural in fact, that there is no syntax needed to compose two functions together. Simply by placing one function after another (concatenate them) you have indicated that you want the two functions composed into a single (new) function.
+CP uses a magic sauce in the form of __post-fix__ notation to make the composition of functions feel natural, so natural in fact, that there is no syntax needed to compose two functions together. Simply by placing functions, one after another (concatenating them) you have indicated that the two functions are to be composed into a single (new) function. More on the advantages of post-fix notiation, such as "Parentheses be gone!"
 
 There's a lot more to say about this concatenative style, also known as __stack-based__ programming. One thing worth mentioning is this: there are __no named variables__ in CP. This lack of variables is a shock to most programmers, but it is the philosophy of CP to "Name the code, not the Data." Along with, the slightly derogatory quote, "Variables are 'GOTO' for data!"  these mottos differentiate CP from other programming paradigms. Sure CP deals with data, but data is not referenced by named variables, instead it's stored in a single uniform data-structure (usually a stack). All functions take this stack as an argument and return a modified copy, now that is what we call consistency.
 
