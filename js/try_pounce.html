@@ -25,6 +25,9 @@
       .scroll {
          overflow-x: scroll;
       }
+      td {
+        vertical-align: top;
+      }
     </style>
   </head>
     <body>
@@ -75,14 +78,13 @@
           </div>
         </div>
       </div>
-      <div id="testing">
-        <button v-on:click="showRuntimeTests = !showRuntimeTests">toggle Runtime test results</button> Out of {{ totalRuntime_tests }} tests, {{ failedRuntime_tests }} tests failed.
-        <table id="runtime_testing" v-show="showRuntimeTests">
-          <tr v-for="t in runtime_tests">
+      <div id="examples_section">
+        <button v-on:click="showExamples = !showExamples">toggle Runtime test results</button> check out {{ totalexamples }} examples.
+        <table id="some_examples" v-show="showExamples">
+          <tr v-for="t in examples">
             <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
-            <td><code>{{t[1]}}</code></td>
-            <td>{{ (t[2])? 'passed': 'failed' }}</td>
-            <td><code>{{t[3]}}</code></td>
+            <td><code>{{t[1].level}}</code></td>
+            <td>{{t[1].desc}}</td>
           </tr>
         </table>
       </div>
@@ -90,7 +92,7 @@
         function loadExample(s) {
           try_pounce.ps = s;
           try_pounce.runPounce();
-          testing.showRuntimeTests = false;
+          testing.showExamples = false;
         }
         var try_pounce = new Vue({
           el: '#try_pounce',
@@ -155,21 +157,31 @@
           directives: {
             focus: {
               update: function(el) {
-                Vue.nextTick(() => el.focus());               // <======== changed this line
+                Vue.nextTick(() => el.focus());
               }
             }
           }
         });
-        var testing = new Vue({
-          el: '#testing',
+const examples = [
+  ['2 3 +', {summary:'Sum of two numbers', desc:'Math is easy to do, the only difference is that the operator (+ for addition) comes after the two numbers being added.', level:'basic'}],
+  ['2 3 *', {summary:'Simple Multiplication', desc:'For multiplication, the operator (* for the product or multiplication) is placed after the two numbers to be multiplied.', level:'basic'}],
+  ['9 7 + 2.5 /', {summary:'Sum of two numbers', desc:'To add and then divide, say (9 + 7) / 2.4. Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['9 7 2.4 + /', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}]
+];
+        var examples_section = new Vue({
+          el: '#examples_section',
           data: {
-            "showRuntimeTests": false
-          , "runtime_tests": runtime_tests
-          , "totalRuntime_tests": runtime_tests.length
-          , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
-          "loadExample": loadExample
+            "showExamples": false
+          , "examples": examples
+          , "totalexamples": examples.length
+          , "loadExample": loadExample
           }
         });
+
 
       </script>
     </body>

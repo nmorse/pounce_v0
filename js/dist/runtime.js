@@ -4,13 +4,13 @@
 // a stack that usually would be empty, but may be primed with an existing state
 // and a dictionary of words.
 
-function clone (o) {
+function cloneAnyObj (o) {
   let newObj = (o instanceof Array) ? [] : {};
   let i;
   for (i in o) {
     if (i == 'clone') continue;
     if (o[i] && typeof o[i] == "object") {
-      newObj[i] = clone(o[i]);
+      newObj[i] = cloneAnyObj(o[i]);
     } else {
       newObj[i] = o[i];
     }
@@ -26,11 +26,28 @@ function unParse (pl) {
         ps += ' [' + unParse(pl[i]) + ']';
       }
       else {
-        ps += ' {' + unParse(pl[i]) + '}';
+        ps += ' {' + unParseKeyValuePair(pl[i]) + '}';
       }
     }
     else {
       ps += ' ' + pl[i];
+    }
+  }
+  return ps;
+}
+function unParseKeyValuePair(pl) {
+  let ps = '';
+  for (let i in pl) {
+    if (pl[i] && typeof pl[i] == "object") {
+      if (isArray(pl[i])) {
+        ps += i + ':[' + unParse(pl[i]) + ']';
+      }
+      else {
+        ps += i + ':{' + unParseKeyValuePair(pl[i]) + '}';
+      }
+    }
+    else {
+      ps += i + ': ' + pl[i];
     }
   }
   return ps;
@@ -50,30 +67,30 @@ function run(pl, stack, words, record_histrory = false) {
     else if (typeof term === 'string' && words[term] && words[term].fn && typeof words[term].fn === 'function') {
       console.log('pre-execute ', stack, term, pl);
       if (record_histrory) {
-        record_histrory.unshift({stack:clone(stack).reverse(), term:term, pl:clone(pl).reverse()});
+        record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
       }
       [stack, pl=pl] = words[term].fn(stack, pl);
       console.log('post-execute ', stack, pl );
 //      if (record_histrory) {
-//        record_histrory.unshift({stack:clone(stack).reverse(), pl:clone(pl).reverse()});
+//        record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
 //      }
     }
     else {
       num = tryConvertToNumber(term);
       if (isArray(term) || !isNumber(num)) {
-        stack.push(term);
+        stack.push(cloneItem(term));
       }
       else {
         stack.push(num);
       }
       if (record_histrory && pl.length > 0) {
         if (record_histrory.length === 0) {
-          record_histrory.unshift({stack:clone(stack).reverse(), pl:clone(pl).reverse()});
+          record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
         }
         if (record_histrory[0].term) {
-          record_histrory.unshift({stack:clone(stack).reverse(), pl:clone(pl).reverse()});
+          record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
         } else {
-          record_histrory[0] = {stack:clone(stack).reverse(), pl:clone(pl).reverse()};
+          record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()};
         }
       }
     }
@@ -152,8 +169,13 @@ var words = {
   'pop': {fn: function(s) {
     const top = s.length - 1;
     const list = s[top];
-    const item = cloneItem(list.pop());
-    s.push(item);
+    if (isArray(list)) {
+      const item = cloneItem(list.pop());
+      s.push(item);
+    }
+    else {
+      console.log({'word':'pop', 'error':"unable to 'pop' from non-Array"});
+    }
     return [s];
   }},
   'apply': {fn: function(s, pl) {
@@ -389,8 +411,8 @@ var words = {
 };
 
 function cloneItem(item) {
-  return cloneObject(item);
-  // return JSON.parse(JSON.stringify(item));
+  // return cloneObject(item);
+  return JSON.parse(JSON.stringify(item));
 }
 
 function cloneObject(obj) {
