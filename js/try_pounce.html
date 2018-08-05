@@ -8,6 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     
     <style>
+    body {
+      font-family: "helvetica neue", roboto;
+    }
       .box {
         border: lightgray solid 1px;
         margin: 1px 1px;
@@ -144,7 +147,7 @@
                   const pl = parse(ps);
                   if (pl.length === 2) {
                     let key = pl[0][0];
-                    this.ps = '[' + unParse(words[key]) + '] [' + key + '] de-f';
+                    this.ps = '[' + unParse(words[key]) + '] [' + key + '] ';
                     this.vs = [];
                     return true;
                   }

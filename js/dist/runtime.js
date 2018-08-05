@@ -47,7 +47,7 @@ function unParseKeyValuePair(pl) {
       }
     }
     else {
-      ps += i + ': ' + pl[i];
+      ps += ' ' + i + ':' + pl[i];
     }
   }
   return ps;
