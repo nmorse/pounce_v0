@@ -57,7 +57,8 @@ function unParseKeyValuePair(pl) {
 function run(pl, stack, words, record_histrory = false) {
   var term;
   var num;
-  while (pl.length > 0) {
+  halt = false;
+  while (pl.length > 0 && !halt) {
     term = pl.shift();
     if (typeof term === 'string' && isArray(words[term])) {
       console.log('unquote list ', stack, term, pl);
@@ -130,10 +131,13 @@ function number_or_str(s) {
   return s;
 }
 
-
+var halt = false;
 var stack = [];
 var words = {
-  
+  'halt': {fn: function(s) {
+    halt = true;
+    return [s];
+  }},
   'def': {fn: function(s) {
     const key = s.pop();
     const fn = s.pop();
@@ -157,6 +161,11 @@ var words = {
   'str-length': {fn: function(s) {
     const str = s.pop();
     s.push(str.length);
+    return [s];
+  }},
+  'str-append': {fn: function(s) {
+    const str = s.pop();
+    s[s.length - 1] = s[s.length - 1] + str;
     return [s];
   }},
   'push': {fn: function(s) {

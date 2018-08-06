@@ -31,3 +31,29 @@ branch-on-char
   description:'pounce bootstrap parser'
 }
 [ps get-^ split-last branch-on-char] define
+
+
+{ps:'this is a sample to parse' pl:[] state:'?' cw:''} ps get str-first dup ' ' == not [cw get swap str-append cw set] if
+
+{ps:'this is a sample to parse' pl:[] state:'?' cw:''} ps get str-first dup ' ' == not drop [cw get] dip str-append
+
+{ps:'this is a sample to parse' pl:[] state:'?' cw:'e'} ps get str-first dup ' ' == not drop [ps set] dip [cw get] dip str-append cw set
+
+
+[[ps set] dip [cw get] dip str-append cw set 'word' state set] [word-proc] def
+[drop ps set pl get [cw get] dip swap push pl set ' ' cw set] [word-end] def
+{ps:'this is a sample to parse' pl:[] state:'?' cw:''} [ps get str-first dup ' ' == not [word-proc] [word-end] if-else] 5 repeat
+
+[drop ps set pl get cw get '' push pl set '' cw set] [word-end] def
+{ps:' this is a sample to parse' pl:[] state:'?' cw:''} ps get str-first dup ' ' == drop drop ps set pl get cw get '' push pl set '' cw set
+
+
+[[ps set] dip [cw get] dip str-append cw set 'word' state set] [word-proc] def
+[drop ps set pl get [cw get] dip swap push pl set ' ' cw set] [word-end] def
+{ps:'this is a sample to parse' pl:[] state:'?' cw:''} [ps get str-first dup {' ':[word-end]} case not [word-proc true] if] 5 repeat
+
+[[ps set] dip [cw get] dip str-append cw set 'word' state set] [word-proc] def
+[drop ps set pl get [cw get] dip swap push pl set ' ' cw set true] [word-end] def
+[drop dup 'list' state set my-parse] [list-proc] def
+[ps get str-first dup {' ':[word-end] '[':list-proc} case not [word-proc] if] [my-parse] def
+{ps:'this is [a sample] to parse' pl:[] state:'?' cw:''} my-parse 9 repeat
