@@ -21,15 +21,20 @@ var cb_words = {
     ctx.stroke();
     return [s];
   }},
-  'cb-block': {fn: function(s) {
-    const x = s.pop();
-    const y = s.pop();
-    const ctx = s[s.length - 1];
-    ctx.fillStyle = 'rgb(200, 0, 0)';
-    ctx.fillRect(x, y, 50, 50);
-    
-    ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-    ctx.fillRect(x + 20, y + 20, 50, 50);
+  'cb-box': {fn: function(s) {
+    const d = s.pop();
+    if (isNumber(d)) {
+      const x = d
+      const y = s.pop();
+      const ctx = s[s.length - 1];
+      ctx.fillStyle = 'rgb(0, 0, 0)';
+      ctx.fillRect(x, y, 50, 50);
+    }
+    else {
+      const ctx = s[s.length - 1];
+      ctx.fillStyle = 'rgba('+d.color.r+', '+d.color.g+', '+d.color.b+', '+d.color.a+')';
+      ctx.fillRect(d.x, d.y, d.w, d.h);
+    }
     return [s];
   }},
   'cb-clear': {fn: function(s) {
