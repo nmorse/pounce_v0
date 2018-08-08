@@ -9,11 +9,31 @@ var cb_words = {
     s.push(ctx);
     return [s];
   }},
-  'cb-line': {fn: function(s) {
-    const x1 = s.pop();
+  'cb-begin-path': {fn: function(s) {
     const y1 = s.pop();
-    const x2 = s.pop();
+    const x1 = s.pop();
+    const ctx = s[s.length - 1];
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    return [s];
+  }},
+  'cb-line-to': {fn: function(s) {
     const y2 = s.pop();
+    const x2 = s.pop();
+    const ctx = s[s.length - 1];
+    ctx.lineTo(x2, y2);
+    return [s];
+  }},
+  'cb-end-path': {fn: function(s) {
+    const ctx = s[s.length - 1];
+    ctx.stroke();
+    return [s];
+  }},
+  'cb-line': {fn: function(s) {
+    const y2 = s.pop();
+    const x2 = s.pop();
+    const y1 = s.pop();
+    const x1 = s.pop();
     const ctx = s[s.length - 1];
     ctx.beginPath();
     ctx.moveTo(x1, y1);
@@ -24,10 +44,10 @@ var cb_words = {
   'cb-box': {fn: function(s) {
     const d = s.pop();
     if (isNumber(d)) {
-      const x = d
-      const y = s.pop();
+      const y = d
+      const x = s.pop();
       const ctx = s[s.length - 1];
-      ctx.fillStyle = 'rgb(0, 0, 0)';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
       ctx.fillRect(x, y, 50, 50);
     }
     else {
