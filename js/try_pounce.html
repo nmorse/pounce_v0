@@ -35,6 +35,7 @@
   </head>
     <body>
       <div class="" id="try_pounce">
+        <canvas id="canvas" width="250" height="150"></canvas>
         <div class="col-container">
           <div class="row-container">
             <div class="box" style="min-width:100px;">
@@ -91,7 +92,10 @@
           </tr>
         </table>
       </div>
+            <script src="ui/io_canvas_basic.js"></script>
+
       <script>
+      
         function loadExample(s) {
           try_pounce.ps = s;
           try_pounce.runPounce();
@@ -173,7 +177,8 @@ const examples = [
   ['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}]
+  ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['cb-init cb-clear 4 7 41 162 cb-line 49 182 130 148 cb-line 50 50 cb-block',{summary:'Draws on the canvas', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:'canvas'}]
 ];
         var examples_section = new Vue({
           el: '#examples_section',
@@ -187,5 +192,6 @@ const examples = [
 
 
       </script>
+
     </body>
 </html>
