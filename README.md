@@ -18,13 +18,13 @@ The FP vs. CP comparison goes something like this:
 
 This just scratches the surface what CP is, so for more definitions and discussions, you should jump to some of these links: ... {links TBD}
 
-There have been many CP languages, but the particular brand of CP that Pounce delivers, has these goals: 
+Pounce borrows from a long line of CP languages. These include Forth, Joy, Factor, Cat. The particular brand of CP that Pounce delivers, has these goals: 
  * To be simple and consistent; 
  * To provide IDEs and help in learning and debugging; 
- * To be portable to the major programming destinations.
+ * To be portable to the major computing platforms.
 
 ## Portable to...
-To be portable, Pounce has JavaScript and Python interpreters for client and server side coding, as well as "C" (or Python) for IoT platforms. 
+To be portable, Pounce (so far) has JavaScript and Python interpreters capable of client and server side coding, as well as in development a "C" interpretor (or Python) for IoT platforms. 
 Future development will include assemblers and compilers, that will improve efficiency over interpretation.
  
 ## Getting started...
