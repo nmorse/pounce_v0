@@ -83,7 +83,7 @@
         </div>
       </div>
       <div id="examples_section">
-        <button v-on:click="showExamples = !showExamples">toggle Runtime test results</button> check out {{ totalexamples }} examples.
+        <button v-on:click="showExamples = !showExamples">toggle Examples</button> check out these {{ totalexamples }} examples.
         <table id="some_examples" v-show="showExamples">
           <tr v-for="t in examples">
             <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
@@ -179,7 +179,8 @@ const examples = [
   ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['cb-init cb-clear 4 7 30 112 cb-line 59 122 130 99 cb-line {color:{r:64 g:0 b:255 a:0.5} x:30 y:40 w:60 h:40} cb-box {color:{r:255 g:63 b:127 a:0.5} x:60 y:50 w:40 h:50} cb-box drop',{summary:'Draws on the canvas', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:'canvas'}],
-  ['cb-init cb-clear 30 45 cb-begin-path 50 60 cb-line-to 100 10 cb-line-to cb-end-path drop', {summary:'Draws on the canvas', desc:'Draws a line on the canvas', level:'canvas'}]
+  ['cb-init cb-clear 30 45 cb-begin-path 50 60 cb-line-to 100 10 cb-line-to cb-end-path drop', {summary:'Draws on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
+  ['[[x set] dip y set] [pack] def [x get [y get] dip swap] [unpack] def cb-init cb-clear 30 45 pack unpack cb-begin-path unpack [20 +] dip 20 + cb-line-to 100 10 cb-line-to cb-end-path drop', {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}]
 ];
         var examples_section = new Vue({
           el: '#examples_section',
