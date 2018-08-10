@@ -179,7 +179,8 @@ const examples = [
   ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['cb-init cb-clear 4 7 30 112 cb-line 59 122 130 99 cb-line {color:{r:64 g:0 b:255 a:0.5} x:30 y:40 w:60 h:40} cb-box {color:{r:255 g:63 b:127 a:0.5} x:60 y:50 w:40 h:50} cb-box drop',{summary:'Draws on the canvas', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:'canvas'}],
-  ['cb-init cb-clear 30 45 cb-begin-path 50 60 cb-line-to 100 10 cb-line-to cb-end-path drop', {summary:'Draws on the canvas', desc:'Draws a line on the canvas', level:'canvas'}]
+  ['cb-init cb-clear 30 45 cb-begin-path 50 60 cb-line-to 100 10 cb-line-to cb-end-path drop', {summary:'Draws on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
+  ['cb-init 1 currX set 1 currY set currX get [currY get] dip cb-begin-path 50 60 cb-line-to cb-end-path 100 10 cb-line-to cb-end-path drop', {level:'canvas'}]
 ];
         var examples_section = new Vue({
           el: '#examples_section',

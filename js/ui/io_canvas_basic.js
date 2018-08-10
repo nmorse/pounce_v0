@@ -59,7 +59,9 @@ var cb_words = {
   }},
   'cb-clear': {fn: function(s) {
     const ctx = s[s.length - 1];
-    ctx.clearRect(0, 0, 300, 300); // clear canvas
+    const w = ctx.canvas.width;
+    const h = ctx.canvas.height;
+    ctx.clearRect(0, 0, w, h); // clear canvas
     return [s];
   }},
 };
