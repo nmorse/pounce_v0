@@ -24,10 +24,10 @@ Pounce borrows from a long line of CP languages. These include Forth, Joy, Facto
  * To be portable to the major computing platforms.
 
 ## Simple and Consistent...
-For simplicity sake in language design Pounce will maintian a minimal core that only contains what is common to all applications. The consistency of Pounce will also help maintian simplicity. One example is that Pounce will always follow post-fix notation. Historically, CP languages switch over to prefix when defining functions, but Pounce supports a post-fix style consistancy (note that other notaions are also offered, but post-fix is always supported).
+For simplicity sake in language design Pounce will maintain a minimal core that only contains what is common to all applications. The consistency of Pounce will also help maintain simplicity. One example is that Pounce will always follow post-fix notation. Historically, CP languages switch over to prefix when defining functions, but Pounce supports a post-fix style consistency (note that other notations are also offered, but post-fix is always supported).
 
 ## IDEs and help in learning and debugging... 
-The REPL has survived the test of time and will continue to be alive and well, but the IDEs have made programming more powerfull and productive. Pounce has a browser based IDE that will help you visualize and interact with your code. The aim is to keep the edit-compile-debug cycle as short as posible. With tests built into the function (word) definitions every function is tested while you code. Try out the IDE and tell us if you have ideas. 
+The REPL has survived the test of time and will continue to be alive and well, but IDEs have made programming more powerful and productive. Pounce has a browser based IDE that will help you visualize and interact with your code. The aim is to keep the edit-run-debug cycle as short as possible. Tests are built into the function definitions every word so that testes are run while you code. Visualizing your code and its affect on the stack, is the business of the IDE.  
 
 ## Portable to...
 To be portable, Pounce (so far) has JavaScript and Python interpreters capable of client and server side coding, as well as (in development) a "C" interpretor (or Python) for IoT platforms. 
