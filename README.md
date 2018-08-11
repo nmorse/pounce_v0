@@ -23,9 +23,15 @@ Pounce borrows from a long line of CP languages. These include Forth, Joy, Facto
  * To provide IDEs and help in learning and debugging; 
  * To be portable to the major computing platforms.
 
+## Simple and Consistent...
+For simplicity sake in language design Pounce will maintian a minimal core that only contains what is common to all applications. The consistency of Pounce will also help maintian simplicity. One example is that Pounce will always follow post-fix notation. Historically, CP languages switch over to prefix when defining functions, but Pounce supports a post-fix style consistancy (note that other notaions are also offered, but post-fix is always supported).
+
+## IDEs and help in learning and debugging... 
+The REPL has survived the test of time and will continue to be alive and well, but the IDEs have made programming more powerfull and productive. Pounce has a browser based IDE that will help you visualize and interact with your code. The aim is to keep the edit-compile-debug cycle as short as posible. With tests built into the function (word) definitions every function is tested while you code. Try out the IDE and tell us if you have ideas. 
+
 ## Portable to...
-To be portable, Pounce (so far) has JavaScript and Python interpreters capable of client and server side coding, as well as in development a "C" interpretor (or Python) for IoT platforms. 
+To be portable, Pounce (so far) has JavaScript and Python interpreters capable of client and server side coding, as well as (in development) a "C" interpretor (or Python) for IoT platforms. 
 Future development will include assemblers and compilers, that will improve efficiency over interpretation.
  
 ## Getting started...
-First try Pounce in your browser to get a feel for the concatenative style of programming. The examples will let you start off small and move into making our own larger applications.
+First try Pounce in your browser to get a feel for the concatenative style of programming. The examples will let you start off small and move into making our own larger applications. https://nmorse.github.io/pounce/js/try_pounce.html
