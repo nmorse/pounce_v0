@@ -1,8 +1,53 @@
 // Pounce runtime interpreter
 
-// run expects the a program list (pl) in list form,
+// run expects a parsed program list (pl).
 // a stack that usually would be empty, but may be primed with an existing state
-// and a dictionary of words.
+// a dictionary of words.
+function run(pl, stack, words, record_histrory = false) {
+  var term;
+  var num;
+  halt = false;
+  while (pl.length > 0 && !halt) {
+    term = pl.shift();
+    if (typeof term === 'string' && isArray(words[term])) {
+      console.log('unquote list ', stack, term, pl);
+      pl = words[term].concat(pl);
+      console.log('post-unquote ', stack, pl);
+    }
+    else if (typeof term === 'string' && words[term] && words[term].fn && typeof words[term].fn === 'function') {
+      console.log('pre-execute ', stack, term, pl);
+      if (record_histrory) {
+        record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
+      }
+      [stack, pl=pl] = words[term].fn(stack, pl);
+      console.log('post-execute ', stack, pl );
+//      if (record_histrory) {
+//        record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
+//      }
+    }
+    else {
+      num = tryConvertToNumber(term);
+      if (isArray(term) || !isNumber(num)) {
+        stack.push(cloneItem(term));
+      }
+      else {
+        stack.push(num);
+      }
+      if (record_histrory && pl.length > 0) {
+        if (record_histrory.length === 0) {
+          record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
+        }
+        if (record_histrory[0].term) {
+          record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
+        } else {
+          record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()};
+        }
+      }
+    }
+  }
+  return stack;
+}
+
 
 function cloneAnyObj (o) {
   let newObj = (o instanceof Array) ? [] : {};
@@ -51,52 +96,6 @@ function unParseKeyValuePair(pl) {
     }
   }
   return ps;
-}
-
-
-function run(pl, stack, words, record_histrory = false) {
-  var term;
-  var num;
-  halt = false;
-  while (pl.length > 0 && !halt) {
-    term = pl.shift();
-    if (typeof term === 'string' && isArray(words[term])) {
-      console.log('unquote list ', stack, term, pl);
-      pl = words[term].concat(pl);
-      console.log('post-unquote ', stack, pl);
-    }
-    else if (typeof term === 'string' && words[term] && words[term].fn && typeof words[term].fn === 'function') {
-      console.log('pre-execute ', stack, term, pl);
-      if (record_histrory) {
-        record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
-      }
-      [stack, pl=pl] = words[term].fn(stack, pl);
-      console.log('post-execute ', stack, pl );
-//      if (record_histrory) {
-//        record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
-//      }
-    }
-    else {
-      num = tryConvertToNumber(term);
-      if (isArray(term) || !isNumber(num)) {
-        stack.push(cloneItem(term));
-      }
-      else {
-        stack.push(num);
-      }
-      if (record_histrory && pl.length > 0) {
-        if (record_histrory.length === 0) {
-          record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
-        }
-        if (record_histrory[0].term) {
-          record_histrory.unshift({stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()});
-        } else {
-          record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()};
-        }
-      }
-    }
-  }
-  return stack;
 }
 
 

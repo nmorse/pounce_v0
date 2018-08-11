@@ -3,8 +3,8 @@
   <head>
     <script src="dist/parser.js"></script>
     <script src="dist/runtime.js"></script>
-    <script src="test/runtime_test.js"></script>
-
+    <!--<script src="test/runtime_test.js"></script>
+    -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     
     <style>
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div class="row-container">
-            <div class="col-container box" style="min-width:100px;">
+            <div class="col-container box" style="min-width:200px;">
               <div v-for="ele in vs" class="box">
                 {{ ele }} &nbsp;
               </div>
@@ -68,13 +68,13 @@
               <div v-for="h_instance in vs_history" class="col-container box">
                 <!--
                 -->
-                <div v-for="pl_item in h_instance.pl" class="box" style="width:100px; background-color:rgba(200, 20, 20, 0.3);">
+                <div v-for="pl_item in h_instance.pl" class="box" style="width:100px; overflow: hidden; background-color:rgba(200, 20, 20, 0.3);">
                   {{ pl_item }}&nbsp;
                 </div>
-                <div v-if="h_instance.term" class="box" style="width:100px; background-color:rgba(20, 20, 200, 0.3);">
+                <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
                   {{ h_instance.term }}
                 </div>
-                <div v-for="item in h_instance.stack" class="box" style="width:100px;">
+                <div v-for="item in h_instance.stack" class="box" style="width:100px; overflow: hidden;">
                   {{ item }}&nbsp;
                 </div>
               </div>
