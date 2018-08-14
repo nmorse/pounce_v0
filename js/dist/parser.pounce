@@ -1,59 +1,25 @@
+// pounce parser (in pounce)
+//// definitions
 
-"a b c" [dup str-length 0 > [str-first {' ':space a:yeay b:ok c:C} case swap] if] [dup dip] 5 repeat
-
-"a b c" [dup str-length 0 > [str-first {' ':space a:yeay b:ok c:C} case swap] if] [dup dip] [dup str-length 2 bubble-up] dip2 repeat
-
-"a b c x y x z " [dup str-length [str-first swap] swap repeat] [str-to-stack] def
-
-
-
-
-
-"abcax" [str-first {' ':space a:yeay b:ok c:C} case swap] [dup dip] 4 repeat
-
-
-[dup str-length [str-last swap] swap repeat] [str-to-stack] def
-
-
-{ word:parse-pounce
-  args:[
-    {ps:"string of pounce code" pl:[any]}
-  ]
-  description:'pounce bootstrap parser'
-}
-[ps get-^ split-last branch-on-char] define
-
-branch-on-char
-{ word:branch-on-char
-  args:[
-    char
-  ]
-  description:'pounce bootstrap parser'
-}
-[ps get-^ split-last branch-on-char] define
-
-
-{ps:'this is a sample to parse' pl:[] state:'?' cw:''} ps get str-first dup ' ' == not [cw get swap str-append cw set] if
-
-{ps:'this is a sample to parse' pl:[] state:'?' cw:''} ps get str-first dup ' ' == not drop [cw get] dip str-append
-
-{ps:'this is a sample to parse' pl:[] state:'?' cw:'e'} ps get str-first dup ' ' == not drop [ps set] dip [cw get] dip str-append cw set
-
-
+[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
 [[ps set] dip [cw get] dip str-append cw set 'word' state set] [word-proc] def
-[drop ps set pl get [cw get] dip swap push pl set ' ' cw set] [word-end] def
-{ps:'this is a sample to parse' pl:[] state:'?' cw:''} [ps get str-first dup ' ' == not [word-proc] [word-end] if-else] 5 repeat
 
-[drop ps set pl get cw get '' push pl set '' cw set] [word-end] def
-{ps:' this is a sample to parse' pl:[] state:'?' cw:''} ps get str-first dup ' ' == drop drop ps set pl get cw get '' push pl set '' cw set
-
-
-[[ps set] dip [cw get] dip str-append cw set 'word' state set] [word-proc] def
-[drop ps set pl get [cw get] dip swap push pl set ' ' cw set] [word-end] def
-{ps:'this is a sample to parse' pl:[] state:'?' cw:''} [ps get str-first dup {' ':[word-end]} case not [word-proc true] if] 5 repeat
-
-[[ps set] dip [cw get] dip str-append cw set 'word' state set] [word-proc] def
 [drop ps set pl get [cw get] dip swap push pl set ' ' cw set true] [word-end] def
+
 [drop dup 'list' state set my-parse] [list-proc] def
-[ps get str-first dup {' ':[word-end] '[':list-proc} case not [word-proc] if] [my-parse] def
-{ps:'this is [a sample] to parse' pl:[] state:'?' cw:''} my-parse 9 repeat
+
+[ps get str-first dup {' ':[word-end] '[':list-proc} case not [word-proc] if] [parse-ps-to-pl] def
+
+[[ps get] dip swap str-length 0 != if] [until-ps-empty] def
+
+{ps:'this is [a sample] to parse' pl:[] state:'?' cw:''} [parse-ps-to-pl] until-ps-empty
+
+
+
+
+
+
+
+[dup [swap] dip swap ps get str-length 0 == not [swap [swap until-ps-empty] push apply apply] if] [until-ps-empty] def
+[ps get str-first drop ps set] [do] def
+{ps:'1 2 3' } [do] until-ps-empty
