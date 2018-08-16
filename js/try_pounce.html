@@ -205,7 +205,10 @@ cb-init cb-clear
 30 45 pack unpack cb-begin-path unpack [20 +] dip 20 + cb-line-to
 100 10 cb-line-to cb-end-path
 drop
-`, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}]
+`, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
+  [
+`[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
+0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply`, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}]
 ];
 
         var examples_section = new Vue({
