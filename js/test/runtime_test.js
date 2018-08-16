@@ -44,7 +44,7 @@ let runtime_tests = [
   ['[{rel-x:12 rel-y:-2}] [mouse-move-sim] def', []],
   ['[[pop swap] [dup str-length] dip swap repeat drop] [pop-all] def', []],
   ['mouse-move-sim get-rel-vec pop-all', [{'rel-x':12, 'rel-y':-2},-2, 12]],
-  ['', []],
+  ['0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply', [1, 1, [1]]],
   ['', []],
   ['', []],
   ['', []],
