@@ -123,6 +123,9 @@ function parse_list(s, i, ls) {
 }
 
 function parse(s) {
+  s = s.replace(/\s/gm, ' ');
+  s = s.replace(/\n/gm, ' ');
+  
   let l = [];
   let i = 0;
   let ls = s.length;
