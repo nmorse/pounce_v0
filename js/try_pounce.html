@@ -35,7 +35,14 @@
   </head>
     <body>
       <div class="" id="try_pounce">
-        <canvas id="canvas" width="250" height="150"></canvas>
+        <div class="row-container">
+          <canvas id="canvas" width="250" height="150"></canvas>
+          <div class="col-container">
+            <div>{{helpWord}}</div>
+            <div>{{helpWordDef}}</div>
+            <div>{{helpWordDesc}}</div>
+          </div>
+        </div>
         <div class="col-container">
           <div class="row-container">
             <div class="box" style="min-width:100px;">
@@ -115,9 +122,27 @@
           , "vs_history": []
           , "words": words
           , "runUpToCursor": false
+          , "helpWord": ""
+          , "helpWordDef": ""
+          , "helpWordDesc": ""
           },
           methods: {
            "runPounce": function (e) {
+              const w = this.wordAtCursor(e);
+              this.helpWord = w;
+              if (w && words[w]) {
+                if (words[w].fn) {
+                  this.helpWordDef = words[w].fn;
+                }
+                else {
+                  this.helpWordDef = words[w];
+                }
+                this.helpWordDesc = words[w].desc;
+              }
+              else {
+                this.helpWordDef = '';
+                this.helpWordDesc = '';
+              }
               if (this.runUpToCursor) {
                 this.runPounceFromCursor(e);
               }
@@ -126,6 +151,38 @@
                   this.executePounceScript(this.ps);
                 }
               }
+            }
+          , "wordAtCursor": function (e) {
+              if (e && e.target) {
+                const i1a = this.ps.lastIndexOf(' ', e.target.selectionStart-1);
+                const i1b = this.ps.lastIndexOf('[', e.target.selectionStart-1);
+                const i1c = this.ps.lastIndexOf(']', e.target.selectionStart-1);
+                const i1d = this.ps.lastIndexOf('\n', e.target.selectionStart-1);
+                let first_i = Math.max(Math.max(Math.max(i1a, i1b), i1c), i1d);
+                
+                first_i += 1;
+              
+                let i2a = this.ps.indexOf(' ', e.target.selectionStart);
+                if (i2a === -1) {
+                  i2a = this.ps.length;
+                }
+                let i2b = this.ps.indexOf('[', e.target.selectionStart);
+                if (i2b === -1) {
+                  i2b = this.ps.length;
+                }
+                let i2c = this.ps.indexOf(']', e.target.selectionStart);
+                if (i2c === -1) {
+                  i2c = this.ps.length;
+                }
+                let i2d = this.ps.indexOf('\n', e.target.selectionStart);
+                if (i2d === -1) {
+                  i2d = this.ps.length;
+                }
+                let last_i = Math.min(Math.min(Math.min(i2a, i2b), i2c), i2d);
+                
+                return this.ps.slice(first_i, last_i);
+              }
+              return '';
             }
           , "runPounceFromCursor": function (e) {
               if (e && e.target) {
@@ -208,7 +265,7 @@ drop
 `, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
   [
 `[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
-0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply`, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}]
+0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}]
 ];
 
         var examples_section = new Vue({
