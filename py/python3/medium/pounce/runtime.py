@@ -1,6 +1,69 @@
 import time
 # the pounce language runtime
 
+def run(pl, debug = False, test_value_stack = []):
+    global words
+    vs = []
+    while pl != None and len(pl) > 0:
+        next = pl[0];
+        pl = pl[1:]
+        if debug:
+            print('about to', vs, next)
+            time.sleep(0.3)
+        
+        if isValue(next, words) or isArray(next) or isRecord(next):
+            if next == 'true':
+                vs.append(True)
+            elif next == 'false':
+                vs.append(False)
+            else:
+                vs.append(next)
+        elif next in words.keys():
+            if debug:
+                print('applying', vs, next, pl)
+                time.sleep(0.3)
+            
+            if isfunction(words[next]):
+                (vs, pl) = words[next](vs, pl)
+            elif isinstance(words[next], str):
+                pl = jp.parse(words[next]) + pl
+            elif isRecord(words[next]):
+                if 'args' in words[next].keys():
+                    arg_rec = {}
+                    while len(words[next].args) > 0:
+                        arg_rec[words[next].args.pop()] = s.pop()
+                    (vs, pl) =  words[next].func(vs, pl, arg_rec)
+            else:
+                pl = words[next] + pl
+        else:
+            print('unknown term or word:', next)
+    return vs
+
+def isValue(e, fun):
+    return (isinstance(e, int)
+            or isinstance(e, float)
+            or isinstance(e, bool)
+            or (isinstance(e, str) and not e in fun.keys()))
+
+def isNumber(e):
+    return isinstance(e, int) or isinstance(e, float)
+
+def isArray(a):
+    return isinstance(a, (list,))
+
+def isRecord(a):
+    return isinstance(a, (dict,))
+
+# from inspect import isfunction
+def isfunction(candidate):
+    return not (isinstance(candidate, str) or isinstance(candidate, (list,)))
+
+
+
+def _halt(s, pl):
+    global halt
+    halt = True
+    return [s, pl]
 def _def(s, pl):
     global words
     # usage: [words that the define a new-function] new-funcion-name def
@@ -15,6 +78,36 @@ def _define(s, pl):
     new_definition = s.pop()
     new_params = s.pop()
     words[new_word] = new_definition
+    return [s, pl]
+def _str_first(s, pl):
+    a_str = s[-1]
+    s.append(a_str[0:1])
+    return [s, pl]
+def _str_last(s, pl):
+    a_str = s[-1]
+    s.append(a_str[-2:-1])
+    return [s, pl]
+def _str_length(s, pl):
+    a_str = s.pop()
+    s.append(len(a_str))
+    return [s, pl]
+def _str_append(s, pl):
+    a_str = s.pop()
+    s[-1] = s[-1] + a_str
+    return [s, pl]
+def _push(s, pl):
+    item = s.pop()
+    list = s[-1]
+    list.push(item)
+    return [s, pl]
+def _pop(s, pl):
+    list = s[-1]
+    if isArray(list):
+      #item = cloneItem(list.pop())
+      item = list.pop()
+      s.push(item)
+    else:
+      runtime.log({'word':'pop', 'error':"unable to 'pop' from non-Array"})
     return [s, pl]
 def _dup(s, pl):
     a = s[-1]
@@ -124,8 +217,15 @@ def _dip(s, l):
     return [s, l]
 
 words = {
+  'halt': _halt,
   'def': _def,
   'define': _define,
+  'str-first': _str_first,
+  'str-last': _str_last,
+  'str-length': _str_length,
+  'str-append': _str_append,
+  'push': _push,
+  'pop': _pop,
   'dup': _dup,
   '+': _add,
   '-': _sub,
@@ -145,65 +245,7 @@ words = {
 }
 
 
-def isValue(e, fun):
-    return (isinstance(e, int)
-            or isinstance(e, float)
-            or isinstance(e, bool)
-            or (isinstance(e, str) and not e in fun.keys()))
-
-def isNumber(e):
-    return isinstance(e, int) or isinstance(e, float)
-
-def isArray(a):
-    return isinstance(a, (list,))
-
-def isRecord(a):
-    return isinstance(a, (dict,))
-
-#from inspect import isfunction
-def isfunction(candidate):
-    return not (isinstance(candidate, str) or isinstance(candidate, (list,)))
-
-
 #def runScript(program_script, vs):
 #    pl = jp.parse(program_script)
 #    return run(pl, vs)
-
-def run(pl, debug = False, test_value_stack = []):
-    global words
-    vs = []
-    while pl != None and len(pl) > 0:
-        next = pl[0];
-        pl = pl[1:]
-        if debug:
-            print('about to', vs, next)
-            time.sleep(0.3)
-        
-        if isValue(next, words) or isArray(next) or isRecord(next):
-            if next == 'true':
-                vs.append(True)
-            elif next == 'false':
-                vs.append(False)
-            else:
-                vs.append(next)
-        elif next in words.keys():
-            if debug:
-                print('applying', vs, next, pl)
-                time.sleep(0.3)
-            
-            if isfunction(words[next]):
-                (vs, pl) = words[next](vs, pl)
-            elif isinstance(words[next], str):
-                pl = jp.parse(words[next]) + pl
-            elif isRecord(words[next]):
-                if 'args' in words[next].keys():
-                    arg_rec = {}
-                    while len(words[next].args) > 0:
-                        arg_rec[words[next].args.pop()] = s.pop()
-                    (vs, pl) =  words[next].func(vs, pl, arg_rec)
-            else:
-                pl = words[next] + pl
-        else:
-            print('unknown term or word:', next)
-    return vs
 

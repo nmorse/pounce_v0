@@ -41,21 +41,6 @@ function run(pl, stack, words, record_histrory = false) {
   return stack;
 }
 
-
-function cloneAnyObj (o) {
-  let newObj = (o instanceof Array) ? [] : {};
-  let i;
-  for (i in o) {
-    if (i == 'clone') continue;
-    if (o[i] && typeof o[i] == "object") {
-      newObj[i] = cloneAnyObj(o[i]);
-    } else {
-      newObj[i] = o[i];
-    }
-  }
-  return newObj;
-}
-
 function unParse (pl) {
   let ps = '';
   for (let i in pl) {
@@ -437,4 +422,19 @@ function cloneObject(obj) {
     }
     return clone;
   }
+}
+
+// alternate clone ?? merits ??
+function cloneAnyObj (o) {
+  let newObj = (o instanceof Array) ? [] : {};
+  let i;
+  for (i in o) {
+    if (i == 'clone') continue;
+    if (o[i] && typeof o[i] == "object") {
+      newObj[i] = cloneAnyObj(o[i]);
+    } else {
+      newObj[i] = o[i];
+    }
+  }
+  return newObj;
 }

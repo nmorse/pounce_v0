@@ -1,4 +1,4 @@
-# connect hardware specific inputs and outputs to pounce words
+# connect environment specific inputs and outputs to pounce words
 
 import time
 
@@ -10,7 +10,7 @@ words = {}
 def _readIO(s, pl):
     global io
     io_values = {}
-    #s.append(io.copy())
+     #s.append(io.copy())
     for key in io:
         io_values[key] = io[key]
     s.append(io_values)
@@ -22,7 +22,6 @@ def _writeIO(s, pl):
     for key in io:
         io[key] = nextio[key]
         print(key, io[key])
-    # red.value = a['red']
     return [s, pl]
 
 def _seconds(s, pl):

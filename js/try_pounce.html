@@ -96,7 +96,7 @@
       <div id="examples_section">
         <button v-on:click="showExamples = !showExamples">toggle Examples</button> check out these {{ totalexamples }} examples.
         <table id="some_examples" v-show="showExamples">
-          <tr v-for="t in examples">
+          <tr v-for="t in sortBylevel(examples)">
             <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
             <td><code>{{t[1].level}}</code></td>
             <td>{{t[1].desc}}</td>
@@ -235,10 +235,10 @@ const examples = [
   ['2 3 *', {summary:'Simple Multiplication', desc:'For multiplication, the operator (* for the product or multiplication) is placed after the two numbers to be multiplied.', level:'basic'}],
   ['9 7 + 2.5 /', {summary:'Sum of two numbers', desc:'To add and then divide, say (9 + 7) / 2.4. Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
   ['9 7 2.4 + /', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
+  ['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+  ['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+  ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+  ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
   [
 `cb-init cb-clear
 4 7 30 112 cb-line
@@ -268,6 +268,7 @@ drop
 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}]
 ];
 
+        const level_order = {basic:1, "stack operations":2, canvas: 3, advanced:4};
         var examples_section = new Vue({
           el: '#examples_section',
           data: {
@@ -275,9 +276,16 @@ drop
           , "examples": examples
           , "totalexamples": examples.length
           , "loadExample": loadExample
+          },
+          methods: {
+           "sortBylevel": function (e) {
+              return e.sort(function (a, b) {
+                return (level_order[a.level] < level_order[b.level])? 1: -1;
+                
+              });
+             }
           }
         });
-
 
       </script>
 
