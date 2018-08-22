@@ -1,6 +1,6 @@
 
-# Introducing the Pounce Programming Language
-Pounce is a concatenative programming language that works in the Browser, Server and IoT.
+# Pounce Programming Language
+Pounce is a __concatenative__ programming language that works in the Browser, Server and IoT.
 The aim of Pounce is to encourage programmers to try conatenative programming. Since Pounce works in your browser, you can try it out easily. If you like this style of programming, you can also try out other Pounce interpreters written in Python and C. Pounce interpreters are being developed in parallel, to be as consistent as possible across various platforms.
 Pounce is currently in an Alpha development phase, so it's not production ready, but the core is fairly stable. Look for updates on development posted here.
 
