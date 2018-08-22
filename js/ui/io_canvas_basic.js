@@ -6,6 +6,7 @@ var cb_words = {
     ctx.fillStyle = 'white';
     ctx.lineWidth = 8;
     ctx.lineCap = 'round';
+    ctx.images = [];
     s.push(ctx);
     return [s];
   }},
@@ -64,5 +65,29 @@ var cb_words = {
     ctx.clearRect(0, 0, w, h); // clear canvas
     return [s];
   }},
+  'cb-load-image': {fn: function(s) {
+    const src = s.pop();
+    const ctx = s[s.length - 1];
+    if (!ctx.images) {
+      ctx.images = [];
+    }
+    var image = new Image();
+    image.onload = drawImageActualSize; // draw when image has loaded
+    
+    // load an image of intrinsic size 300x227 in CSS pixels
+    image.src = src; //'https://mdn.mozillademos.org/files/5397/rhino.jpg';
+    
+    function drawImageActualSize() {
+      ctx.drawImage(this, 0, 0);
+      ctx.images.push(this);
+    }
+    return [s];
+  }},
+  'cb-nth-image': {fn: function(s) {
+    const n = s.pop();
+    const ctx = s[s.length - 1];
+    ctx.drawImage(ctx.images[n], 0, 0);
+    return [s];
+  }}
 };
 words = Object.assign(cb_words, words);

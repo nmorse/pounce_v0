@@ -9,14 +9,24 @@
     
     <style>
       body {
+        margin: 0;
         font-family: "helvetica neue", roboto;
-        background: rgb(15,69,242);
-        background: linear-gradient(167deg, rgba(15,69,242,1) 0%, rgba(8,61,246,0.6895133053221288) 30%, rgba(5,114,175,0.4009978991596639) 58%, rgba(0,121,255,0.14609593837535018) 100%);
+        color: #614c23;
+        background: #f1dac0;
+      }
+      .top-bar {
+        padding: 5px;
+        margin: 0;
+        background: orange;
+        color:white;
+      }
+      .content-area {
+        padding: 2px 15px;
       }
       .box {
-        border: lightgray solid 1px;
+        border: orange solid 1px;
         margin: 1px 1px;
-        padding: 0px 4px;
+        padding: 0px 3 px;
       }
       .col-container {
         display: flex;
@@ -36,7 +46,8 @@
     </style>
   </head>
     <body>
-      <div class="" id="try_pounce">
+      <div class="top-bar">Pounce</div>
+      <div class="content-area" id="try_pounce">
         <div class="row-container">
           <canvas id="canvas" width="250" height="150"></canvas>
           <div class="col-container">
@@ -48,7 +59,7 @@
         <div class="col-container">
           <div class="row-container">
             <div class="box" style="min-width:100px;">
-              Pounce
+              <canvas id="pounce-animation" width="100" height="61"></canvas>
             </div>
             <div class="col-container">
               <div>
@@ -58,8 +69,8 @@
                 <!-- <input v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
                    style="width:608px; margin:2px; font-size:16px;" v-focus /> -->
                    <textarea v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
-                    v-focus style="font-size:16px;"
-                  rows="3" cols="80"
+                    v-focus style="font-size:16px; border:orange solid 1px; margin:3px;"
+                  rows="3" cols="120"
                   wrap="hard"></textarea>
               </div>
             </div>
@@ -95,7 +106,7 @@
           </div>
         </div>
       </div>
-      <div id="examples_section">
+      <div class="content-area" id="examples_section">
         <button v-on:click="showExamples = !showExamples">toggle Examples</button> check out these {{ totalexamples }} examples.
         <table id="some_examples" v-show="showExamples">
           <tr v-for="t in sortBylevel(examples)">
@@ -265,6 +276,10 @@ cb-init cb-clear
 100 10 cb-line-to cb-end-path
 drop
 `, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
+  [
+`cb-init cb-clear
+/images/pounce-cat1.png cb-load-image
+`, {summary:'Image on the canvas', desc:'Draws an image on the canvas', level:'canvas'}],
   [
 `[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}]
