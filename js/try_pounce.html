@@ -109,7 +109,7 @@
       <div class="content-area" id="examples_section">
         <button v-on:click="showExamples = !showExamples">toggle Examples</button> check out these {{ totalexamples }} examples.
         <table id="some_examples" v-show="showExamples">
-          <tr v-for="t in sortBylevel(examples)">
+          <tr v-for="t in examples">
             <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
             <td><code>{{t[1].level}}</code></td>
             <td>{{t[1].desc}}</td>
@@ -285,22 +285,22 @@ drop
 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}]
 ];
 
+        const sortBylevel = function (e) {
+              return e.sort(function (a, b) {
+                return (level_order[a[1].level] > level_order[b[1].level])? 1: -1;
+                
+              });
+             };
         const level_order = {basic:1, "stack operations":2, canvas: 3, advanced:4};
         var examples_section = new Vue({
           el: '#examples_section',
           data: {
             "showExamples": false
-          , "examples": examples
+          , "examples": sortBylevel(examples)
           , "totalexamples": examples.length
           , "loadExample": loadExample
           },
           methods: {
-           "sortBylevel": function (e) {
-              return e.sort(function (a, b) {
-                return (level_order[a.level] < level_order[b.level])? 1: -1;
-                
-              });
-             }
           }
         });
 
