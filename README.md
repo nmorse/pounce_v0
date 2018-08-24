@@ -1,7 +1,7 @@
 
-# Pounce Programming Language
-Pounce is a __concatenative__ programming language that works in the Browser, Server and IoT.
-The aim of Pounce is to encourage programmers to try conatenative programming. Since Pounce works in your browser, you can try it out easily. If you like this style of programming, you can also try out other Pounce interpreters written in Python and C. Pounce interpreters are being developed in parallel, to be as consistent as possible across various platforms.
+# Pounce, a concatenative programming language
+Pounce is a programming language that works in the Browser, Server and IoT.
+The aim of Pounce is to encourage programmers to try conatenative programming. Since Pounce works in the browser, you can try it out easily. If you like this style of programming, you can also try out other Pounce interpreters written in Python and C. Pounce interpreters are being developed in parallel, to be as consistent as possible across various platforms.
 Pounce is currently in an Alpha development phase, so it's not production ready, but the core is fairly stable. Look for updates on development posted here.
 
 ## Concatenative Programming is... 
@@ -9,7 +9,9 @@ It's a different approach to programming, that is for sure. Concatenative progra
 
 CP uses a magic sauce in the form of __post-fix__ notation to make the composition of functions feel natural, so natural in fact, that there is no syntax needed to compose two functions together. Simply by placing functions, one after another (concatenating them) you have indicated that these functions are to be composed into a single (new) function. More on the advantages of post-fix notiation, such as "Parentheses be gone!", later.
 
-There's a lot more to say about this concatenative style, also known as __stack-based__ programming. One thing worth mentioning is this: there are __no named variables__ in CP. This lack of variables is a shock to most programmers, but it is the philosophy of CP to "Name the code, not the Data." Along with, the slightly derogatory quote, "Variables are 'GOTO' for data!",  these mottos differentiate CP from other programming paradigms. Sure CP deals with data, but data is not referenced by named variables, instead it's stored in a single uniform data-structure (usually a stack). All functions take this stack as an argument and return a modified copy. That consistency across function signatures gives CP programmers less to memorize and eases the mental overhead involved in coding.
+CP is famous for the simplicity of its virtual machine archetecture. Pounce keeps this archetecture as simple as possible with only three virtual machine elements. A dictionary of functions (called words), a list of words (the program to be executed) and a stack (of values). These are all that are needed to run a Pounce program. The state of a running program is defined by the stack and the program list, the dictionary remains static while executing. 
+
+There's a lot more to say about this concatenative style. One thing worth mentioning is that there are __no named variables__ in CP. This lack of variables is a shock to most programmers, but it is the philosophy of CP to "Name the code, not the Data." Along with, the slightly derogatory quote, "Variables are 'GOTO' for data!",  these mottos differentiate CP from other programming paradigms. Sure CP deals with data, but data is not referenced by named variables, instead it's stored on a stack. All functions take this stack as an argument and return a modified copy. That consistency across function signatures gives CP programmers less to memorize and eases the mental overhead involved in coding. For this reason CP is also known as __stack-based__ programming. 
 
 Also, most CP language are 'pure' functional languages, so that is cool for the 'functional programming' (FP) folks out there, but again, it comes as a shock to those FP aficionados, just how different the CP style of problem solving is.
 The FP vs. CP comparison goes something like this:
