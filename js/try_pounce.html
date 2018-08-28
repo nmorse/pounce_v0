@@ -32,6 +32,18 @@
         display: flex;
         flex-flow: column wrap;
       }
+      .stack-up {
+        display: flex;
+        flex-wrap: wrap;
+        flex-flow: column-reverse wrap;
+        align-content: flex-end;
+      }
+      .stack-down {
+        display: flex;
+        flex-wrap: wrap;
+        flex-flow: column;
+        align-content: flex-start;
+      }
       .row-container {
         display: flex;
         flex-flow: row nowrap;
@@ -43,6 +55,12 @@
       td {
         vertical-align: top;
       }
+      button {
+        padding: 4px 7px;
+        background-color: rgba(0,0,0,0.1);
+        border: none;
+        /* margin: 3px; */
+      }
     </style>
   </head>
     <body>
@@ -50,8 +68,8 @@
       <div class="content-area" id="try_pounce">
         <div class="row-container">
           <canvas id="canvas" width="250" height="150"></canvas>
-          <div class="col-container">
-            <div>{{helpWord}}</div>
+          <div class="stack-up">
+            <div class="top-bar">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button></div>
             <div>{{helpWordDef}}</div>
             <div>{{helpWordDesc}}</div>
           </div>
@@ -76,7 +94,7 @@
             </div>
           </div>
           <div class="row-container">
-            <div class="col-container box" style="min-width:200px;">
+            <div class="stack-down  box" style="min-width:200px;">
               <div v-for="ele in vs" class="box">
                 {{ ele }} &nbsp;
               </div>
@@ -89,7 +107,7 @@
                 </div>
               -->
             <div class="row-container" style="min-height:300px;">
-              <div v-for="h_instance in vs_history" class="col-container box">
+              <div v-for="h_instance in vs_history" class="stack-down box">
                 <!--
                 -->
                 <div v-for="pl_item in h_instance.pl" class="box" style="width:100px; overflow: hidden; background-color:rgba(200, 20, 20, 0.3);">
@@ -107,7 +125,7 @@
         </div>
       </div>
       <div class="content-area" id="examples_section">
-        <button v-on:click="showExamples = !showExamples">toggle Examples</button> check out these {{ totalexamples }} examples.
+        <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
         <table id="some_examples" v-show="showExamples">
           <tr v-for="t in examples">
             <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
@@ -282,15 +300,14 @@ drop
 `, {summary:'Image on the canvas', desc:'Draws an image on the canvas', level:'canvas'}],
   [
 `[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
-0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}]
+0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}],
+[`[n get [p get] dip] [p-n-get] def
+[p-n-get % 0 == [n get [f get] dip push f set p-n-get / p set] [n get 1 + n set] if-else] [pf-check] def
+[p get 1 <= [f get] [pf-check 1-p-until] if-else] [1-p-until] def
+{n:2 p:210 f:[]} 1-p-until`, {summary:'define a word "until" ...', desc:'', level:'advanced'}]
 ];
 
-        const sortBylevel = function (e) {
-              return e.sort(function (a, b) {
-                return (level_order[a[1].level] > level_order[b[1].level])? 1: -1;
-                
-              });
-             };
+        const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].level] > level_order[b[1].level])? 1: -1);
         const level_order = {basic:1, "stack operations":2, canvas: 3, advanced:4};
         var examples_section = new Vue({
           el: '#examples_section',

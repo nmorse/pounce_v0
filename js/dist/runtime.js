@@ -251,6 +251,12 @@ var words = {
     s.push(b / a);
     return [s];
   }},
+  '%': {fn: function(s) {
+    const a = s.pop();
+    const b = s.pop();
+    s.push(b % a);
+    return [s];
+  }},
   '*': {fn: function(s) {
     const a = s.pop();
     const b = s.pop();
