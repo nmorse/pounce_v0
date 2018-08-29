@@ -126,13 +126,20 @@
       </div>
       <div class="content-area" id="examples_section">
         <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
-        <table id="some_examples" v-show="showExamples">
-          <tr v-for="t in examples">
-            <td><a v-on:click="loadExample(t[0])"><code>{{t[0]}}</code></a></td>
-            <td><code>{{t[1].level}}</code></td>
-            <td>{{t[1].desc}}</td>
-          </tr>
-        </table>
+        <div class="row-container" id="some_examples" v-show="showExamples">
+          basic
+          <div class="column-container" v-for="t in examples.filter(e=>e[1].level === 'basic')">
+            <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
+          </div>
+          canvas
+          <div class="column-container" v-for="t in examples.filter(e=>e[1].level === 'canvas')">
+            <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
+          </div>
+          advanced
+          <div class="column-container" v-for="t in examples.filter(e=>e[1].level === 'advanced')">
+            <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
+          </div>
+        </div>
       </div>
             <script src="ui/io_canvas_basic.js"></script>
 
@@ -141,7 +148,8 @@
         function loadExample(s) {
           try_pounce.ps = s;
           try_pounce.runPounce();
-          examples_section.showExamples = false;
+          // TBD focus
+          examples_section.examples[s].shown = true;
         }
         var try_pounce = new Vue({
           el: '#try_pounce',
@@ -277,7 +285,7 @@ const examples = [
 {color:{r:64 g:0 b:255 a:0.5} x:30 y:40 w:60 h:40} cb-box
 {color:{r:255 g:63 b:127 a:0.5} x:60 y:50 w:40 h:50} cb-box
 drop
-`,{summary:'Draws on the canvas', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:'canvas'}],
+`,{summary:'Draw some shapes', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:'canvas'}],
   [
 `cb-init cb-clear
 30 45 cb-begin-path
@@ -285,7 +293,7 @@ drop
 100 10 cb-line-to
 cb-end-path
 drop
-`, {summary:'Draws on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
+`, {summary:'Draw a check-mark', desc:'Draws a line on the canvas', level:'canvas'}],
   [
 `[[x set] dip y set] [pack] def
 [y get [x get] dip] [unpack] def
@@ -293,7 +301,7 @@ cb-init cb-clear
 30 45 pack unpack cb-begin-path unpack [20 +] dip 20 + cb-line-to
 100 10 cb-line-to cb-end-path
 drop
-`, {summary:'Some word definitions and then draw on the canvas', desc:'Draws a line on the canvas', level:'canvas'}],
+`, {summary:'Turtle Graphics', desc:'Draws a line, relative to possition', level:'canvas'}],
   [
 `cb-init cb-clear
 /images/pounce-cat1.png cb-load-image
@@ -312,7 +320,7 @@ drop
         var examples_section = new Vue({
           el: '#examples_section',
           data: {
-            "showExamples": false
+            "showExamples": true
           , "examples": sortBylevel(examples)
           , "totalexamples": examples.length
           , "loadExample": loadExample
