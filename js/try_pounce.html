@@ -12,21 +12,22 @@
         margin: 0;
         font-family: "helvetica neue", roboto;
         color: #614c23;
-        background: #f1dac0;
+        background: #f0f0f0;
       }
       .top-bar {
         padding: 5px;
         margin: 0;
-        background: orange;
+        background: gray;
         color:white;
       }
       .content-area {
         padding: 2px 15px;
       }
       .box {
-        border: orange solid 1px;
+        /* border: rgba(0,0,0,0.1) solid 1px; */
+        background: rgba(0,0,0,0.05);
         margin: 1px 1px;
-        padding: 0px 3 px;
+        padding: 1px 3px;
       }
       .col-container {
         display: flex;
@@ -52,6 +53,11 @@
       .scroll {
          overflow-x: scroll;
       }
+      
+      .pounce-program-list-color {
+         background-color: rgba(20, 80, 250, 0.2);
+      }
+      }
       td {
         vertical-align: top;
       }
@@ -59,7 +65,6 @@
         padding: 4px 7px;
         background-color: rgba(0,0,0,0.1);
         border: none;
-        /* margin: 3px; */
       }
     </style>
   </head>
@@ -69,7 +74,7 @@
         <div class="row-container">
           <canvas id="canvas" width="250" height="150"></canvas>
           <div class="stack-up">
-            <div class="top-bar">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button></div>
+            <div class="box">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button></div>
             <div>{{helpWordDef}}</div>
             <div>{{helpWordDesc}}</div>
           </div>
@@ -87,7 +92,7 @@
                 <!-- <input v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
                    style="width:608px; margin:2px; font-size:16px;" v-focus /> -->
                    <textarea v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
-                    v-focus style="font-size:16px; border:orange solid 1px; margin:3px;"
+                    v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
                   rows="3" cols="120"
                   wrap="hard"></textarea>
               </div>
@@ -110,7 +115,7 @@
               <div v-for="h_instance in vs_history" class="stack-down box">
                 <!--
                 -->
-                <div v-for="pl_item in h_instance.pl" class="box" style="width:100px; overflow: hidden; background-color:rgba(200, 20, 20, 0.3);">
+                <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color" style="width:100px; overflow: hidden;">
                   {{ pl_item }}&nbsp;
                 </div>
                 <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
@@ -304,7 +309,7 @@ drop
 `, {summary:'Turtle Graphics', desc:'Draws a line, relative to possition', level:'canvas'}],
   [
 `cb-init cb-clear
-/images/pounce-cat1.png cb-load-image
+images/pounce-cat1.png cb-load-image
 `, {summary:'Image on the canvas', desc:'Draws an image on the canvas', level:'canvas'}],
   [
 `[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
