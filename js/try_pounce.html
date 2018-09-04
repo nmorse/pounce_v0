@@ -130,18 +130,20 @@
         </div>
       </div>
       <div class="content-area" id="examples_section">
+        <!--
         <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
-        <div class="row-container" id="some_examples" v-show="showExamples">
-          basic
-          <div class="column-container" v-for="t in examples.filter(e=>e[1].level === 'basic')">
+        -->
+        <div class="column-container" id="some_examples" v-show="showExamples">
+          <button v-for="category in tutorials">{{category}}</button>basic
+          <div class="row-container" v-for="t in examples.filter(e=>e[1].level === 'basic')">
             <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
           </div>
           canvas
-          <div class="column-container" v-for="t in examples.filter(e=>e[1].level === 'canvas')">
+          <div class="row-container" v-for="t in examples.filter(e=>e[1].level === 'canvas')">
             <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
           </div>
           advanced
-          <div class="column-container" v-for="t in examples.filter(e=>e[1].level === 'advanced')">
+          <div class="row-container" v-for="t in examples.filter(e=>e[1].level === 'advanced')">
             <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
           </div>
         </div>
@@ -274,6 +276,7 @@
             }
           }
         });
+const tutorials = ['start here', 'calculate', 'rearrange the stack', 'your own words', 'some I/O'];
 const examples = [
   ['2 3 +', {summary:'Sum of two numbers', desc:'Math is easy to do, the only difference is that the operator (+ for addition) comes after the two numbers being added.', level:'basic'}],
   ['2 3 *', {summary:'Simple Multiplication', desc:'For multiplication, the operator (* for the product or multiplication) is placed after the two numbers to be multiplied.', level:'basic'}],
