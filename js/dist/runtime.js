@@ -111,48 +111,56 @@ function number_or_str(s) {
 var halt = false;
 var stack = [];
 var words = {
-  'halt': {fn: function(s) {
+  'halt': {desc: 'halts a running program',
+    fn: function(s) {
     halt = true;
     return [s];
   }},
-  'def': {fn: function(s) {
+  'def': {desc: 'defines a word',
+    fn: function(s) {
     const key = s.pop();
     const fn = s.pop();
     words[key] = fn;
     return [s];
   }},
-  'str-first': {fn: function(s) {
+  'str-first': {desc: 'extract the first character from a string',
+    fn: function(s) {
     const str = s.pop();
     const first = str.slice(0, 1);
     const last_part = str.slice(1);
     s.push(last_part, first);
     return [s];
   }},
-  'str-last': {fn: function(s) {
+  'str-last': {desc: 'extract the last character from a string',
+    fn: function(s) {
     const str = s.pop();
     const last = str.slice(-1);
     const first_part = str.slice(0, -1);
     s.push(first_part, last);
     return [s];
   }},
-  'str-length': {fn: function(s) {
+  'str-length': {desc: 'lenth of a string',
+    fn: function(s) {
     const str = s.pop();
     s.push(str.length);
     return [s];
   }},
-  'str-append': {fn: function(s) {
+  'str-append': {desc: 'append two strings together',
+    fn: function(s) {
     const str = s.pop();
     s[s.length - 1] = s[s.length - 1] + str;
     return [s];
   }},
-  'push': {fn: function(s) {
+  'push': {desc: 'push an item on end of a list',
+    fn: function(s) {
     const item = s.pop();
     const top = s.length - 1;
     const list = s[top];
     list.push(item);
     return [s];
   }},
-  'pop': {fn: function(s) {
+  'pop': {desc: 'pop the last item off the end of a list',
+    fn: function(s) {
     const top = s.length - 1;
     const list = s[top];
     if (isArray(list)) {
@@ -164,7 +172,8 @@ var words = {
     }
     return [s];
   }},
-  'apply': {fn: function(s, pl) {
+  'apply': {desc: 'run the contents of a list',
+    fn: function(s, pl) {
     const block = s.pop();
     if (isArray(block)) {
       pl = block.concat(pl);
@@ -174,7 +183,8 @@ var words = {
     }
     return [s, pl];
   }},
-  'un-apply': {fn: function(s, pl) {
+  'un-apply': {desc: 'put a word on to a list',
+    fn: function(s, pl) {
     const item = s.pop();
     if (isArray(item)) {
       pl = [item].concat(pl);
@@ -184,7 +194,8 @@ var words = {
     }
     return [s, pl];
   }},
-  'dip': {fn: function(s, pl) {
+  'dip': {desc: 'apply under the top of the stack (see apply)',
+    fn: function(s, pl) {
     const block = s.pop();
     const item = s.pop();
     pl = [item].concat(pl);
@@ -196,7 +207,8 @@ var words = {
     }
     return [s, pl];
   }},
-  'dip2': {fn: function(s, pl) {
+  'dip2': {desc: 'apply two under the top of the stack (see apply)',
+    fn: function(s, pl) {
     const block = s.pop();
     const item1 = s.pop();
     const item2 = s.pop();
@@ -210,64 +222,75 @@ var words = {
     }
     return [s, pl];
   }},
-  'drop': {fn: function(s) {
+  'drop': {desc: 'remove one element from the top of the stack',
+    fn: function(s) {
     s.pop();
     return [s];
   }},
-  'dup': {fn: function(s) {
+  'dup': {desc: 'duplicate the top element on the stack',
+    fn: function(s) {
     const top = s.length - 1;
     const a = cloneItem(s[top]);
     s.push(a);
     return [s];
   }},
-  'dup2': {fn: function(s) {
+  'dup2': {desc: 'duplicate the top two elements on the stack',
+    fn: function(s) {
     const top = s.length - 1;
     const a = cloneItem(s[top]);
     const b = cloneItem(s[top - 1]);
     s.push(b, a);
     return [s];
   }},
-  'swap': {fn: function(s) {
+  'swap': {desc: 'swap the top two elements on the stack',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(a, b);
     return [s];
   }},
-  '+': {fn: function(s) {
+  '+': {desc: 'addition',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(a + b);
     return [s];
   }},
-  '-': {fn: function(s) {
+  '-': {desc: 'subtraction',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b - a);
     return [s];
   }},
-  '/': {fn: function(s) {
+  '/': {desc: 'division',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b / a);
     return [s];
   }},
-  '%': {fn: function(s) {
+  '%': {desc: 'modulo',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b % a);
     return [s];
   }},
-  '*': {fn: function(s) {
+  '*': {desc: 'multipication',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(a * b);
     return [s];
   }},
-  'depth': {fn: function(s, pl) {
+  'depth': {desc: 'stack depth',
+    fn: function(s, pl) {
     s.push(s.length);
     return [s];
   }},
-  'n*': {fn: function(s, pl) {
+  'n*': {desc: 'mupltiply many numbers on the stack',
+    fn: function(s, pl) {
     if (s.length >= 2) {
       const a = s.pop();
       const b = s.pop();
@@ -282,73 +305,85 @@ var words = {
     }
     return [s];
   }},
-  '==': {fn: function(s) {
+  '==': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(a === b);
     return [s];
   }},
-  '>': {fn: function(s) {
+  '>': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b > a);
     return [s];
   }},
-  '>=': {fn: function(s) {
+  '>=': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b >= a);
     return [s];
   }},
-  '<': {fn: function(s) {
+  '<': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b < a);
     return [s];
   }},
-  '<=': {fn: function(s) {
+  '<=': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b <= a);
     return [s];
   }},
-  'and': {fn: function(s) {
+  'and': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b && a);
     return [s];
   }},
-  'or': {fn: function(s) {
+  'or': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b || a);
     return [s];
   }},
-  'not': {fn: function(s) {
+  'not': {desc: '',
+    fn: function(s) {
     const a = s.pop();
     s.push(!a);
     return [s];
   }},
-  'bubble-up': {fn: function(s) {
+  'bubble-up': {desc: '',
+    fn: function(s) {
     const i = s.pop();
     const item = s.splice(-i-1, 1);
     s.push(item[0]);
     return [s];
   }},
-  'get': {fn: function(s) {
+  'get': {desc: '',
+    fn: function(s) {
     const key = s.pop();
     const rec = cloneItem(s[s.length - 1]);
     s.push(rec[key])
     return [s];
   }},
-  'set': {fn: function(s) {
+  'set': {desc: '',
+    fn: function(s) {
     const key = s.pop();
     const value = s.pop();
     let rec = s[s.length - 1];
     rec[key] = value;
     return [s];
   }},
-  'case': {fn: function(s, pl) {
+  'case': {desc: '',
+    fn: function(s, pl) {
     const case_record = s.pop();
     let key = s.pop();
     if (key === " ") {
@@ -367,7 +402,8 @@ var words = {
     }
     return [s, pl];
   }},
-  'if': {fn: function(s, pl) {
+  'if': {desc: '',
+    fn: function(s, pl) {
     const then_block = s.pop();
     const expression = s.pop();
     if (expression) {
@@ -380,7 +416,8 @@ var words = {
     }
     return [s, pl];
   }},
-  'if-else': {fn: function(s, pl) {
+  'if-else': {desc: '',
+    fn: function(s, pl) {
     const else_block = s.pop();
     const then_block = s.pop();
     const expression = s.pop();

@@ -48,7 +48,7 @@
       .row-container {
         display: flex;
         flex-flow: row nowrap;
-        overflow-x: scroll;
+        overflow-x: auto;
       }
       .scroll {
          overflow-x: scroll;
@@ -76,7 +76,7 @@
           <div class="stack-up">
             <div class="box">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button></div>
             <div>{{helpWordDef}}</div>
-            <div>{{helpWordDesc}}</div>
+            <div class="box">{{helpWordDesc}}</div>
           </div>
         </div>
         <div class="col-container">
@@ -93,7 +93,7 @@
                    style="width:608px; margin:2px; font-size:16px;" v-focus /> -->
                    <textarea v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
                     v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
-                  rows="3" cols="120"
+                  rows="3" cols="80"
                   wrap="hard"></textarea>
               </div>
             </div>
@@ -178,10 +178,10 @@
               this.helpWord = w;
               if (w && words[w]) {
                 if (words[w].fn) {
-                  this.helpWordDef = words[w].fn;
+                  this.helpWordDef = 'internal definition'; //words[w].fn;
                 }
                 else {
-                  this.helpWordDef = words[w];
+                  this.helpWordDef = unParse(words[w]);
                 }
                 this.helpWordDesc = words[w].desc;
               }
@@ -330,6 +330,7 @@ images/pounce-cat1.png cb-load-image
           data: {
             "showExamples": true
           , "examples": sortBylevel(examples)
+          , "tutorials": tutorials
           , "totalexamples": examples.length
           , "loadExample": loadExample
           },

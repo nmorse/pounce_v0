@@ -1,5 +1,6 @@
 var cb_words = {
-  'cb-init': {fn: function(s) {
+  'cb-init': {desc: 'given the id of a canvas tag, init the graphics context.',
+    fn: function(s) {
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
     ctx.strokeStyle = 'black';
@@ -10,7 +11,8 @@ var cb_words = {
     s.push(ctx);
     return [s];
   }},
-  'cb-begin-path': {fn: function(s) {
+  'cb-begin-path': {desc: 'given an x y, start a path',
+    fn: function(s) {
     const y1 = s.pop();
     const x1 = s.pop();
     const ctx = s[s.length - 1];
@@ -18,19 +20,22 @@ var cb_words = {
     ctx.moveTo(x1, y1);
     return [s];
   }},
-  'cb-line-to': {fn: function(s) {
+  'cb-line-to': {desc: 'given an x y, continue a path',
+    fn: function(s) {
     const y2 = s.pop();
     const x2 = s.pop();
     const ctx = s[s.length - 1];
     ctx.lineTo(x2, y2);
     return [s];
   }},
-  'cb-end-path': {fn: function(s) {
+  'cb-end-path': {desc: 'ends a path',
+    fn: function(s) {
     const ctx = s[s.length - 1];
     ctx.stroke();
     return [s];
   }},
-  'cb-line': {fn: function(s) {
+  'cb-line': {desc: 'given x1 y1 x2 y2 draw a line',
+    fn: function(s) {
     const y2 = s.pop();
     const x2 = s.pop();
     const y1 = s.pop();
@@ -42,7 +47,8 @@ var cb_words = {
     ctx.stroke();
     return [s];
   }},
-  'cb-box': {fn: function(s) {
+  'cb-box': {desc: 'demo of filling a box',
+    fn: function(s) {
     const d = s.pop();
     if (isNumber(d)) {
       const y = d
@@ -58,14 +64,16 @@ var cb_words = {
     }
     return [s];
   }},
-  'cb-clear': {fn: function(s) {
+  'cb-clear': {desc: 'clear the full canvas',
+    fn: function(s) {
     const ctx = s[s.length - 1];
     const w = ctx.canvas.width;
     const h = ctx.canvas.height;
     ctx.clearRect(0, 0, w, h); // clear canvas
     return [s];
   }},
-  'cb-load-image': {fn: function(s) {
+  'cb-load-image': {desc: 'given a src load an image (async)',
+    fn: function(s) {
     const src = s.pop();
     const ctx = s[s.length - 1];
     if (!ctx.images) {
@@ -73,9 +81,7 @@ var cb_words = {
     }
     var image = new Image();
     image.onload = drawImageActualSize; // draw when image has loaded
-    
-    // load an image of intrinsic size 300x227 in CSS pixels
-    image.src = src; //'https://mdn.mozillademos.org/files/5397/rhino.jpg';
+    image.src = src;
     
     function drawImageActualSize() {
       ctx.drawImage(this, 0, 0);
@@ -83,7 +89,8 @@ var cb_words = {
     }
     return [s];
   }},
-  'cb-nth-image': {fn: function(s) {
+  'cb-nth-image': {desc: 'show the nth loaded image (see: cb-load-image)',
+    fn: function(s) {
     const n = s.pop();
     const ctx = s[s.length - 1];
     ctx.drawImage(ctx.images[n], 0, 0);
