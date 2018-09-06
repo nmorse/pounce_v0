@@ -49,11 +49,11 @@
       <script>
           var date_now = new Date();
           words['years-since'] = parse(date_now.getFullYear() + ' - -1 *');
-          words['floor'] = (s, pl) => {
+          words['floor'] = {fn:(s, pl) => {
             const num = s.pop();
             s.push(Math.floor(num));
             return [s, pl];
-          };
+          }};
           var intro = new Vue({
             el: '#intro',
             data: {

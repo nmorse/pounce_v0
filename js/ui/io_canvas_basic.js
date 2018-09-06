@@ -1,8 +1,8 @@
 var cb_words = {
   'cb-init': {desc: 'init the graphics context for a canvas element',
     fn: function(s) {
-      // todo get DOM element id form stack and update examples... canvas should not be hard-coded
-    var canvas = document.getElementById('canvas');
+    const canvasId = s.pop();
+    var canvas = document.getElementById(canvasId);
     var ctx = canvas.getContext('2d');
     ctx.strokeStyle = 'black';
     ctx.fillStyle = 'white';

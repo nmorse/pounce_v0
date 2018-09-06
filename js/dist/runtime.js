@@ -440,7 +440,8 @@ var words = {
     return [s, pl];
   }},
   'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ], 'if'],
-  'fact': ['count-down', 'n*']
+  'fact': ['count-down', 'n*'],
+  'floor': ['dup', 1, '%', '-']
 };
 
 function cloneItem(item) {
