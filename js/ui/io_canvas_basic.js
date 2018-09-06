@@ -1,6 +1,7 @@
 var cb_words = {
-  'cb-init': {desc: 'given the id of a canvas tag, init the graphics context.',
+  'cb-init': {desc: 'init the graphics context for a canvas element',
     fn: function(s) {
+      // todo get DOM element id form stack and update examples... canvas should not be hard-coded
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
     ctx.strokeStyle = 'black';
@@ -11,7 +12,7 @@ var cb_words = {
     s.push(ctx);
     return [s];
   }},
-  'cb-begin-path': {desc: 'given an x y, start a path',
+  'cb-begin-path': {desc: 'start a path at x y',
     fn: function(s) {
     const y1 = s.pop();
     const x1 = s.pop();
@@ -20,7 +21,7 @@ var cb_words = {
     ctx.moveTo(x1, y1);
     return [s];
   }},
-  'cb-line-to': {desc: 'given an x y, continue a path',
+  'cb-line-to': {desc: 'continue a path to x y',
     fn: function(s) {
     const y2 = s.pop();
     const x2 = s.pop();
@@ -34,7 +35,7 @@ var cb_words = {
     ctx.stroke();
     return [s];
   }},
-  'cb-line': {desc: 'given x1 y1 x2 y2 draw a line',
+  'cb-line': {desc: 'draw a line from x1 y1 to x2 y2',
     fn: function(s) {
     const y2 = s.pop();
     const x2 = s.pop();
@@ -47,7 +48,8 @@ var cb_words = {
     ctx.stroke();
     return [s];
   }},
-  'cb-box': {desc: 'demo of filling a box',
+  'cb-box': {sig:{args:[{'x':'number', 'y':'number'}, {d:'record'}]},
+    desc: 'demo 50 x 50 filled box',
     fn: function(s) {
     const d = s.pop();
     if (isNumber(d)) {

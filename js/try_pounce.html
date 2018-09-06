@@ -24,7 +24,7 @@
         padding: 2px 15px;
       }
       .box {
-        /* border: rgba(0,0,0,0.1) solid 1px; */
+        border: none;
         background: rgba(0,0,0,0.05);
         margin: 1px 1px;
         padding: 1px 3px;
@@ -74,7 +74,15 @@
         <div class="row-container">
           <canvas id="canvas" width="250" height="150"></canvas>
           <div class="stack-up">
-            <div class="box">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button></div>
+            <select class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
+              <option v-for="word in Object.keys(words)" v-bind:value="word">
+                {{ word }}
+              </option>
+            </select>
+            <!--
+            <div class="box">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button>
+            </div>
+            -->
             <div>{{helpWordDef}}</div>
             <div class="box">{{helpWordDesc}}</div>
           </div>
@@ -89,10 +97,9 @@
                 &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run Pounce only to cursor</label>
               </div>
               <div>
-                <!-- <input v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
-                   style="width:608px; margin:2px; font-size:16px;" v-focus /> -->
-                   <textarea v-model="ps" v-on:keyup="runPounce($event)" placeholder="Enter Pounce words here" spellcheck="false"
-                    v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
+                <textarea v-model="ps" v-on:keyup="runPounce($event)"
+                  placeholder="Enter Pounce words here" spellcheck="false"
+                  v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
                   rows="3" cols="80"
                   wrap="hard"></textarea>
               </div>
@@ -175,6 +182,17 @@
           methods: {
            "runPounce": function (e) {
               const w = this.wordAtCursor(e);
+              this.lookupWord(w);
+              if (this.runUpToCursor) {
+                this.runPounceFromCursor(e);
+              }
+              else {
+                if (this.ps !== this.last_ps) {
+                  this.executePounceScript(this.ps);
+                }
+              }
+            }
+          , "lookupWord": function (w) {
               this.helpWord = w;
               if (w && words[w]) {
                 if (words[w].fn) {
@@ -189,15 +207,8 @@
                 this.helpWordDef = '';
                 this.helpWordDesc = '';
               }
-              if (this.runUpToCursor) {
-                this.runPounceFromCursor(e);
-              }
-              else {
-                if (this.ps !== this.last_ps) {
-                  this.executePounceScript(this.ps);
-                }
-              }
-            }
+
+          }
           , "wordAtCursor": function (e) {
               if (e && e.target) {
                 const i1a = this.ps.lastIndexOf(' ', e.target.selectionStart-1);
