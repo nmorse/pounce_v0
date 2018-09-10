@@ -172,6 +172,13 @@ var words = {
     }
     return [s];
   }},
+  'cons': {desc: 'add an item at the begining of a list',
+    fn: function(s) {
+    const list = s.pop();
+    const item = s.pop();
+    list.push(item);
+    return [s];
+  }},
   'apply': {desc: 'run the contents of a list',
     fn: function(s, pl) {
     const block = s.pop();
@@ -277,7 +284,7 @@ var words = {
     s.push(b % a);
     return [s];
   }},
-  '*': {desc: 'multipication',
+  '*': {desc: 'multiplication',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
@@ -289,7 +296,7 @@ var words = {
     s.push(s.length);
     return [s];
   }},
-  'n*': {desc: 'mupltiply many numbers on the stack',
+  'n*': {desc: 'multiply a stack numbers (depreceated)',
     fn: function(s, pl) {
     if (s.length >= 2) {
       const a = s.pop();
@@ -305,76 +312,76 @@ var words = {
     }
     return [s];
   }},
-  '==': {desc: '',
+  '==': {desc: 'compare for equality',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(a === b);
     return [s];
   }},
-  '>': {desc: '',
+  '>': {desc: 'greater than',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b > a);
     return [s];
   }},
-  '>=': {desc: '',
+  '>=': {desc: 'greater than or equal',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b >= a);
     return [s];
   }},
-  '<': {desc: '',
+  '<': {desc: 'less than',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b < a);
     return [s];
   }},
-  '<=': {desc: '',
+  '<=': {desc: 'less than or equal',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b <= a);
     return [s];
   }},
-  'and': {desc: '',
+  'and': {desc: 'logical and',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b && a);
     return [s];
   }},
-  'or': {desc: '',
+  'or': {desc: 'logical or',
     fn: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(b || a);
     return [s];
   }},
-  'not': {desc: '',
+  'not': {desc: 'logical not',
     fn: function(s) {
     const a = s.pop();
     s.push(!a);
     return [s];
   }},
-  'bubble-up': {desc: '',
+  'bubble-up': {desc: 'move a stack element up to the top',
     fn: function(s) {
     const i = s.pop();
     const item = s.splice(-i-1, 1);
     s.push(item[0]);
     return [s];
   }},
-  'get': {desc: '',
+  'get': {desc: 'get the value of a property from a record',
     fn: function(s) {
     const key = s.pop();
     const rec = cloneItem(s[s.length - 1]);
     s.push(rec[key])
     return [s];
   }},
-  'set': {desc: '',
+  'set': {desc: 'set the value of a property in a record',
     fn: function(s) {
     const key = s.pop();
     const value = s.pop();
@@ -382,7 +389,7 @@ var words = {
     rec[key] = value;
     return [s];
   }},
-  'case': {desc: '',
+  'case': {desc: 'apply a matching case',
     fn: function(s, pl) {
     const case_record = s.pop();
     let key = s.pop();
@@ -402,7 +409,7 @@ var words = {
     }
     return [s, pl];
   }},
-  'if': {desc: '',
+  'if': {desc: 'conditionally apply a quotation',
     fn: function(s, pl) {
     const then_block = s.pop();
     const expression = s.pop();
@@ -416,7 +423,7 @@ var words = {
     }
     return [s, pl];
   }},
-  'if-else': {desc: '',
+  'if-else': {desc: 'conditionally apply the first or second quotation',
     fn: function(s, pl) {
     const else_block = s.pop();
     const then_block = s.pop();
