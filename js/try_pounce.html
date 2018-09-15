@@ -163,7 +163,7 @@
           try_pounce.ps = s;
           try_pounce.runPounce();
           // TBD focus
-          examples_section.examples[s].shown = true;
+          // examples_section.examples[s].shown = true;
         }
         var try_pounce = new Vue({
           el: '#try_pounce',
@@ -243,12 +243,38 @@
             }
           , "runPounceFromCursor": function (e) {
               if (e && e.target) {
-                //console.log(e.target.selectionStart, e.target.selectionEnd);
-                //console.log(this.ps.slice(0, e.target.selectionStart));
-                const new_ps = this.ps.slice(0, e.target.selectionStart);
-                if (new_ps !== this.last_ps) {
-                  this.executePounceScript(new_ps);
+                if (this.cursorAtWordEnd(e)) {
+                  // console.log('cursor a end of word: '+proceed);
+                  // console.log(e.target.selectionStart, e.target.selectionEnd);
+                  // console.log(this.ps.slice(0, e.target.selectionStart));
+                  const new_ps = this.ps.slice(0, e.target.selectionStart);
+                  if (new_ps !== this.last_ps) {
+                    this.executePounceScript(new_ps);
+                  }
                 }
+              }
+            }
+          , "cursorAtWordEnd": function (e) {
+              if (e && e.target) {
+                const start_i = e.target.selectionStart;
+                //console.log(e.target.selectionStart, e.target.selectionEnd);
+                if (start_i < this.ps.length) {
+                  const charAfter = this.ps[start_i];
+                  if ( charAfter === ' '
+                    || charAfter === '{'
+                    || charAfter === '['
+                    || charAfter === ']'
+                    || charAfter === '\n'
+                  ) {
+                    return true;
+                  }
+                  return false;
+                }
+                else {
+                  // cursor at end of string
+                  return true;
+                }
+                
               }
             }
           , "focusEditor" : function () {
@@ -331,7 +357,9 @@ images/pounce-cat1.png cb-load-image
 [`[n get [p get] dip] [p-n-get] def
 [p-n-get % 0 == [n get [f get] dip push f set p-n-get / p set] [n get 1 + n set] if-else] [pf-check] def
 [p get 1 <= [f get] [pf-check 1-p-until] if-else] [1-p-until] def
-{n:2 p:210 f:[]} 1-p-until`, {summary:'define a word "until" ...', desc:'', level:'advanced'}]
+{n:2 p:210 f:[]} 1-p-until`, {summary:'define a word "until" ...', desc:'', level:'advanced'}],
+[`[[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
+4 [15] 6 dup3 [4 push] dip`, {summary:'define dup3', desc:'dup3', level:'advanced'}]
 ];
 
         const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].level] > level_order[b[1].level])? 1: -1);

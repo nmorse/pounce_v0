@@ -132,10 +132,10 @@ function parse(s) {
   let w = '';
   let word_count = 0;
   while (i < ls && word_count < 10000) {
-    console.log('parsing--', s, i, ls);
+    // console.log('parsing--', s, i, ls);
     [w, i] = parse_next(s, i, ls);
     word_count += 1;
-    console.log('parse-got',w);
+    // console.log('parse-got',w);
     if (w !== '' && w !== null && typeof w !== undefined) {
       l.push(w);
     }

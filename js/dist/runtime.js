@@ -11,17 +11,17 @@ function run(pl, stack, words, record_histrory = false) {
   while (pl.length > 0 && !halt) {
     term = pl.shift();
     if (typeof term === 'string' && isArray(words[term])) {
-      console.log('unquote list ', stack, term, pl);
+      // console.log('unquote list ', stack, term, pl);
       pl = words[term].concat(pl);
-      console.log('post-unquote ', stack, pl);
+      // console.log('post-unquote ', stack, pl);
     }
     else if (typeof term === 'string' && words[term] && words[term].fn && typeof words[term].fn === 'function') {
-      console.log('pre-execute ', stack, term, pl);
+      // console.log('pre-execute ', stack, term, pl);
       if (record_histrory !== false) {
         record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
       }
       [stack, pl=pl] = words[term].fn(stack, pl);
-      console.log('post-execute ', stack, pl );
+      // console.log('post-execute ', stack, pl );
     }
     else {
       num = tryConvertToNumber(term);
