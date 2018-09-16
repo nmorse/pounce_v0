@@ -167,6 +167,16 @@ var words = {
     list.push(item);
     return [s];
   }},
+  'prepend': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [
+    [`[6 7] 5 prepend`, [[5, 6, 7]]]
+    ], desc: 'push an item on end of a list',
+    fn: function(s) {
+    const item = s.pop();
+    const top = s.length - 1;
+    const list = s[top];
+    list.unshift(item);
+    return [s];
+  }},
   'pop': {expects: [{desc: 'a', ofType: 'list'}], effects:[1], tests: [], desc: 'pop the last item off the end of a list',
     fn: function(s) {
     const top = s.length - 1;
