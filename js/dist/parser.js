@@ -123,6 +123,7 @@ function parse_list(s, i, ls) {
 }
 
 function parse(s) {
+  s = s.replace(/^#.*\n*$/gm, ' '); // ixnay comments
   s = s.replace(/\s/gm, ' ');
   s = s.replace(/\n/gm, ' ');
   
