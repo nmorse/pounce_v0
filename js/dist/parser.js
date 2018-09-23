@@ -33,8 +33,8 @@ function parse_next(s, i, ls) {
   if (i >= ls) {
     return ['', i];
   }
-  if (s[i] === '#') {
-    return consume_comment(s, i, ls);
+  if (i+1 < ls && s[i] === '/' &&  s[i+1] === '/') {
+    return consume_to_eol(s, i, ls);
   }
   if (s[i] === '"' || s[i] === "'") {
     return parse_string(s, i, ls);
@@ -59,12 +59,10 @@ function parse_word (s, i, ls) {
   return [word, i];
 }
 
-function consume_comment(s, i, ls) {
-  const orig_i = i;
+function consume_to_eol(s, i, ls) {
   while (i < ls && s[i] !== '\n') {
     i += 1;
   }
-  console.log('comment: ', s.substring(orig_i, i));
   return ['', i];
 }
 
