@@ -27,7 +27,7 @@ function number_or_str(s) {
 }
 
 function parse_next(s, i, ls) {
-  while (i < ls && s[i] == ' ') {
+  while (i < ls && (s[i] === ' ' || s[i] === '\n')) {
     i += 1;
   }
   if (i >= ls) {
@@ -52,13 +52,21 @@ function parse_next(s, i, ls) {
 
 function parse_word (s, i, ls) {
   const orig_i = i;
-  while (i < ls && s[i] !== ' ' && s[i] !== '[' && s[i] !== ']' && s[i] !== '{' && s[i] !== '}') {
+  while (i < ls && s[i] !== ' ' && s[i] !== '\n' && s[i] !== '[' && s[i] !== ']' && s[i] !== '{' && s[i] !== '}') {
     i += 1;
   }
   const word = number_or_str(s.substring(orig_i, i));
   return [word, i];
 }
 
+function consume_comment(s, i, ls) {
+  const orig_i = i;
+  while (i < ls && s[i] !== '\n') {
+    i += 1;
+  }
+  console.log('comment: ', s.substring(orig_i, i));
+  return ['', i];
+}
 
 function parse_string(s, i_orig, ls) {
   let i = +i_orig;
@@ -93,7 +101,7 @@ function parse_dict(s, i, ls) {
   let k = '';
   let w = '';
   i += 1;
-  while (i < ls && s[i] === ' ') {
+  while (i < ls && (s[i] === ' ' || s[i] === '\n')) {
     i += 1;
   }
   while (i+1 < ls && s[i] != '}') {
@@ -104,7 +112,7 @@ function parse_dict(s, i, ls) {
     if (k !== '' && w !== null && typeof w !== undefined) {
       dict[k] = w;
     }
-    while (i < ls && s[i] === ' ') {
+    while (i < ls && (s[i] === ' ' || s[i] === '\n')) {
       i += 1;
     }
   }
@@ -125,10 +133,6 @@ function parse_list(s, i, ls) {
 }
 
 function parse(s) {
-  s = s.replace(/^#.*\n*$/gm, ' '); // ixnay comments that start at begining of line.
-  s = s.replace(/\s/gm, ' ');
-  s = s.replace(/\n/gm, ' ');
-  
   let l = [];
   let i = 0;
   let ls = s.length;
