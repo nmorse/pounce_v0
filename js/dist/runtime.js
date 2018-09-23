@@ -23,6 +23,13 @@ function run(pl, stack, words, record_histrory = false) {
       [stack, pl=pl] = words[term].fn(stack, pl);
       // console.log('post-execute ', stack, pl );
     }
+    else if (typeof term === 'string' && words[term] && isArray(words[term].fn)) {
+      // process args to a local word dictionary
+      
+      // console.log('unquote fn list ', stack, term, pl);
+      pl = words[term].fn.concat(pl);
+      // console.log('post-unquote ', stack, pl);
+    }
     else {
       num = tryConvertToNumber(term);
       if (isArray(term) || !isNumber(num)) {
@@ -121,6 +128,13 @@ var words = {
     const key = s.pop();
     const fn = s.pop();
     words[key] = fn;
+    return [s];
+  }},
+  'define': {expects: [{ofType: 'list', desc: 'local-defined words for runtime stack items'}, {ofType: 'list', desc: 'composition of words'}, {ofType: 'list', desc: 'name of this new word'}], effects:[-3], tests: [], desc: 'defines a word with locally named stack items',
+    fn: function(s) {
+    const key = s.pop();
+    words[key].fn = s.pop();
+    words[key].args = s.pop();
     return [s];
   }},
   'str-first': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
@@ -464,6 +478,8 @@ var words = {
     }
     return [s, pl];
   }},
+  'ifte': {expects: [{desc: 'conditional', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}], effects:[-3], tests: [], desc: 'conditionally apply the first or second quotation',
+    fn: [['apply'], 'dip2', 'if-else']},
   'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ], 'if'],
   'fact': ['count-down', 'n*'],
   'floor': ['dup', 1, '%', '-']

@@ -315,6 +315,13 @@
               this.vs_history = [];
               this.pl = parse(pounce_script);
               this.vs = run(this.pl, [], words, this.vs_history).reverse();
+              
+              //this.vs_history = this.vs_history.map(e => {
+              //  let rt = e;
+              //  rt.pl = unParse(e.pl);
+              //  rt.stack = unParse(e.stack);
+              //  return rt;
+              //});
             }
           , 'scan_recall': function (ps) {
                 if (ps.indexOf(' recall') >= 1) {

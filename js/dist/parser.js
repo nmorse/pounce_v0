@@ -33,7 +33,9 @@ function parse_next(s, i, ls) {
   if (i >= ls) {
     return ['', i];
   }
-  
+  if (s[i] === '#') {
+    return consume_comment(s, i, ls);
+  }
   if (s[i] === '"' || s[i] === "'") {
     return parse_string(s, i, ls);
   }
@@ -123,7 +125,7 @@ function parse_list(s, i, ls) {
 }
 
 function parse(s) {
-  s = s.replace(/^#.*\n*$/gm, ' '); // ixnay comments
+  s = s.replace(/^#.*\n*$/gm, ' '); // ixnay comments that start at begining of line.
   s = s.replace(/\s/gm, ' ');
   s = s.replace(/\n/gm, ' ');
   
