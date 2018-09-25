@@ -57,7 +57,7 @@
           var intro = new Vue({
             el: '#intro',
             data: {
-              "pounce": (ps) => run(parse(ps), [], words)[0]
+              "pounce": (ps) => run(parse(ps), [], [words])[0]
             }
           });
           var testing = new Vue({

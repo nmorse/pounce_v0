@@ -315,7 +315,7 @@
               this.last_ps = pounce_script;
               this.vs_history = [];
               this.pl = parse(pounce_script);
-              this.vs = run(this.pl, [], words, this.vs_history).reverse();
+              this.vs = run(this.pl, [], [words], this.vs_history).reverse();
               
               //this.vs_history = this.vs_history.map(e => {
               //  let rt = e;

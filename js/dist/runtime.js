@@ -2,33 +2,68 @@
 
 // run expects a parsed program list (pl).
 // a stack that usually would be empty, but may be primed with an existing state
-// a dictionary of words.
+// a stack of dictionaries of words.
 // and optionaly a history array to record stack and pl state
-function run(pl, stack, words, record_histrory = false) {
-  var term;
-  var num;
+function run(pl, stack, wordstack, record_histrory = false) {
+  let term;
+  let num;
+  const findWord = (term) => {
+    let i = wordstack.length - 1;
+    let w = wordstack[i][term];
+    while (i >= 0 && !w) {
+      i -= 1;
+      if (i >= 0) {
+        w = wordstack[i][term];
+      }
+    }
+    if (i < 0) {
+      return null;
+    }
+    return w;
+  };
+  
   halt = false;
   while (pl.length > 0 && !halt) {
     term = pl.shift();
-    if (typeof term === 'string' && isArray(words[term])) {
-      // console.log('unquote list ', stack, term, pl);
-      pl = words[term].concat(pl);
-      // console.log('post-unquote ', stack, pl);
-    }
-    else if (typeof term === 'string' && words[term] && words[term].fn && typeof words[term].fn === 'function') {
-      // console.log('pre-execute ', stack, term, pl);
-      if (record_histrory !== false) {
-        record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
+    let handled = false;
+    if (typeof term === 'string') {
+      let thisWord = findWord(term);
+      if (isArray(thisWord)) {
+        // console.log('unquote list ', stack, term, pl);
+        pl = thisWord.concat(pl);
+        // console.log('post-unquote ', stack, pl);
+        handled = true;
       }
-      [stack, pl=pl] = words[term].fn(stack, pl);
-      // console.log('post-execute ', stack, pl );
-    }
-    else if (typeof term === 'string' && words[term] && isArray(words[term].fn)) {
-      // process args to a local word dictionary
-      
-      // console.log('unquote fn list ', stack, term, pl);
-      pl = words[term].fn.concat(pl);
-      // console.log('post-unquote ', stack, pl);
+      if (thisWord && isArray(thisWord.fn)) {
+        if (thisWord['local-words']) {
+          wordstack.push(thisWord['local-words']);
+          pl = thisWord.fn.concat(['pop-local-environment']).concat(pl);
+        }
+        else {
+          // console.log('unquote fn list ', stack, term, pl);
+          pl = thisWord.fn.concat(pl);
+          // console.log('post-unquote ', stack, pl);
+        }
+        handled = true;
+      }
+      if (thisWord && thisWord.fn && typeof thisWord.fn === 'function') {
+        // console.log('pre-execute ', stack, term, pl);
+        if (record_histrory !== false) {
+          record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
+        }
+        [stack, pl=pl] = thisWord.fn(stack, pl, wordstack[0]);
+        // console.log('post-execute ', stack, pl );
+        handled = true;
+      }
+      if (!handled) {
+        num = tryConvertToNumber(term);
+        stack.push(num);
+        if (record_histrory && pl.length > 0) {
+          if (record_histrory.length !== 0 && !record_histrory[0].term) {
+            record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()};
+          }
+        }
+      }
     }
     else {
       num = tryConvertToNumber(term);
@@ -124,14 +159,14 @@ var words = {
     return [s];
   }},
   'def': {expects: [{ofType: 'list', desc: 'composition of words'}, {ofType: 'list', desc: 'name of this new word'}], effects:[-2], tests: [], desc: 'defines a word',
-    fn: function(s) {
+    fn: function(s, pl, words) {
     const key = s.pop();
     const fn = s.pop();
     words[key] = fn;
     return [s];
   }},
   'define': {expects: [{ofType: 'record', desc: 'definition of word'}, {ofType: 'string', desc: 'word name'}], effects:[-2], tests: [], desc: 'defines a word given a record',
-    fn: function(s) {
+    fn: function(s, pl, words) {
     const name = s.pop();
     words[name] = s.pop();
     return [s];
