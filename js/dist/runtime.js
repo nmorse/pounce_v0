@@ -130,11 +130,10 @@ var words = {
     words[key] = fn;
     return [s];
   }},
-  'define': {expects: [{ofType: 'list', desc: 'local-defined words for runtime stack items'}, {ofType: 'list', desc: 'composition of words'}, {ofType: 'list', desc: 'name of this new word'}], effects:[-3], tests: [], desc: 'defines a word with locally named stack items',
+  'define': {expects: [{ofType: 'record', desc: 'definition of word'}, {ofType: 'string', desc: 'word name'}], effects:[-2], tests: [], desc: 'defines a word given a record',
     fn: function(s) {
-    const key = s.pop();
-    words[key].fn = s.pop();
-    words[key].args = s.pop();
+    const name = s.pop();
+    words[name] = s.pop();
     return [s];
   }},
   'str-first': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
