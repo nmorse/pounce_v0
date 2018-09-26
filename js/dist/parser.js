@@ -102,7 +102,7 @@ function parse_dict(s, i, ls) {
   while (i < ls && (s[i] === ' ' || s[i] === '\n')) {
     i += 1;
   }
-  while (i+1 < ls && s[i] != '}') {
+  while (i+1 < ls && s[i] !== '}' && s[i] !== ']') {
     //print ('parse_dict', s, i, dict)
     [k, i] = parse_key(s, i, ls);
     //print ('parse_key', k)
@@ -114,20 +114,26 @@ function parse_dict(s, i, ls) {
       i += 1;
     }
   }
-  return [dict, i+1];
+  if (i < ls) {
+    return [dict, i+1];
+  }
+  return [dict, i];
 }
 
 function parse_list(s, i, ls) {
   let l = [];
   i += 1;
-  while (i+1 < ls && s[i] != ']') {
+  while (i+1 < ls && s[i] !== ']' && s[i] !== '}') {
     //print (s, i, l)
     [w, i] = parse_next(s, i, ls);
     if (w !== '' && w !== null && typeof w !== undefined) {
       l.push(w);
     }
   }
-  return [l, i+1];
+  if (i+1 < ls) {
+    return [l, i+1];
+  }
+  return [l, i];
 }
 
 function parse(s) {

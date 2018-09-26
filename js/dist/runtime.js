@@ -37,7 +37,7 @@ function run(pl, stack, wordstack, record_histrory = false) {
       if (thisWord && isArray(thisWord.fn)) {
         if (thisWord['local-words']) {
           wordstack.push(thisWord['local-words']);
-          pl = thisWord.fn.concat(['pop-local-environment']).concat(pl);
+          pl = thisWord.fn.concat(['internal=>drop-local-words']).concat(pl);
         }
         else {
           // console.log('unquote fn list ', stack, term, pl);
@@ -51,7 +51,7 @@ function run(pl, stack, wordstack, record_histrory = false) {
         if (record_histrory !== false) {
           record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
         }
-        [stack, pl=pl] = thisWord.fn(stack, pl, wordstack[0]);
+        [stack, pl=pl] = thisWord.fn(stack, pl, wordstack);
         // console.log('post-execute ', stack, pl );
         handled = true;
       }
@@ -159,16 +159,21 @@ var words = {
     return [s];
   }},
   'def': {expects: [{ofType: 'list', desc: 'composition of words'}, {ofType: 'list', desc: 'name of this new word'}], effects:[-2], tests: [], desc: 'defines a word',
-    fn: function(s, pl, words) {
+    fn: function(s, pl, wordstack) {
     const key = s.pop();
     const fn = s.pop();
-    words[key] = fn;
+    wordstack[0][key] = fn;
     return [s];
   }},
   'define': {expects: [{ofType: 'record', desc: 'definition of word'}, {ofType: 'string', desc: 'word name'}], effects:[-2], tests: [], desc: 'defines a word given a record',
-    fn: function(s, pl, words) {
+    fn: function(s, pl, wordstack) {
     const name = s.pop();
-    words[name] = s.pop();
+    wordstack[0][name] = s.pop();
+    return [s];
+  }},
+  'internal=>drop-local-words': {
+    fn:function(s, pl, wordstack) {
+    wordstack.pop();
     return [s];
   }},
   'str-first': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
@@ -236,6 +241,14 @@ var words = {
     else {
       console.log({'word':'pop', 'error':"unable to 'pop' from non-Array"});
     }
+    return [s];
+  }},
+  'list-length': {expects: [{desc: 'source', ofType: 'list'}], effects:[0], tests: [
+    [`[1 2 3] str-length`, [3]]
+    ], desc: 'lenth of a list',
+    fn: function(s) {
+    const list = s.pop();
+    s.push(list.length);
     return [s];
   }},
   'cons': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [], desc: 'add an item at the begining of a list',

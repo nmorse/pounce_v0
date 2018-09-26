@@ -46,7 +46,17 @@ let runtime_tests = [
   ['mouse-move-sim get-rel-vec pop-all', [{'rel-x':12, 'rel-y':-2},-2, 12]],
   ['0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply', [1, 1, [1]]],
   ['[true] [true] [false] ifte', ["true"]],
-  ['', []],
+  [`{
+ local-words:{
+  map-repeat: [dup 0 > [1 - swap dup dip2 swap map-repeat] [drop drop drop r get [drop] dip] if-else ]
+  map-package: [{} swap f set swap o set [] r set]
+ }
+ fn:[map-package
+  [o get dup str-length 0 > [pop [f get] dip2 2 bubble-up apply [o set] dip [r get ] dip prepend r set] if]
+  [dup [apply] dip] [o get str-length] dip2 2 bubble-up map-repeat
+ ]
+} [map] define
+[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
   ['', []],
   ['', []]
 ];
