@@ -48,8 +48,8 @@ function run(pl, stack, wordstack, record_histrory = false) {
       }
       if (thisWord && thisWord.fn && typeof thisWord.fn === 'function') {
         // console.log('pre-execute ', stack, term, pl);
-        if (record_histrory !== false) {
-          record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:cloneItem(pl).reverse()});
+        if (record_histrory !== false && ixnay([term]) !== []) {
+          record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:ixnay(cloneItem(pl).reverse())});
         }
         [stack, pl=pl] = thisWord.fn(stack, pl, wordstack);
         // console.log('post-execute ', stack, pl );
@@ -60,7 +60,7 @@ function run(pl, stack, wordstack, record_histrory = false) {
         stack.push(num);
         if (record_histrory && pl.length > 0) {
           if (record_histrory.length !== 0 && !record_histrory[0].term) {
-            record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()};
+            record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:ixnay(cloneItem(pl).reverse())};
           }
         }
       }
@@ -75,12 +75,17 @@ function run(pl, stack, wordstack, record_histrory = false) {
       }
       if (record_histrory && pl.length > 0) {
         if (record_histrory.length !== 0 && !record_histrory[0].term) {
-          record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:cloneItem(pl).reverse()};
+          record_histrory[0] = {stack:cloneItem(stack).reverse(), pl:ixnay(cloneItem(pl).reverse())};
         }
       }
     }
   }
   return stack;
+}
+
+function ixnay(l) {
+  const new_l = l.filter(e => e !== 'internal=>drop-local-words');
+  return new_l;
 }
 
 function unParse (pl) {
@@ -337,36 +342,36 @@ var words = {
   }},
   '+': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'addition',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
+    const a = s.pop();
     s.push(a + b);
     return [s];
   }},
   '-': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'subtraction',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b - a);
+    const a = s.pop();
+    s.push(a - b);
     return [s];
   }},
   '/': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'division',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b / a);
+    const a = s.pop();
+    s.push(a / b);
     return [s];
   }},
   '%': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'modulo',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b % a);
+    const a = s.pop();
+    s.push(a % b);
     return [s];
   }},
   '*': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'multiplication',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
+    const a = s.pop();
     s.push(a * b);
     return [s];
   }},
@@ -393,51 +398,51 @@ var words = {
   }},
   '==': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'compare for equality',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
+    const a = s.pop();
     s.push(a === b);
     return [s];
   }},
   '>': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'greater than',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b > a);
+    const a = s.pop();
+    s.push(a > b);
     return [s];
   }},
   '>=': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'greater than or equal',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b >= a);
+    const a = s.pop();
+    s.push(a >= b);
     return [s];
   }},
   '<': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'less than',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b < a);
+    const a = s.pop();
+    s.push(a < b);
     return [s];
   }},
   '<=': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'less than or equal',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b <= a);
+    const a = s.pop();
+    s.push(a <= b);
     return [s];
   }},
   'and': {expects: [{desc: 'a', ofType: 'boolean'}, {desc: 'b', ofType: 'boolean'}], effects:[-1], tests: [], desc: 'logical and',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b && a);
+    const a = s.pop();
+    s.push(a && b);
     return [s];
   }},
   'or': {expects: [{desc: 'a', ofType: 'boolean'}, {desc: 'b', ofType: 'boolean'}], effects:[-1], tests: [], desc: 'logical or',
     fn: function(s) {
-    const a = s.pop();
     const b = s.pop();
-    s.push(b || a);
+    const a = s.pop();
+    s.push(a || b);
     return [s];
   }},
   'not': {expects: [{desc: 'a', ofType: 'boolean'}], effects:[0], tests: [], desc: 'logical not',
