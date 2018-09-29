@@ -98,6 +98,7 @@
             <div class="col-container">
               <div>
                 &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run Pounce only to cursor</label>
+                &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />Debug Mode</label>
               </div>
               <div>
                 <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)"
@@ -178,6 +179,7 @@
           , "vs_history": []
           , "words": words
           , "runUpToCursor": false
+          , "debugMode": true
           , "helpWord": ""
           , "helpWordDef": ""
           , "helpWordDesc": ""
@@ -313,7 +315,7 @@
                 return;
               }
               this.last_ps = pounce_script;
-              this.vs_history = [];
+              this.vs_history = this.debugMode? []: false;
               this.pl = parse(pounce_script);
               this.vs = run(this.pl, [], [words], this.vs_history).reverse();
               
