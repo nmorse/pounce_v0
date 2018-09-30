@@ -50,7 +50,7 @@
       <script>
           var date_now = new Date();
           words['years-since'] = parse(date_now.getFullYear() + ' - -1 *');
-          words['floor'] = {fn:(s, pl) => {
+          words['floor'] = {definition:(s, pl) => {
             const num = s.pop();
             s.push(Math.floor(num));
             return [s, pl];

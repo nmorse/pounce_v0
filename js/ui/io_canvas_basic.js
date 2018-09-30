@@ -1,6 +1,7 @@
 var cb_words = {
-  'cb-init': {desc: 'init the graphics context for a canvas element',
-    fn: function(s) {
+  'cb-init': {expects: [{desc: 'canvas tag id', ofType: 'string'}],
+    effects:[0], desc: 'init the graphics context for a canvas element',
+    definition: function(s) {
     const canvasId = s.pop();
     var canvas = document.getElementById(canvasId);
     var ctx = canvas.getContext('2d');
@@ -13,7 +14,7 @@ var cb_words = {
     return [s];
   }},
   'cb-begin-path': {desc: 'start a path at x y',
-    fn: function(s) {
+    definition: function(s) {
     const y1 = s.pop();
     const x1 = s.pop();
     const ctx = s[s.length - 1];
@@ -22,7 +23,7 @@ var cb_words = {
     return [s];
   }},
   'cb-line-to': {desc: 'continue a path to x y',
-    fn: function(s) {
+    definition: function(s) {
     const y2 = s.pop();
     const x2 = s.pop();
     const ctx = s[s.length - 1];
@@ -30,13 +31,13 @@ var cb_words = {
     return [s];
   }},
   'cb-end-path': {desc: 'ends a path',
-    fn: function(s) {
+    definition: function(s) {
     const ctx = s[s.length - 1];
     ctx.stroke();
     return [s];
   }},
   'cb-line': {desc: 'draw a line from x1 y1 to x2 y2',
-    fn: function(s) {
+    definition: function(s) {
     const y2 = s.pop();
     const x2 = s.pop();
     const y1 = s.pop();
@@ -50,7 +51,7 @@ var cb_words = {
   }},
   'cb-box': {sig:{args:[{'x':'number', 'y':'number'}, {d:'record'}]},
     desc: 'demo 50 x 50 filled box',
-    fn: function(s) {
+    definition: function(s) {
     const d = s.pop();
     if (isNumber(d)) {
       const y = d
@@ -67,7 +68,7 @@ var cb_words = {
     return [s];
   }},
   'cb-clear': {desc: 'clear the full canvas',
-    fn: function(s) {
+    definition: function(s) {
     const ctx = s[s.length - 1];
     const w = ctx.canvas.width;
     const h = ctx.canvas.height;
@@ -75,7 +76,7 @@ var cb_words = {
     return [s];
   }},
   'cb-load-image': {desc: 'given a src load an image (async)',
-    fn: function(s) {
+    definition: function(s) {
     const src = s.pop();
     const ctx = s[s.length - 1];
     if (!ctx.images) {
@@ -92,7 +93,7 @@ var cb_words = {
     return [s];
   }},
   'cb-nth-image': {desc: 'show the nth loaded image (see: cb-load-image)',
-    fn: function(s) {
+    definition: function(s) {
     const n = s.pop();
     const ctx = s[s.length - 1];
     ctx.drawImage(ctx.images[n], 0, 0);

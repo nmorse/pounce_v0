@@ -202,8 +202,8 @@
           , "lookupWord": function (w) {
               this.helpWord = w;
               if (w && words[w]) {
-                if (words[w].fn) {
-                  this.helpWordDef = 'internal definition'; //words[w].fn;
+                if (words[w].definition) {
+                  this.helpWordDef = 'internal definition'; //words[w].definition;
                 }
                 else {
                   this.helpWordDef = unParse(words[w]);
@@ -402,7 +402,7 @@ images/pounce-cat1.png cb-load-image
  }
  expects: [{desc: 'a positive', ofType: 'integer'}]
  effects: [0]
- fn:[package factorize clean-up]
+ definition:[package factorize clean-up]
  desc:'Prime factors of a number'
 } [factor] define
 210 factor

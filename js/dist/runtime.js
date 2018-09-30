@@ -34,24 +34,24 @@ function run(pl, stack, wordstack, record_histrory = false) {
         // console.log('post-unquote ', stack, pl);
         handled = true;
       }
-      if (thisWord && isArray(thisWord.fn)) {
+      if (thisWord && isArray(thisWord.definition)) {
         if (thisWord['local-words']) {
           wordstack.push(thisWord['local-words']);
-          pl = thisWord.fn.concat(['internal=>drop-local-words']).concat(pl);
+          pl = thisWord.definition.concat(['internal=>drop-local-words']).concat(pl);
         }
         else {
-          // console.log('unquote fn list ', stack, term, pl);
-          pl = thisWord.fn.concat(pl);
+          // console.log('unquote definition list ', stack, term, pl);
+          pl = thisWord.definition.concat(pl);
           // console.log('post-unquote ', stack, pl);
         }
         handled = true;
       }
-      if (thisWord && thisWord.fn && typeof thisWord.fn === 'function') {
+      if (thisWord && thisWord.definition && typeof thisWord.definition === 'function') {
         // console.log('pre-execute ', stack, term, pl);
         if (record_histrory !== false && ixnay([term]) !== []) {
           record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:ixnay(cloneItem(pl).reverse())});
         }
-        [stack, pl=pl] = thisWord.fn(stack, pl, wordstack);
+        [stack, pl=pl] = thisWord.definition(stack, pl, wordstack);
         // console.log('post-execute ', stack, pl );
         handled = true;
       }
@@ -159,32 +159,32 @@ var halt = false;
 var stack = [];
 var words = {
   'halt': {expects: [], effects:[], tests: [], desc: 'halts a running program',
-    fn: function(s) {
+    definition: function(s) {
     halt = true;
     return [s];
   }},
   'def': {expects: [{ofType: 'list', desc: 'composition of words'}, {ofType: 'list', desc: 'name of this new word'}], effects:[-2], tests: [], desc: 'defines a word',
-    fn: function(s, pl, wordstack) {
+    definition: function(s, pl, wordstack) {
     const key = s.pop();
-    const fn = s.pop();
-    wordstack[0][key] = fn;
+    const definition = s.pop();
+    wordstack[0][key] = definition;
     return [s];
   }},
   'define': {expects: [{ofType: 'record', desc: 'definition of word'}, {ofType: 'string', desc: 'word name'}], effects:[-2], tests: [], desc: 'defines a word given a record',
-    fn: function(s, pl, wordstack) {
+    definition: function(s, pl, wordstack) {
     const name = s.pop();
     wordstack[0][name] = s.pop();
     return [s];
   }},
   'internal=>drop-local-words': {
-    fn:function(s, pl, wordstack) {
+    definition:function(s, pl, wordstack) {
     wordstack.pop();
     return [s];
   }},
   'str-first': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
     [`'hello' str-first`, ['ello', 'h']]
     ], desc: 'extract the first character from a string',
-    fn: function(s) {
+    definition: function(s) {
     const str = s.pop();
     const first = str.slice(0, 1);
     const last_part = str.slice(1);
@@ -194,7 +194,7 @@ var words = {
   'str-last': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
     [`'hello' str-last`, ['hell', 'o']]
     ], desc: 'extract the last character from a string',
-    fn: function(s) {
+    definition: function(s) {
     const str = s.pop();
     const last = str.slice(-1);
     const first_part = str.slice(0, -1);
@@ -204,7 +204,7 @@ var words = {
   'str-length': {expects: [{desc: 'source string', ofType: 'string'}], effects:[0], tests: [
     [`'hello' str-length`, [5]]
     ], desc: 'lenth of a string',
-    fn: function(s) {
+    definition: function(s) {
     const str = s.pop();
     s.push(str.length);
     return [s];
@@ -212,13 +212,13 @@ var words = {
   'str-append': {expects: [{desc: 'source 1', ofType: 'string'}, {desc: 'source 2', ofType: 'string'}], effects:[-1], tests: [
     [`'hello' ' ' str-append 'world'`, ['hello world']]
     ], desc: 'append two strings together',
-    fn: function(s) {
+    definition: function(s) {
     const str = s.pop();
     s[s.length - 1] = s[s.length - 1] + str;
     return [s];
   }},
   'push': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [], desc: 'push an item on end of a list',
-    fn: function(s) {
+    definition: function(s) {
     const item = s.pop();
     const top = s.length - 1;
     const list = s[top];
@@ -228,7 +228,7 @@ var words = {
   'prepend': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [
     [`[6 7] 5 prepend`, [[5, 6, 7]]]
     ], desc: 'push an item on end of a list',
-    fn: function(s) {
+    definition: function(s) {
     const item = s.pop();
     const top = s.length - 1;
     const list = s[top];
@@ -236,7 +236,7 @@ var words = {
     return [s];
   }},
   'pop': {expects: [{desc: 'a', ofType: 'list'}], effects:[1], tests: [], desc: 'pop the last item off the end of a list',
-    fn: function(s) {
+    definition: function(s) {
     const top = s.length - 1;
     const list = s[top];
     if (isArray(list)) {
@@ -251,20 +251,20 @@ var words = {
   'list-length': {expects: [{desc: 'source', ofType: 'list'}], effects:[0], tests: [
     [`[1 2 3] str-length`, [3]]
     ], desc: 'lenth of a list',
-    fn: function(s) {
+    definition: function(s) {
     const list = s.pop();
     s.push(list.length);
     return [s];
   }},
   'cons': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [], desc: 'add an item at the begining of a list',
-    fn: function(s) {
+    definition: function(s) {
     const list = s.pop();
     const item = s.pop();
     list.push(item);
     return [s];
   }},
   'apply': {expects: [{desc: 'a runable', ofType: 'list'}], effects:[-1], tests: [], desc: 'run the contents of a list',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const block = s.pop();
     if (isArray(block)) {
       pl = block.concat(pl);
@@ -275,7 +275,7 @@ var words = {
     return [s, pl];
   }},
   'un-apply': {expects: [{desc: 'an word', ofType: 'any'}], effects:[0], tests: [], desc: 'put a word into list form',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const item = s.pop();
     if (isArray(item)) {
       pl = [item].concat(pl);
@@ -286,7 +286,7 @@ var words = {
     return [s, pl];
   }},
   'dip': {expects: [{desc: 'a', ofType: 'list'}], effects:[-1], tests: [], desc: 'apply under the top of the stack (see apply)',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const block = s.pop();
     const item = s.pop();
     pl = [item].concat(pl);
@@ -299,7 +299,7 @@ var words = {
     return [s, pl];
   }},
   'dip2': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [], desc: 'apply two under the top of the stack (see apply)',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const block = s.pop();
     const item1 = s.pop();
     const item2 = s.pop();
@@ -314,19 +314,19 @@ var words = {
     return [s, pl];
   }},
   'drop': {expects: [{desc: 'some value', ofType: 'any'}], effects:[-1], tests: [], desc: 'remove one element from the top of the stack',
-    fn: function(s) {
+    definition: function(s) {
     s.pop();
     return [s];
   }},
   'dup': {expects: [{desc: 'some item', ofType: 'any'}], effects:[1], tests: [], desc: 'duplicate the top element on the stack',
-    fn: function(s) {
+    definition: function(s) {
     const top = s.length - 1;
     const a = cloneItem(s[top]);
     s.push(a);
     return [s];
   }},
   'dup2': {expects: [{desc: 'some item', ofType: 'any'}, {desc: 'another item', ofType: 'any'}], effects:[2], tests: [], desc: 'duplicate the top two elements on the stack',
-    fn: function(s) {
+    definition: function(s) {
     const top = s.length - 1;
     const a = cloneItem(s[top]);
     const b = cloneItem(s[top - 1]);
@@ -334,54 +334,54 @@ var words = {
     return [s];
   }},
   'swap': {expects: [{desc: 'some item', ofType: 'any'}, {desc: 'another item', ofType: 'any'}], effects:[0], tests: [], desc: 'swap the top two elements on the stack',
-    fn: function(s) {
+    definition: function(s) {
     const a = s.pop();
     const b = s.pop();
     s.push(a, b);
     return [s];
   }},
   '+': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'addition',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a + b);
     return [s];
   }},
   '-': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'subtraction',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a - b);
     return [s];
   }},
   '/': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'division',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a / b);
     return [s];
   }},
   '%': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'modulo',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a % b);
     return [s];
   }},
   '*': {expects: [{desc: 'a', ofType: 'number'}, {desc: 'b', ofType: 'number'}], effects:[-1], tests: [], desc: 'multiplication',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a * b);
     return [s];
   }},
   'depth': {expects: [], effects:[1], tests: [], desc: 'stack depth',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     s.push(s.length);
     return [s];
   }},
   'n*': {expects: [], effects:[], tests: [], desc: 'multiply a stack numbers (depreceated)',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     if (s.length >= 2) {
       const a = s.pop();
       const b = s.pop();
@@ -397,76 +397,76 @@ var words = {
     return [s];
   }},
   '==': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'compare for equality',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a === b);
     return [s];
   }},
   '>': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'greater than',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a > b);
     return [s];
   }},
   '>=': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'greater than or equal',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a >= b);
     return [s];
   }},
   '<': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'less than',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a < b);
     return [s];
   }},
   '<=': {expects: [{desc: 'a', ofType: 'comparable'}, {desc: 'b', ofType: 'comparable'}], effects:[-1], tests: [], desc: 'less than or equal',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a <= b);
     return [s];
   }},
   'and': {expects: [{desc: 'a', ofType: 'boolean'}, {desc: 'b', ofType: 'boolean'}], effects:[-1], tests: [], desc: 'logical and',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a && b);
     return [s];
   }},
   'or': {expects: [{desc: 'a', ofType: 'boolean'}, {desc: 'b', ofType: 'boolean'}], effects:[-1], tests: [], desc: 'logical or',
-    fn: function(s) {
+    definition: function(s) {
     const b = s.pop();
     const a = s.pop();
     s.push(a || b);
     return [s];
   }},
   'not': {expects: [{desc: 'a', ofType: 'boolean'}], effects:[0], tests: [], desc: 'logical not',
-    fn: function(s) {
+    definition: function(s) {
     const a = s.pop();
     s.push(!a);
     return [s];
   }},
   'bubble-up': {expects: [{desc: 'offset', ofType: 'integer'}], effects:[-1], tests: [], desc: 'move a stack element up to the top',
-    fn: function(s) {
+    definition: function(s) {
     const i = s.pop();
     const item = s.splice(-i-1, 1);
     s.push(item[0]);
     return [s];
   }},
   'get': {expects: [{desc: 'a', ofType: 'record'}, {desc: 'key', ofType: 'word'}], effects:[0], tests: [], desc: 'get the value of a property from a record',
-    fn: function(s) {
+    definition: function(s) {
     const key = s.pop();
     const rec = cloneItem(s[s.length - 1]);
     s.push(rec[key])
     return [s];
   }},
   'set': {expects: [{desc: 'a', ofType: 'record'}, {desc: 'key', ofType: 'word'}, {desc: 'value', ofType: 'any'}], effects:[-2], tests: [], desc: 'set the value of a property in a record',
-    fn: function(s) {
+    definition: function(s) {
     const key = s.pop();
     const value = s.pop();
     let rec = s[s.length - 1];
@@ -474,7 +474,7 @@ var words = {
     return [s];
   }},
   'case': {expects: [{desc: 'key', ofType: 'word'}, {desc: 'a', ofType: 'record'}], effects:[-2], tests: [], desc: 'apply a matching case',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const case_record = s.pop();
     let key = s.pop();
     if (key === " ") {
@@ -494,7 +494,7 @@ var words = {
     return [s, pl];
   }},
   'if': {expects: [{desc: 'conditional', ofType: 'boolean'}, {desc: 'then clause', ofType: 'list'}], effects:[-2], tests: [], desc: 'conditionally apply a quotation',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const then_block = s.pop();
     const expression = s.pop();
     if (expression) {
@@ -508,7 +508,7 @@ var words = {
     return [s, pl];
   }},
   'if-else': {expects: [{desc: 'conditional', ofType: 'boolean'}, {desc: 'then clause', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}], effects:[-3], tests: [], desc: 'conditionally apply the first or second quotation',
-    fn: function(s, pl) {
+    definition: function(s, pl) {
     const else_block = s.pop();
     const then_block = s.pop();
     const expression = s.pop();
@@ -531,7 +531,7 @@ var words = {
     return [s, pl];
   }},
   'ifte': {expects: [{desc: 'conditional', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}], effects:[-3], tests: [], desc: 'conditionally apply the first or second quotation',
-    fn: [['apply'], 'dip2', 'if-else']},
+    definition: [['apply'], 'dip2', 'if-else']},
   'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ], 'if'],
   'fact': ['count-down', 'n*'],
   'floor': ['dup', 1, '%', '-']

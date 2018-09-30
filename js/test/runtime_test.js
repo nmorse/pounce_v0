@@ -51,7 +51,7 @@ let runtime_tests = [
   map-repeat: [dup 0 > [1 - swap dup dip2 swap map-repeat] [drop drop drop r get [drop] dip] if-else ]
   map-package: [{} swap f set swap o set [] r set]
  }
- fn:[map-package
+ definition:[map-package
   [o get dup str-length 0 > [pop [f get] dip2 2 bubble-up apply [o set] dip [r get ] dip prepend r set] if]
   [dup [apply] dip] [o get str-length] dip2 2 bubble-up map-repeat
  ]
