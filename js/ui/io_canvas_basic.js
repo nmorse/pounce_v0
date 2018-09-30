@@ -100,4 +100,4 @@ var cb_words = {
     return [s];
   }}
 };
-words = Object.assign(cb_words, words);
+words = Object.assign(cb_words, pounce.words);
