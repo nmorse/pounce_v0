@@ -5,14 +5,6 @@ var pounce = (function () {
   // a stack of dictionaries of words.
   // and optionaly a history array to record stack and pl state
   
-  function isArray(candidate) {
-    return Array.isArray(candidate);
-  }
-  
-  function isNumber (value) {
-    return typeof value === 'number' && isFinite(value);
-  }
-  
   function tryConvertToNumber(w) {
     return number_or_str(w);
   }
@@ -546,7 +538,14 @@ var pounce = (function () {
         }
         return stack;
       }
-      
+    , isArray: function isArray(candidate) {
+        return Array.isArray(candidate);
+      }
+
+    , isNumber: function isNumber (value) {
+        return typeof value === 'number' && isFinite(value);
+      }
+
     // move to parse lib??
     , unParse:  function unParse (pl) {
         let ps = '';
