@@ -60,7 +60,7 @@ parser_tests.forEach((test, i) => {
     const expected_stack = test[1];
     
     //console.log('starting parse test for: ', ps);
-    const result_pl = parse(ps);
+    const result_pl = pounce.parse(ps);
     testCount += 1;
     if (!deepCompare(result_pl, expected_stack)) {
         testsFailed += 1;

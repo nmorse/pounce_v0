@@ -1,9 +1,9 @@
 
 <html>
   <head>
+    <script src="dist/runtime.js"></script>
     <script src="dist/parser.js"></script>
     <script src="test/parser_test.js"></script>
-    <script src="dist/runtime.js"></script>
     <script src="test/runtime_test.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -49,7 +49,7 @@
 
       <script>
           var date_now = new Date();
-          pounce.words['years-since'] = parse(date_now.getFullYear() + ' - -1 *');
+          pounce.words['years-since'] = pounce.parse(date_now.getFullYear() + ' - -1 *');
           pounce.words['floor'] = {definition:(s, pl) => {
             const num = s.pop();
             s.push(Math.floor(num));
@@ -58,7 +58,7 @@
           var intro = new Vue({
             el: '#intro',
             data: {
-              "pounce": (ps) => pounce.run(parse(ps), [], [pounce.words])[0]
+              "pounce": (ps) => pounce.run(pounce.parse(ps), [], [pounce.words])[0]
             }
           });
           var testing = new Vue({

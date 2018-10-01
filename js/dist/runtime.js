@@ -454,7 +454,14 @@ var pounce = (function () {
     const new_l = l.filter(e => e !== 'internal=>drop-local-words');
     return new_l;
   }
-
+  
+  function isArray(candidate) {
+    return Array.isArray(candidate);
+  }
+  
+  function isNumber (value) {
+    return typeof value === 'number' && isFinite(value);
+  }
   
   return {
       words: words
@@ -538,13 +545,10 @@ var pounce = (function () {
         }
         return stack;
       }
-    , isArray: function isArray(candidate) {
-        return Array.isArray(candidate);
-      }
+      
+    , isArray: isArray
 
-    , isNumber: function isNumber (value) {
-        return typeof value === 'number' && isFinite(value);
-      }
+    , isNumber: isNumber
 
     // move to parse lib??
     , unParse:  function unParse (pl) {

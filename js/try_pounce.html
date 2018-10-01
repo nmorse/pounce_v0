@@ -201,30 +201,30 @@
             }
           , "lookupWord": function (w) {
               this.helpWord = w;
-              if (w && words[w]) {
-                if (words[w].definition) {
-                  this.helpWordDef = 'internal definition'; //words[w].definition;
+              if (w && this.words[w]) {
+                if (this.words[w].definition) {
+                  this.helpWordDef = 'internal definition'; //this.words[w].definition;
                 }
                 else {
-                  this.helpWordDef = pounce.unParse(words[w]);
+                  this.helpWordDef = pounce.unParse(this.words[w]);
                 }
-                this.helpWordDesc = words[w].desc;
-                if (words[w].expects) {
+                this.helpWordDesc = this.words[w].desc;
+                if (this.words[w].expects) {
                   this.helpWordExpects =
-                    words[w].expects.length + ' item(s)' +
-                      words[w].expects.map(i => ' ' + i.desc + ' (' + i.ofType + ')');
+                    this.words[w].expects.length + ' item(s)' +
+                      this.words[w].expects.map(i => ' ' + i.desc + ' (' + i.ofType + ')');
                 }
                 else {
-                  if (words[w].expects === []) {
+                  if (this.words[w].expects === []) {
                     this.helpWordExpects = 'nothing';
                   }
                   else {
                     this.helpWordExpects = '';
                   }
                 }
-                if (words[w].effects) {
+                if (this.words[w].effects) {
                   
-                  this.helpWordEffects = '' + words[w].effects[0];
+                  this.helpWordEffects = '' + this.words[w].effects[0];
                 }
                 else {
                   this.helpWordEffects = '';
@@ -272,7 +272,7 @@
             }
           , "runPounceToCursor": function (e) {
               if (e && e.target) {
-                if (this.cursorAtWordEnd(e) || /* its not a word */ !words[this.wordAtCursor(e)] ) {
+                if (this.cursorAtWordEnd(e) || /* its not a word */ !this.words[this.wordAtCursor(e)] ) {
                   // console.log('cursor a end of word: '+proceed);
                   // console.log(e.target.selectionStart, e.target.selectionEnd);
                   // console.log(this.ps.slice(0, e.target.selectionStart));
@@ -317,7 +317,7 @@
               this.last_ps = pounce_script;
               this.vs_history = this.debugMode? []: false;
               this.pl = pounce.parse(pounce_script);
-              this.vs = pounce.run(this.pl, [], [words], this.vs_history).reverse();
+              this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
               
               //this.vs_history = this.vs_history.map(e => {
               //  let rt = e;
@@ -331,7 +331,7 @@
                   const pl = parse(ps);
                   if (pl.length === 2) {
                     let key = pl[0][0];
-                    this.ps = '[' + pounce.unParse(words[key]) + '] [' + key + '] ';
+                    this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';
                     this.vs = [];
                     return true;
                   }
