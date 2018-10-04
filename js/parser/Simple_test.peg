@@ -1,7 +1,14 @@
 grammar Simple_test
-  map     <-  "{" pair (", " pair)* "}" %make_map
-  pair    <-  string ":" value  %make_pair
-  string  <-  "'" [^']* "'" %make_string
-  value   <-  list / number / string
-  list    <-  "[" value ("," value)* "]" %make_list
-  number  <-  [0-9]+ %make_number
+  map     <-  "{" ws* pair ws* (","  ws* pair)* ws* "}" %make_map
+  pair    <-  string ws* ":" ws* value  %make_pair
+  string  <-  string_s / string_d
+  string_s  <-  "'" [^']* "'"  %make_string
+  string_d  <-  '"' [^\"]* '"' %make_string
+  value   <-  list / number / string / map
+  list    <-  list_empty / list_full
+  list_empty    <-  "[" ws* "]" %make_list_empty
+  list_full    <-  "[" value ("," value)* "]" %make_list
+  number  <-  float / integer
+  integer <-  [0-9]+  %make_integer
+  float   <-  [0-9]* "." [0-9]+   %make_float
+  ws      <-  " " %make_ws

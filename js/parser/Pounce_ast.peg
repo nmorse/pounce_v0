@@ -1,10 +1,24 @@
 grammar pounce_ast
   pounce  <-  value (ws value)*
-  string  <-  ("'" [^']* "'") / ('"' [^\"]* '"') %make_string
-  number  <-  [0-9]+  %make_number
   word    <-  [a-z]+  %make_word
   value   <-  list / number / word / string / map
-  list    <-  "[" value (ws value)* "]" %make_list
-  map     <-  "{" pair (ws pair)* "}"   %make_map
-  pair    <-  word ":" value
-  ws      <-  " " #/ "\t" / "\n"
+
+  map     <-  "{" ws* pair (" "  ws* pair)* ws* "}" %make_map
+  pair    <-  word ws* ":" ws* value  %make_pair
+
+  string  <-  string_s / string_d
+  string_s  <-  "'" [^']* "'"  %make_string
+  string_d  <-  '"' [^\"]* '"' %make_string
+
+  list    <-  list_empty / list_full
+  list_empty    <-  "[" ws* "]" %make_list_empty
+  list_full    <-  "[" value (ws+ value)* "]" %make_list
+
+  number  <-  float / integer
+  integer <-  [0-9]+  %make_integer
+  float   <-  [0-9]* "." [0-9]+   %make_float
+
+  ws      <-  space / tab / newline
+  space   <-  " " %make_ws
+  tab     <-  "\t" %make_ws
+  newline <-  "\n" %make_ws
