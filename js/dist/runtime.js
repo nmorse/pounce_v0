@@ -469,7 +469,8 @@ var pounce = (function () {
     , run:
       function run(pl, stack, wordstack, record_histrory = false) {
         let term;
-        let num;
+        let reps = 0;
+        const maxReps = 1000;
         const findWord = (term) => {
           let i = wordstack.length - 1;
           let w = wordstack[i][term];
@@ -486,8 +487,10 @@ var pounce = (function () {
         };
         
         halt = false;
-        while (pl.length > 0 && !halt) {
+        while (pl.length > 0 && !halt && reps < maxReps) {
+          reps += 1;
           term = pl.shift();
+          let num;
           let handled = false;
           if (typeof term === 'string') {
             let thisWord = findWord(term);

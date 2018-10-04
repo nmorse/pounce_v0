@@ -3,6 +3,8 @@
   <head>
     <script src="dist/runtime.js"></script>
     <script src="dist/parser.js"></script>
+    <script src="parser/Pounce_ast.js"></script>
+    
     <script src="test/parser_test.js"></script>
     <script src="test/runtime_test.js"></script>
 
@@ -55,6 +57,34 @@
             s.push(Math.floor(num));
             return [s, pl];
           }};
+var actions = {
+  make_map: function(input, start, end, elements) {
+    var map = {};
+    map[elements[1]] = elements[3];
+    return map;
+  },
+
+  make_string: function(input, start, end, elements) {
+    return elements[1].text;
+  },
+
+  make_word: function(input, start, end, elements) {
+    return input.substring(start, end);
+  },
+
+  make_list: function(input, start, end, elements) {
+    var list = [elements[1]];
+    elements[2].forEach(function(el) { list.push(el.value) });
+    return list;
+  },
+
+  make_number: function(input, start, end, elements) {
+    return parseInt(input.substring(start, end), 10);
+  }
+};
+
+          console.log(pounce_ast.parse("[6 3 7] abc {a:11 b:'B' c:\"C\"}", {actions: actions}));
+          
           var intro = new Vue({
             el: '#intro',
             data: {

@@ -1,0 +1,10 @@
+grammar pounce_ast
+  pounce  <-  value (ws value)*
+  string  <-  ("'" [^']* "'") / ('"' [^\"]* '"') %make_string
+  number  <-  [0-9]+  %make_number
+  word    <-  [a-z]+  %make_word
+  value   <-  list / number / word / string / map
+  list    <-  "[" value (ws value)* "]" %make_list
+  map     <-  "{" pair (ws pair)* "}"   %make_map
+  pair    <-  word ":" value
+  ws      <-  " " #/ "\t" / "\n"
