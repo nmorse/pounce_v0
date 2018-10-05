@@ -1,24 +1,36 @@
-grammar pounce_ast
-  pounce  <-  value (ws value)*
-  word    <-  [a-z]+  %make_word
+grammar Pounce_ast
+  pounce    <-  pounce_pl / pounce_empty
+  pounce_pl <-  ws* value (ws+ value)* ws*          %make_pounce_pl
+  pounce_empty  <- ws*                              %make_pounce_empty
+
+#  word      <- word_aux*                             %make_word 
+#  word_aux   <-  (!nonword .)    #                       %make_word
+#  nonword   <-  ws / "[" / "]" / "{" / ":" / "}"
+#  ws      <-  [\s]   %make_ws
+
+  word    <-  [a-zA-Z0-9\_\-\+\*\/\~\!\@\#\$\%\^\&\*\?\.]+               %make_word
   value   <-  list / number / word / string / map
 
-  map     <-  "{" ws* pair (" "  ws* pair)* ws* "}" %make_map
-  pair    <-  word ws* ":" ws* value  %make_pair
+  map     <-  "{" ws* pair (ws*  ws* pair)* ws* "}" %make_map
+  pair    <-  word ws* ":" ws* value                %make_pair
 
-  string  <-  string_s / string_d
+  string    <-  string_s / string_d
   string_s  <-  "'" [^']* "'"  %make_string
   string_d  <-  '"' [^\"]* '"' %make_string
 
-  list    <-  list_empty / list_full
-  list_empty    <-  "[" ws* "]" %make_list_empty
-  list_full    <-  "[" value (ws+ value)* "]" %make_list
+  list        <-  list_empty / list_full
+  list_empty  <-  "[" ws* "]"                         %make_list_empty
+  list_full   <-  "[" ws* value (ws+ value)* ws* "]"  %make_list
 
-  number  <-  float / integer
-  integer <-  [0-9]+  %make_integer
-  float   <-  [0-9]* "." [0-9]+   %make_float
+  number    <-  float1 / float2 / float3 / integer
+  float1    <-  [0-9]+ "." [0-9]+   %make_float
+  float2    <-  "." [0-9]+          %make_float
+  float3    <-  [0-9]+ "."          %make_float
+  integer   <-  [0-9]+              %make_integer
 
-  ws      <-  space / tab / newline
-  space   <-  " " %make_ws
-  tab     <-  "\t" %make_ws
-  newline <-  "\n" %make_ws
+
+  ws      <-  newline1 / newline2 / space / tab
+  space   <-    [\s]  %make_ws
+  tab     <-    [\t]  %make_ws
+  newline1  <-  [\r]  %make_ws
+  newline2  <-  [\n]  %make_ws
