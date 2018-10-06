@@ -3,20 +3,17 @@ grammar Pounce_ast
   pounce_pl <-  ws* value (ws+ value)* ws*          %make_pounce_pl
   pounce_empty  <- ws*                              %make_pounce_empty
 
-#  word      <- word_aux*                             %make_word 
-#  word_aux   <-  (!nonword .)    #                       %make_word
-#  nonword   <-  ws / "[" / "]" / "{" / ":" / "}"
-#  ws      <-  [\s]   %make_ws
-
-  word    <-  [a-zA-Z0-9\_\-\+\*\/\~\!\@\#\$\%\^\&\*\?\.]+               %make_word
+  word    <-  [a-zA-Z0-9\_\-\+\/\~\!\@\$\%\^\&\*\?\.]+ [a-zA-Z0-9\_\-\+\/\~\!\@\#\$\%\^\&\*\?\.]* %make_word
   value   <-  list / number / word / string / map
 
   map     <-  "{" ws* pair (ws*  ws* pair)* ws* "}" %make_map
   pair    <-  word ws* ":" ws* value                %make_pair
 
-  string    <-  string_s / string_d
+# # # # Strings JS style ["", '', ``] # # # #
+  string    <-  string_s / string_d / string_t
   string_s  <-  "'" [^']* "'"  %make_string
   string_d  <-  '"' [^\"]* '"' %make_string
+  string_t  <-  '`' [^`]* '`'  %make_string
 
   list        <-  list_empty / list_full
   list_empty  <-  "[" ws* "]"                         %make_list_empty
@@ -28,9 +25,14 @@ grammar Pounce_ast
   float3    <-  [0-9]+ "."          %make_float
   integer   <-  [0-9]+              %make_integer
 
-
+# # # # White Space # # # #
   ws      <-  newline1 / newline2 / space / tab
   space   <-    [\s]  %make_ws
   tab     <-    [\t]  %make_ws
   newline1  <-  [\r]  %make_ws
   newline2  <-  [\n]  %make_ws
+
+# # # # tried many interations of a blacklist word definition rules # # # #
+#  word      <- word_aux*                             %make_word 
+#  word   <-  (!nonword .)+                          %make_word
+#  nonword   <-  ws / "[" / "]" / "{" / ":" / "}"

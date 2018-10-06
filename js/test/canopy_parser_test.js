@@ -1,5 +1,3 @@
-const pounce_ast = require('./Pounce_ast');
-
 const parser_actions = {
   make_pounce_empty: function(input, start, end, elements) {
     return [];
@@ -118,7 +116,7 @@ parser_tests.forEach((test, i) => {
     //console.log('starting parse test for: ', ps);
     // old parser // const result_pl = pounce.parse(ps);
     try {
-      result_pl = pounce_ast.parse(ps, {actions: parser_actions});
+      result_pl = Pounce_ast.parse(ps, {actions: parser_actions});
     }
     catch(syntax_error) {
       if (expected_stack && expected_stack[0] && expected_stack[0] !== 'SyntaxError') {
@@ -274,4 +272,3 @@ function deepCompare () {
 
   return true;
 }
-
