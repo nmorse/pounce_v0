@@ -57,6 +57,7 @@
             return [s, pl];
           }};
           
+          canopy_parser_test.run_parser_test(Pounce_ast);
 
           var intro = new Vue({
             el: '#intro',
@@ -68,9 +69,9 @@
             el: '#testing',
             data: {
               "showParserTests": false
-            , "parser_tests": parser_tests
-            , "total_tests": parser_tests.length
-            , "failed_tests": parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
+            , "parser_tests": canopy_parser_test.parser_tests
+            , "total_tests": canopy_parser_test.parser_tests.length
+            , "failed_tests": canopy_parser_test.parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
               "showRuntimeTests": false
             , "runtime_tests": runtime_tests
             , "totalRuntime_tests": runtime_tests.length

@@ -470,7 +470,7 @@ var pounce = (function () {
       function run(pl, stack, wordstack, record_histrory = false) {
         let term;
         let reps = 0;
-        const maxReps = 1000000;
+        const maxReps = 10000000;
         const findWord = (term) => {
           let i = wordstack.length - 1;
           let w = wordstack[i][term];

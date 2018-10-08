@@ -8,7 +8,7 @@
   // all else is a word...
   
   if (!pounce) {
-    console.error('pounce parser.js must be after the pounce runtime is defined.')
+    console.error('pounce parser.js must be after the pounce runtime is defined.');
   }
   
   function number_or_str(s) {

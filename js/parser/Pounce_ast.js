@@ -153,7 +153,7 @@
           while (address5 !== FAILURE) {
             var index4 = this._offset, elements3 = new Array(2);
             var address6 = FAILURE;
-            var remaining2 = 1, index5 = this._offset, elements4 = [], address7 = true;
+            var remaining2 = 0, index5 = this._offset, elements4 = [], address7 = true;
             while (address7 !== FAILURE) {
               address7 = this._read_ws();
               if (address7 !== FAILURE) {
@@ -285,7 +285,7 @@
         if (this._offset < this._inputSize) {
           chunk0 = this._input.substring(this._offset, this._offset + 1);
         }
-        if (chunk0 !== null && /^[a-zA-Z0-9\_\-\+\/\~\!\@\$\%\^\&\*\?\.]/.test(chunk0)) {
+        if (chunk0 !== null && /^[a-zA-Z0-9\_\-\+\=\/\~\!\@\$\%\^\&\*\?\<\>]/.test(chunk0)) {
           address2 = new TreeNode(this._input.substring(this._offset, this._offset + 1), this._offset);
           this._offset = this._offset + 1;
         } else {
@@ -295,7 +295,7 @@
             this._expected = [];
           }
           if (this._offset === this._failure) {
-            this._expected.push('[a-zA-Z0-9\\_\\-\\+\\/\\~\\!\\@\\$\\%\\^\\&\\*\\?\\.]');
+            this._expected.push('[a-zA-Z0-9\\_\\-\\+\\=\\/\\~\\!\\@\\$\\%\\^\\&\\*\\?\\<\\>]');
           }
         }
         if (address2 !== FAILURE) {
@@ -318,7 +318,7 @@
           if (this._offset < this._inputSize) {
             chunk1 = this._input.substring(this._offset, this._offset + 1);
           }
-          if (chunk1 !== null && /^[a-zA-Z0-9\_\-\+\/\~\!\@\#\$\%\^\&\*\?\.]/.test(chunk1)) {
+          if (chunk1 !== null && /^[a-zA-Z0-9\_\-\+\=\/\~\!\@\#\$\%\^\&\*\?\.\<\>]/.test(chunk1)) {
             address4 = new TreeNode(this._input.substring(this._offset, this._offset + 1), this._offset);
             this._offset = this._offset + 1;
           } else {
@@ -328,7 +328,7 @@
               this._expected = [];
             }
             if (this._offset === this._failure) {
-              this._expected.push('[a-zA-Z0-9\\_\\-\\+\\/\\~\\!\\@\\#\\$\\%\\^\\&\\*\\?\\.]');
+              this._expected.push('[a-zA-Z0-9\\_\\-\\+\\=\\/\\~\\!\\@\\#\\$\\%\\^\\&\\*\\?\\.\\<\\>]');
             }
           }
           if (address4 !== FAILURE) {
