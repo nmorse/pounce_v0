@@ -26,13 +26,14 @@ grammar Pounce_ast
   integer   <-  [0-9]+              %make_integer
 
 # # # # White Space # # # #
-  ws      <-  newline1 / newline2 / space / tab # / comment
+  ws      <-  newline / space / tab / comment
   space   <-    [\s]  %make_ws
   tab     <-    [\t]  %make_ws
+  newline <- newline1 / newline2
   newline1  <-  [\r]  %make_ws
   newline2  <-  [\n]  %make_ws
 
-#  comment <- "#" ([^newline])
+  comment <- "#" [^\n]+
 
 # # # # tried many interations of a blacklist word definition rules # # # #
 #  word      <- word_aux*                             %make_word 

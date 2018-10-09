@@ -1666,16 +1666,16 @@
         return cached[0];
       }
       var index1 = this._offset;
-      address0 = this._read_newline1();
+      address0 = this._read_newline();
       if (address0 === FAILURE) {
         this._offset = index1;
-        address0 = this._read_newline2();
+        address0 = this._read_space();
         if (address0 === FAILURE) {
           this._offset = index1;
-          address0 = this._read_space();
+          address0 = this._read_tab();
           if (address0 === FAILURE) {
             this._offset = index1;
-            address0 = this._read_tab();
+            address0 = this._read_comment();
             if (address0 === FAILURE) {
               this._offset = index1;
             }
@@ -1744,6 +1744,27 @@
       return address0;
     },
 
+    _read_newline: function() {
+      var address0 = FAILURE, index0 = this._offset;
+      this._cache._newline = this._cache._newline || {};
+      var cached = this._cache._newline[index0];
+      if (cached) {
+        this._offset = cached[1];
+        return cached[0];
+      }
+      var index1 = this._offset;
+      address0 = this._read_newline1();
+      if (address0 === FAILURE) {
+        this._offset = index1;
+        address0 = this._read_newline2();
+        if (address0 === FAILURE) {
+          this._offset = index1;
+        }
+      }
+      this._cache._newline[index0] = [address0, this._offset];
+      return address0;
+    },
+
     _read_newline1: function() {
       var address0 = FAILURE, index0 = this._offset;
       this._cache._newline1 = this._cache._newline1 || {};
@@ -1799,6 +1820,86 @@
         }
       }
       this._cache._newline2[index0] = [address0, this._offset];
+      return address0;
+    },
+
+    _read_comment: function() {
+      var address0 = FAILURE, index0 = this._offset;
+      this._cache._comment = this._cache._comment || {};
+      var cached = this._cache._comment[index0];
+      if (cached) {
+        this._offset = cached[1];
+        return cached[0];
+      }
+      var index1 = this._offset, elements0 = new Array(2);
+      var address1 = FAILURE;
+      var chunk0 = null;
+      if (this._offset < this._inputSize) {
+        chunk0 = this._input.substring(this._offset, this._offset + 1);
+      }
+      if (chunk0 === '#') {
+        address1 = new TreeNode(this._input.substring(this._offset, this._offset + 1), this._offset);
+        this._offset = this._offset + 1;
+      } else {
+        address1 = FAILURE;
+        if (this._offset > this._failure) {
+          this._failure = this._offset;
+          this._expected = [];
+        }
+        if (this._offset === this._failure) {
+          this._expected.push('"#"');
+        }
+      }
+      if (address1 !== FAILURE) {
+        elements0[0] = address1;
+        var address2 = FAILURE;
+        var remaining0 = 1, index2 = this._offset, elements1 = [], address3 = true;
+        while (address3 !== FAILURE) {
+          var chunk1 = null;
+          if (this._offset < this._inputSize) {
+            chunk1 = this._input.substring(this._offset, this._offset + 1);
+          }
+          if (chunk1 !== null && /^[^\n]/.test(chunk1)) {
+            address3 = new TreeNode(this._input.substring(this._offset, this._offset + 1), this._offset);
+            this._offset = this._offset + 1;
+          } else {
+            address3 = FAILURE;
+            if (this._offset > this._failure) {
+              this._failure = this._offset;
+              this._expected = [];
+            }
+            if (this._offset === this._failure) {
+              this._expected.push('[^\\n]');
+            }
+          }
+          if (address3 !== FAILURE) {
+            elements1.push(address3);
+            --remaining0;
+          }
+        }
+        if (remaining0 <= 0) {
+          address2 = new TreeNode(this._input.substring(index2, this._offset), index2, elements1);
+          this._offset = this._offset;
+        } else {
+          address2 = FAILURE;
+        }
+        if (address2 !== FAILURE) {
+          elements0[1] = address2;
+        } else {
+          elements0 = null;
+          this._offset = index1;
+        }
+      } else {
+        elements0 = null;
+        this._offset = index1;
+      }
+      if (elements0 === null) {
+        address0 = FAILURE;
+      } else {
+        address0 = new TreeNode(this._input.substring(index1, this._offset), index1, elements0);
+        this._offset = this._offset;
+      }
+      this._cache._comment[index0] = [address0, this._offset];
       return address0;
     }
   };
