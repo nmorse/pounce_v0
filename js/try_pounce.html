@@ -22,6 +22,9 @@
         background: gray;
         color:white;
       }
+      .top-bar-toutorial {
+        padding-left: 5px;
+      }
       .content-area {
         padding: 2px 15px;
       }
@@ -70,358 +73,361 @@
       }
     </style>
   </head>
-    <body>
-      <div class="top-bar">Pounce</div>
-      <div class="content-area" id="try_pounce">
+  <body>
+    <div class="top-bar row-container" id="examples_section" >Try Pounce {{show_category}}
+        <div class="top-bar-toutorial" v-for="category in tutorials">
+          <button v-on:click="show_example_toggle(category)">{{category}}</button>
+          <div v-show="show_category === category" class="row-container" v-for="t in examples.filter((e)=>e[1].tutorial === category)">
+            <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
+          </div>
+        </div>
+    </div>
+    <div class="content-area" id="try_pounce">
+      <div class="row-container">
+        <canvas id="canvas" width="250" height="150"></canvas>
+        <div class="stack-up">
+          <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
+            <option v-for="word in Object.keys(words)" v-bind:value="word">
+              {{ word }}
+            </option>
+          </select>
+
+          <div>{{helpWordDef}}</div>
+          <div class="box">{{helpWordDesc}}</div>
+          <div class="box" v-show="helpWordEffects">net stack effect: {{helpWordEffects}} </div>
+          <div class="box" v-show="helpWordExpects">expects: {{helpWordExpects}} </div>
+        </div>
+      </div>
+      <div class="col-container">
         <div class="row-container">
-          <canvas id="canvas" width="250" height="150"></canvas>
-          <div class="stack-up">
-            <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
-              <option v-for="word in Object.keys(words)" v-bind:value="word">
-                {{ word }}
-              </option>
-            </select>
+          <div class="box" style="min-width:100px;">
+            <canvas id="pounce-animation" width="100" height="61"></canvas>
+          </div>
+          <div class="col-container">
+            <div>
+              &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run Pounce only to cursor</label>
+              &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />Debug Mode</label>
+            </div>
+            <div>
+              <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)"
+                placeholder="Enter Pounce words here" spellcheck="false"
+                v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
+                rows="3" cols="80"
+                wrap="hard"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="row-container">
+          <div class="stack-down  box" style="min-width:200px;">
+            <div v-for="ele in vs" class="box">
+              {{ ele }} &nbsp;
+            </div>
+          </div>
             <!--
-            <div class="box">{{helpWord}} <button v-on:click="helpWordDef = ''" v-show="!helpWordDef">define as a new word</button>
-            </div>
+              <div class="col-container box" style="height:300px; width: 600px;">
+                <div v-for="(value, key) in words" class="box" style="width:100px;">
+                  {{ key }}: {{ value.desc }}
+                </div>
+              </div>
             -->
-            <div>{{helpWordDef}}</div>
-            <div class="box">{{helpWordDesc}}</div>
-            <div class="box" v-show="helpWordEffects">net stack effect: {{helpWordEffects}} </div>
-            <div class="box" v-show="helpWordExpects">expects: {{helpWordExpects}} </div>
-          </div>
-        </div>
-        <div class="col-container">
-          <div class="row-container">
-            <div class="box" style="min-width:100px;">
-              <canvas id="pounce-animation" width="100" height="61"></canvas>
-            </div>
-            <div class="col-container">
-              <div>
-                &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run Pounce only to cursor</label>
-                &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />Debug Mode</label>
-              </div>
-              <div>
-                <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)"
-                  placeholder="Enter Pounce words here" spellcheck="false"
-                  v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
-                  rows="3" cols="80"
-                  wrap="hard"></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="row-container">
-            <div class="stack-down  box" style="min-width:200px;">
-              <div v-for="ele in vs" class="box">
-                {{ ele }} &nbsp;
-              </div>
-            </div>
+          <div class="row-container" style="min-height:300px;">
+            <div v-for="h_instance in vs_history" class="stack-down box">
               <!--
-                <div class="col-container box" style="height:300px; width: 600px;">
-                  <div v-for="(value, key) in words" class="box" style="width:100px;">
-                    {{ key }}: {{ value.desc }}
-                  </div>
-                </div>
               -->
-            <div class="row-container" style="min-height:300px;">
-              <div v-for="h_instance in vs_history" class="stack-down box">
-                <!--
-                -->
-                <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color" style="width:100px; overflow: hidden;">
-                  {{ pl_item }}&nbsp;
-                </div>
-                <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
-                  {{ h_instance.term }}
-                </div>
-                <div v-for="item in h_instance.stack" class="box" style="width:100px; overflow: hidden;">
-                  {{ item }}&nbsp;
-                </div>
+              <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color" style="width:100px; overflow: hidden;">
+                {{ pl_item }}&nbsp;
+              </div>
+              <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
+                {{ h_instance.term }}
+              </div>
+              <div v-for="item in h_instance.stack" class="box" style="width:100px; overflow: hidden;">
+                {{ item }}&nbsp;
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="content-area" id="examples_section">
-        <!--
-        <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
-        -->
-        <div class="column-container" id="some_examples" v-show="showExamples">
-          <button v-for="category in tutorials">{{category}}</button>basic
-          <div class="row-container" v-for="t in examples.filter(e=>e[1].level === 'basic')">
-            <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
-          </div>
-          canvas
-          <div class="row-container" v-for="t in examples.filter(e=>e[1].level === 'canvas')">
-            <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
-          </div>
-          advanced
-          <div class="row-container" v-for="t in examples.filter(e=>e[1].level === 'advanced')">
+    </div>
+    <div class="content-area" id="examples_section2">
+      <!--
+      <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
+      -->
+      <!-- 
+      <div class="column-container" id="some_examples2" v-show="showExamples">
+        <div v-for="category in tutorials">
+          <button v-on:click="show_example_toggle(category)">{{category}}</button>
+          <div v-show="true || show_example(category)" class="row-container" v-for="t in examples.filter((e)=>e[1].level === category)">
             <button v-on:click="loadExample(t[0])"><code>{{t[1].summary}}</code></button>
           </div>
         </div>
       </div>
-            <script src="ui/io_canvas_basic.js"></script>
+      -->
+    </div>
+          <script src="ui/io_canvas_basic.js"></script>
 
-      <script>
-        const parser_actions = {
-          make_pounce_empty: function(input, start, end, elements) {
-            return [];
-          },
-          
-          make_pounce_pl: function(input, start, end, elements) {
-            var list = [elements[1]];
-            elements[2].forEach(function(el) { list.push(el.value) });
-            return list;
-          },
-          
-          make_word: function(input, start, end, elements) {
-            return input.substring(start, end);
-          },
+    <script>
+      const parser_actions = {
+        make_pounce_empty: function(input, start, end, elements) {
+          return [];
+        },
         
-          make_map: function(input, start, end, elements) {
-            var map = {};
-            // console.log('making a map ',  elements.length);
-            // console.log('elements ', elements);
-            if (elements.length = 6) {
-              map[elements[2][0]] = elements[2][1];
-              elements[3].elements.forEach(function(el) {
-                map[el.elements[2][0]] = el.elements[2][1];
-              });
-            }
-            return map;
-          },
+        make_pounce_pl: function(input, start, end, elements) {
+          var list = [elements[1]];
+          elements[2].forEach(function(el) { list.push(el.value) });
+          return list;
+        },
         
-          make_pair: function(input, start, end, elements) {
-            // console.log('making a pair ',  elements.length);
-            // console.log('--elements ', elements);
-            return [elements[0], elements[4]];
-          },
-        
-          make_string: function(input, start, end, elements) {
-            return elements[1].text;
-          },
-        
-          make_list: function(input, start, end, elements) {
-            var list = [elements[2]];
-            elements[3].forEach(function(el) { list.push(el.value) });
-            return list;
-          },
-        
-          make_list_empty: function(input, start, end, elements) {
-            return [];
-          },
-        
-          make_integer: function(input, start, end, elements) {
-            return parseInt(input.substring(start, end), 10);
-          },
-        
-          make_float: function(input, start, end, elements) {
-            return parseFloat(input.substring(start, end));
-          },
-        
-          make_ws: function(input, start, end, elements) {
-            return null;
-          }
-        };
-
+        make_word: function(input, start, end, elements) {
+          return input.substring(start, end);
+        },
       
-        function loadExample(s) {
-          try_pounce.ps = s;
-          try_pounce.runPounce();
-          // TBD focus
-          // examples_section.examples[s].shown = true;
+        make_map: function(input, start, end, elements) {
+          var map = {};
+          // console.log('making a map ',  elements.length);
+          // console.log('elements ', elements);
+          if (elements.length = 6) {
+            map[elements[2][0]] = elements[2][1];
+            elements[3].elements.forEach(function(el) {
+              map[el.elements[2][0]] = el.elements[2][1];
+            });
+          }
+          return map;
+        },
+      
+        make_pair: function(input, start, end, elements) {
+          // console.log('making a pair ',  elements.length);
+          // console.log('--elements ', elements);
+          return [elements[0], elements[4]];
+        },
+      
+        make_string: function(input, start, end, elements) {
+          return elements[1].text;
+        },
+      
+        make_list: function(input, start, end, elements) {
+          var list = [elements[2]];
+          elements[3].forEach(function(el) { list.push(el.value) });
+          return list;
+        },
+      
+        make_list_empty: function(input, start, end, elements) {
+          return [];
+        },
+      
+        make_integer: function(input, start, end, elements) {
+          return parseInt(input.substring(start, end), 10);
+        },
+      
+        make_float: function(input, start, end, elements) {
+          return parseFloat(input.substring(start, end));
+        },
+      
+        make_ws: function(input, start, end, elements) {
+          return null;
         }
-        var try_pounce = new Vue({
-          el: '#try_pounce',
-          data: {
-            "ps": ""
-          , "last_ps": ""
-          , "pl": []
-          , "vs": []
-          , "vs_history": []
-          , "words": pounce.words
-          , "runUpToCursor": false
-          , "debugMode": true
-          , "helpWord": ""
-          , "helpWordDef": ""
-          , "helpWordDesc": ""
-          , "helpWordExpects": ""
-          , "helpWordEffects": ""
-          },
-          methods: {
-           "runPounce": function (e) {
-              const w = this.wordAtCursor(e);
-              this.lookupWord(w);
-              if (this.runUpToCursor) {
-                this.runPounceToCursor(e);
-              }
-              else {
-                if (this.ps !== this.last_ps) {
-                  this.executePounceScript(this.ps);
-                }
+      };
+
+    
+      function loadExample(s) {
+        try_pounce.ps = s;
+        try_pounce.runPounce();
+        // TBD focus
+        // examples_section.examples[s].shown = true;
+      }
+      var try_pounce = new Vue({
+        el: '#try_pounce',
+        data: {
+          "ps": ""
+        , "last_ps": ""
+        , "pl": []
+        , "vs": []
+        , "vs_history": []
+        , "words": pounce.words
+        , "runUpToCursor": false
+        , "debugMode": true
+        , "helpWord": ""
+        , "helpWordDef": ""
+        , "helpWordDesc": ""
+        , "helpWordExpects": ""
+        , "helpWordEffects": ""
+        },
+        methods: {
+         "runPounce": function (e) {
+            const w = this.wordAtCursor(e);
+            this.lookupWord(w);
+            if (this.runUpToCursor) {
+              this.runPounceToCursor(e);
+            }
+            else {
+              if (this.ps !== this.last_ps) {
+                this.executePounceScript(this.ps);
               }
             }
-          , "lookupWord": function (w) {
-              this.helpWord = w;
-              if (w && this.words[w]) {
-                if (this.words[w].definition) {
-                  this.helpWordDef = 'internal definition'; //this.words[w].definition;
-                }
-                else {
-                  this.helpWordDef = pounce.unParse(this.words[w]);
-                }
-                this.helpWordDesc = this.words[w].desc;
-                if (this.words[w].expects) {
-                  this.helpWordExpects =
-                    this.words[w].expects.length + ' item(s)' +
-                      this.words[w].expects.map(i => ' ' + i.desc + ' (' + i.ofType + ')');
-                }
-                else {
-                  if (this.words[w].expects === []) {
-                    this.helpWordExpects = 'nothing';
-                  }
-                  else {
-                    this.helpWordExpects = '';
-                  }
-                }
-                if (this.words[w].effects) {
-                  
-                  this.helpWordEffects = '' + this.words[w].effects[0];
-                }
-                else {
-                  this.helpWordEffects = '';
-                }
+          }
+        , "lookupWord": function (w) {
+            this.helpWord = w;
+            if (w && this.words[w]) {
+              if (this.words[w].definition) {
+                this.helpWordDef = 'internal definition'; //this.words[w].definition;
               }
               else {
-                this.helpWordDef = '';
-                this.helpWordDesc = '';
-                this.helpWordExpects = '';
+                this.helpWordDef = pounce.unParse(this.words[w]);
+              }
+              this.helpWordDesc = this.words[w].desc;
+              if (this.words[w].expects) {
+                this.helpWordExpects =
+                  this.words[w].expects.length + ' item(s)' +
+                    this.words[w].expects.map(i => ' ' + i.desc + ' (' + i.ofType + ')');
+              }
+              else {
+                if (this.words[w].expects === []) {
+                  this.helpWordExpects = 'nothing';
+                }
+                else {
+                  this.helpWordExpects = '';
+                }
+              }
+              if (this.words[w].effects) {
+                
+                this.helpWordEffects = '' + this.words[w].effects[0];
+              }
+              else {
                 this.helpWordEffects = '';
               }
+            }
+            else {
+              this.helpWordDef = '';
+              this.helpWordDesc = '';
+              this.helpWordExpects = '';
+              this.helpWordEffects = '';
+            }
 
-          }
-          , "wordAtCursor": function (e) {
-              if (e && e.target) {
-                const i1a = this.ps.lastIndexOf(' ', e.target.selectionStart-1);
-                const i1b = this.ps.lastIndexOf('[', e.target.selectionStart-1);
-                const i1c = this.ps.lastIndexOf(']', e.target.selectionStart-1);
-                const i1d = this.ps.lastIndexOf('\n', e.target.selectionStart-1);
-                let first_i = Math.max(Math.max(Math.max(i1a, i1b), i1c), i1d);
-                
-                first_i += 1;
+        }
+        , "wordAtCursor": function (e) {
+            if (e && e.target) {
+              const i1a = this.ps.lastIndexOf(' ', e.target.selectionStart-1);
+              const i1b = this.ps.lastIndexOf('[', e.target.selectionStart-1);
+              const i1c = this.ps.lastIndexOf(']', e.target.selectionStart-1);
+              const i1d = this.ps.lastIndexOf('\n', e.target.selectionStart-1);
+              let first_i = Math.max(Math.max(Math.max(i1a, i1b), i1c), i1d);
               
-                let i2a = this.ps.indexOf(' ', e.target.selectionStart);
-                if (i2a === -1) {
-                  i2a = this.ps.length;
-                }
-                let i2b = this.ps.indexOf('[', e.target.selectionStart);
-                if (i2b === -1) {
-                  i2b = this.ps.length;
-                }
-                let i2c = this.ps.indexOf(']', e.target.selectionStart);
-                if (i2c === -1) {
-                  i2c = this.ps.length;
-                }
-                let i2d = this.ps.indexOf('\n', e.target.selectionStart);
-                if (i2d === -1) {
-                  i2d = this.ps.length;
-                }
-                let last_i = Math.min(Math.min(Math.min(i2a, i2b), i2c), i2d);
-                
-                return this.ps.slice(first_i, last_i);
+              first_i += 1;
+            
+              let i2a = this.ps.indexOf(' ', e.target.selectionStart);
+              if (i2a === -1) {
+                i2a = this.ps.length;
               }
-              return '';
+              let i2b = this.ps.indexOf('[', e.target.selectionStart);
+              if (i2b === -1) {
+                i2b = this.ps.length;
+              }
+              let i2c = this.ps.indexOf(']', e.target.selectionStart);
+              if (i2c === -1) {
+                i2c = this.ps.length;
+              }
+              let i2d = this.ps.indexOf('\n', e.target.selectionStart);
+              if (i2d === -1) {
+                i2d = this.ps.length;
+              }
+              let last_i = Math.min(Math.min(Math.min(i2a, i2b), i2c), i2d);
+              
+              return this.ps.slice(first_i, last_i);
             }
-          , "runPounceToCursor": function (e) {
-              if (e && e.target) {
-                if (this.cursorAtWordEnd(e) || /* its not a word */ !this.words[this.wordAtCursor(e)] ) {
-                  // console.log('cursor a end of word: '+proceed);
-                  // console.log(e.target.selectionStart, e.target.selectionEnd);
-                  // console.log(this.ps.slice(0, e.target.selectionStart));
-                  const new_ps = this.ps.slice(0, e.target.selectionStart);
-                  if (new_ps !== this.last_ps) {
-                    this.executePounceScript(new_ps);
-                  }
+            return '';
+          }
+        , "runPounceToCursor": function (e) {
+            if (e && e.target) {
+              if (this.cursorAtWordEnd(e) || /* its not a word */ !this.words[this.wordAtCursor(e)] ) {
+                // console.log('cursor a end of word: '+proceed);
+                // console.log(e.target.selectionStart, e.target.selectionEnd);
+                // console.log(this.ps.slice(0, e.target.selectionStart));
+                const new_ps = this.ps.slice(0, e.target.selectionStart);
+                if (new_ps !== this.last_ps) {
+                  this.executePounceScript(new_ps);
                 }
               }
             }
-          , "cursorAtWordEnd": function (e) {
-              if (e && e.target) {
-                const start_i = e.target.selectionStart;
-                //console.log(e.target.selectionStart, e.target.selectionEnd);
-                if (start_i < this.ps.length) {
-                  const charAfter = this.ps[start_i];
-                  if ( charAfter === ' '
-                    || charAfter === '{'
-                    || charAfter === '['
-                    || charAfter === ']'
-                    || charAfter === '\n'
-                  ) {
-                    return true;
-                  }
-                  return false;
-                }
-                else {
-                  // cursor at end of string
+          }
+        , "cursorAtWordEnd": function (e) {
+            if (e && e.target) {
+              const start_i = e.target.selectionStart;
+              //console.log(e.target.selectionStart, e.target.selectionEnd);
+              if (start_i < this.ps.length) {
+                const charAfter = this.ps[start_i];
+                if ( charAfter === ' '
+                  || charAfter === '{'
+                  || charAfter === '['
+                  || charAfter === ']'
+                  || charAfter === '\n'
+                ) {
                   return true;
                 }
-                
-              }
-            }
-          , "focusEditor" : function () {
-              //this.focus();
-              console.log('deadwood here?');
-            }
-          , "executePounceScript" : function (pounce_script) {
-              if (this.scan_recall(pounce_script)) {
-                return;
-              }
-              this.last_ps = pounce_script;
-              this.vs_history = this.debugMode? []: false;
-              try {
-                this.pl = Pounce_ast.parse(pounce_script, {actions: parser_actions});
-                this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
-              }
-              catch(syntax_error) {
-                //console.error(syntax_error.stack);
-                //this.ps = syntax_error.message;
-              }
-
-            }
-          , 'scan_recall': function (ps) {
-                if (ps.indexOf(' recall') >= 1) {
-                  const pl = Pounce_ast.parse(ps);
-                  if (pl.length === 2) {
-                    let key = pl[0][0];
-                    this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';
-                    this.vs = [];
-                    return true;
-                  }
-                }
                 return false;
-              
-              //      s.push('recall error: requested word is internal (i.e. defined as a function) and is not divisable into words');
-            }
-          },
-          directives: {
-            focus: {
-              update: function(el) {
-                Vue.nextTick(() => el.focus());
               }
+              else {
+                // cursor at end of string
+                return true;
+              }
+              
             }
           }
-        });
-const tutorials = ['start here', 'calculate', 'rearrange the stack', 'your own words', 'some I/O'];
+        , "focusEditor" : function () {
+            //this.focus();
+            console.log('deadwood here?');
+          }
+        , "executePounceScript" : function (pounce_script) {
+            if (this.scan_recall(pounce_script)) {
+              return;
+            }
+            this.last_ps = pounce_script;
+            this.vs_history = this.debugMode? []: false;
+            try {
+              this.pl = Pounce_ast.parse(pounce_script, {actions: parser_actions});
+              this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
+            }
+            catch(syntax_error) {
+              console.log(syntax_error.stack);
+              console.log(syntax_error.message);
+              //this.ps = syntax_error.message;
+            }
+
+          }
+        , 'scan_recall': function (ps) {
+              if (ps.indexOf(' recall') >= 1) {
+                const pl = Pounce_ast.parse(ps);
+                if (pl.length === 2) {
+                  let key = pl[0][0];
+                  this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';
+                  this.vs = [];
+                  return true;
+                }
+              }
+              return false;
+            
+            //      s.push('recall error: requested word is internal (i.e. defined as a function) and is not divisable into words');
+          }
+        },
+        directives: {
+          focus: {
+            update: function(el) {
+              Vue.nextTick(() => el.focus());
+            }
+          }
+        }
+      });
+const tutorials = ['world hello', 'calculate', 'rearrange the stack', 'your own words', 'some I/O'];
 const examples = [
-  ['2 3 +', {summary:'Sum of two numbers', desc:'Math is easy to do, the only difference is that the operator (+ for addition) comes after the two numbers being added.', level:'basic'}],
-  ['2 3 *', {summary:'Simple Multiplication', desc:'For multiplication, the operator (* for the product or multiplication) is placed after the two numbers to be multiplied.', level:'basic'}],
-  ['9 7 + 2.5 /', {summary:'Sum of two numbers', desc:'To add and then divide, say (9 + 7) / 2.4. Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['9 7 2.4 + /', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'basic'}],
-  ['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
-  ['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
-  ['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
-  ['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
-  [
+['"hello " "world" str-append', {summary:'A word about concatenitive programming', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack. its a "Noun then Verb" pattern.', tutorial: 'world hello', level:1}],
+['`a` \'b\' "c" d str-append str-append str-append', {summary:'Strings can be quoted or words with no spaces dont even have to be in quotes.', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack. its a "Noun then Verb" pattern.', tutorial: 'world hello', level:1}],
+['2 3 +', {summary:'Sum of two numbers', desc:'Math is easy to do, the only difference is that the operator (+ for addition) comes after the two numbers being added.', tutorial: 'calculate', level:1}],
+['2 3 *', {summary:'Simple Multiplication', desc:'For multiplication, the operator (* for the product or multiplication) is placed after the two numbers to be multiplied.', tutorial: 'calculate', level:1}],
+['9 7 + 2.5 /', {summary:'Sum of two numbers', desc:'To add and then divide, say (9 + 7) / 2.4. Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level:1}],
+['9 7 2.4 + /', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level:1}],
+['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how  no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:'stack operations'}],
+[
 `canvas cb-init cb-clear
 4 7 30 112 cb-line
 59 122 130 99 cb-line
@@ -429,7 +435,7 @@ const examples = [
 {color:{r:255 g:63 b:127 a:0.5} x:60 y:50 w:40 h:50} cb-box
 drop
 `,{summary:'Draw some shapes', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:'canvas'}],
-  [
+[
 `canvas cb-init cb-clear
 30 45 cb-begin-path
 50 60 cb-line-to
@@ -437,7 +443,7 @@ drop
 cb-end-path
 drop
 `, {summary:'Draw a check-mark', desc:'Draws a line on the canvas', level:'canvas'}],
-  [
+[
 `[[x set] dip y set] [pack] def
 [y get [x get] dip] [unpack] def
 canvas cb-init cb-clear
@@ -445,27 +451,27 @@ canvas cb-init cb-clear
 100 10 cb-line-to cb-end-path
 drop
 `, {summary:'Turtle Graphics', desc:'Draws a line, relative to possition', level:'canvas'}],
-  [
+[
 `canvas cb-init cb-clear
 images/pounce-cat1.png cb-load-image
 `, {summary:'Image on the canvas', desc:'Draws an image on the canvas', level:'canvas'}],
-  [
+[
 `[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:'advanced'}],
 [`{local-words:{
-  p-n-get:[n get [p get] dip]
-  n-f-get:[n get [f get] dip]
-  n-inc:[n get 1 + n set]
-  prime-factor?:[p-n-get % 0 == [n-f-get push f set p-n-get / p set] [n-inc] if-else]
-  factorize:[p get 1 <= [f get] [prime-factor? factorize] if-else]
-  check-integer:[dup 0 > not [drop 1] if]
-  package:[{n:2 f:[]} swap check-integer p set]
-  clean-up:[swap drop]
- }
- expects: [{desc: 'a positive' ofType: 'integer'}]
- effects: [0]
- definition:[package factorize clean-up]
- desc:'Prime factors of a number'
+p-n-get:[n get [p get] dip]
+n-f-get:[n get [f get] dip]
+n-inc:[n get 1 + n set]
+prime-factor?:[p-n-get % 0 == [n-f-get push f set p-n-get / p set] [n-inc] if-else]
+factorize:[p get 1 <= [f get] [prime-factor? factorize] if-else]
+check-integer:[dup 0 > not [drop 1] if]
+package:[{n:2 f:[]} swap check-integer p set]
+clean-up:[swap drop]
+}
+expects: [{desc: 'a positive' ofType: 'integer'}]
+effects: [0]
+definition:[package factorize clean-up]
+desc:'Prime factors of a number'
 } [factor] define
 210 factor
 `, {summary:'find the prime factors of a number', desc:'', level:'advanced'}],
@@ -473,22 +479,28 @@ images/pounce-cat1.png cb-load-image
 4 [15] 6 dup3 [4 push] dip`, {summary:'define dup3', desc:'dup3', level:'advanced'}]
 ];
 
-        const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].level] > level_order[b[1].level])? 1: -1);
-        const level_order = {basic:1, "stack operations":2, canvas: 3, advanced:4};
-        var examples_section = new Vue({
-          el: '#examples_section',
-          data: {
-            "showExamples": true
-          , "examples": sortBylevel(examples)
-          , "tutorials": tutorials
-          , "totalexamples": examples.length
-          , "loadExample": loadExample
-          },
-          methods: {
-          }
-        });
+      const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial] > level_order[b[1].tutorial])? 1: -1);
+      const level_order = {"world hello":0, "basic":1, "stack operations":2, "canvas": 3, "advanced":4};
+      let show_category = '';
+      var examples_section = new Vue({
+        el: '#examples_section',
+        data: {
+          "showExamples": true
+        , "examples": sortBylevel(examples)
+        , "tutorials": tutorials
+        , "show_category": show_category
+        , "totalexamples": examples.length
+        , "loadExample": loadExample
+        },
+        methods: {
+          show_example_toggle: (category) => {
+            if (this.show_category === category) {Vue.set(examples_section, 'show_category', '');}
+            else {Vue.set(examples_section, 'show_category', category);}},
+          show_example: category =>this.show_category
+        }
+      });
 
-      </script>
+    </script>
 
-    </body>
+  </body>
 </html>
