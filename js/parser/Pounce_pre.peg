@@ -1,0 +1,28 @@
+grammar Pounce_pre
+  pounce    <-  pounce_pl / pounce_empty
+  pounce_pl <-  ws* value (ws* value)* ws*
+  pounce_empty  <- ws*
+
+  value   <-  string / number / word / map / list
+  map     <-  "{" [^\}]* "}"
+  list    <-  "[" [^\]]* "]"
+  word    <-  [a-zA-Z0-9\_\-\+\=\/\~\!\@\$\%\^\&\*\?\<\>]+ [a-zA-Z0-9\_\-\+\=\/\~\!\@\#\$\%\^\&\*\?\.\<\>]*
+
+  string    <-  string_s / string_d / string_t
+  string_s  <-  "'" [^\']* "'"
+  string_d  <-  '"' [^\"]* '"'
+  string_t  <-  '`' [^\`]* '`'
+
+  number    <-  float1 / float2 / float3 / integer
+  float1    <-  [0-9]+ "." [0-9]+
+  float2    <-  "." [0-9]+
+  float3    <-  [0-9]+ "."
+  integer   <-  [0-9]+
+
+  ws      <-  newline / space / tab / comment
+  space   <-    [\s]
+  tab     <-    [\t]
+  newline <- newline1 / newline2
+  newline1  <-  [\r]
+  newline2  <-  [\n]
+  comment <- "#" [^\n]+
