@@ -2,26 +2,27 @@
 const tutorials = ['introduction', 'hello world', 'calculate', 'rearrange the stack', 'your own words', 'some I/O'];
 const examples = [
   ['', {summary:'start here', desc:`
-  Pounce is a programming language, with the goal of letting anyone try out this rather 'different' style of programming. Everything you need is right here.
-  A word about 'words': Words are the basic unit of programming Pounce. In Pounce, words can be data or functions, but we thought you should know that everything in the Pounce language is refered to as a word.
-  ## The Page is layed out to help
-  1. The Blue Box is for program code (to be run). As you go through the tutorial, code will be entered for you or you can type in your own 'words' at any time.
-  2. The Gray Box to the left is the 'stack'. The working memory of the program will show up here. Also, just to the right, when running in debug mode, you will see the history of the program and the stack as it ran.
-  3. The top area will show you the definition of words. When the cursor is on a word in the program code the definition of that word will pop up. 
+  ##  The page is layed out to help you understand how your 'Pounce' program works 
+  1. The [Blue Box](#tooltip-pl) is for program code (to be run). As you go through the tutorial, code will be entered for you or you can type in your own 'words' at any time.
+  2. The [Gray Box](#tooltip-stack) to the left is the 'stack'. The working memory of the program will show up here. Also, just to the right, when running in debug mode, you will see the history of the program and the stack as it ran.
+  3. The [top area](#tooltip-map) will show you the definition of words. When the cursor is on a word in the program code the definition of that word will pop up. 
   `, tutorial: 'introduction', level:1}],
   ['', {summary:'using this tutorial', desc:'', tutorial: 'introduction', level:2}],
-  ['', {summary:'how to code differently', desc:'Its a "Noun then Verb" pattern', tutorial: 'introduction', level:3}],
+  ['', {summary:'how to code differently', desc:`
+  Pounce is a programming language, with the goal of letting anyone try out this rather 'different' style of programming. Everything you need is right here.
+  A word about 'words': Words are the basic unit of programming Pounce. In Pounce, words can be data or functions, but we thought you should know that everything in the Pounce language is refered to as a word.Its a "Noun then Verb" pattern
+  `, tutorial: 'introduction', level:3}],
   
-['"hello " "world" str-append', {summary:'Working with strings', desc:'"hello world":0, In this iconic example, two strings are pushed on to a stack, then "str-append" is applied and the result is left on the stack.', tutorial: 'hello world', level:1}],
+['"hello " "world" str-append', {summary:'Working with strings', desc:'"hello world", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'hello world', level:1}],
 ['`a` \'b\' "c" d str-append str-append str-append', {summary:'Strings can be quoted or words with no spaces can be strings as well.', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack.', tutorial: 'hello world', level:2}],
-['2 3 +', {summary:'Sum of two numbers', desc:'Math is easy to do, the only difference is that the operator (+ for addition) comes after the two numbers being added.', tutorial: 'calculate', level:1}],
-['2 3 *', {summary:'Simple Multiplication', desc:'For multiplication, the operator (* for the product or multiplication) is placed after the two numbers to be multiplied.', tutorial: 'calculate', level:2}],
-['9 7 + 2.5 /', {summary:'Sum of two numbers', desc:'To add and then divide, say (9 + 7) / 2.4. Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level:3}],
-['9 7 2.4 + /', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level:4}],
-['9 7 swap', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how  no parenthases are needed when the operators are after the numbers. ', level:1, tutorial:'rearrange the stack'}],
-['1 2 3 dup', {summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:2, tutorial:'rearrange the stack'}],
-['9 7 swap dup',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:3, tutorial:'rearrange the stack'}],
-['10 20 30 40 2 bubble-up',{summary:'Sum of two numbers', desc:'To divide by a sum, say 9  / (7 + 2.4). Notice how no parenthases are needed when the operators are after the numbers. ', level:4, tutorial:'rearrange the stack'}],
+['2 3 +', {summary:'Sum of two numbers', desc:'the operator \'+\' (for addition) comes after the two numbers being added.', tutorial: 'calculate', level: 1}],
+['2 3 *', {summary:'same for multiplication', desc:'the \'*\' is placed after the two numbers to be multiplied.', tutorial: 'calculate', level: 2}],
+['9 7 + 2.5 /', {summary:'combining opererations', desc:'To add and then divide, say (9 + 7) / 2.5. Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level: 3}],
+['9 7 2.5 + /', {summary:'another combination', desc:'To divide by a sum, say 9  / (7 + 2.5). Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level: 4}],
+['9 7 swap', {summary:'swap the two top', desc:'\'swap\' comes in handy when you want to swap the position of the top two items on the stack.', level:1, tutorial:'rearrange the stack'}],
+['3 dup', {summary:'duplicate the top', desc:'\'dup\' is short for duplicate and it makes a copy of what on the top of the stack leaving you with two of them.', level:2, tutorial:'rearrange the stack'}],
+['9 7 swap dup',{summary:'combine dup and swap', desc:'Combining a couple stack rearranging words  together allows you to arrange the stack in a new order', level:3, tutorial:'rearrange the stack'}],
+['10 20 30 40 2 bubble-up',{summary:'roll up', desc:'To rearranging the stack your own way, you may write your own words, like this bubble-up', level:4, tutorial:'rearrange the stack'}],
 [
 `canvas cb-init cb-clear
 4 7 30 112 cb-line
@@ -75,4 +76,4 @@ desc:'Prime factors of a number'
 ];
 
 const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial]+(a[1].level*0.01) > level_order[b[1].tutorial]+(b[1].level*0.01))? 1: -1);
-const level_order = {"introduction":-1, "hello world":0, "basic":1, "rearrange the stack":2, "canvas": 3, "advanced":4};
+const level_order = {"introduction":1, "hello world":2, "basic":3, "rearrange the stack":4, "canvas": 5, "advanced":6};

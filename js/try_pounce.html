@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="dist/vue.js"></script>
     <script src="tutorials.js"></script>
+    <script src="https://unpkg.com/marked@0.3.6"></script>
+    <script src="https://unpkg.com/lodash@4.16.0"></script>
     
     <style>
       body {
@@ -80,7 +82,7 @@
       }
     </style>
   </head>
-  <body>
+  <body onhashchange="onHashChange()">
     <div class="top-bar row-container" id="examples_section" >Try Pounce
         <div class="top-bar-toutorial" v-for="category in tutorials">
           <button v-on:click="show_example_toggle(category)">{{category}}</button>
@@ -92,7 +94,7 @@
         </div>
     </div>
     <div class="content-area" id="try_pounce">
-      <div v-if="exampleDesc && !exampleGotIt" class="pop-over">{{exampleDesc}}</div>
+      <div v-if="exampleDesc && !exampleGotIt" class="pop-over" v-html="exampleMarkdown"></div>
       <div class="row-container">
         <canvas id="canvas" width="250" height="150"></canvas>
         <div class="stack-up">
@@ -116,9 +118,10 @@
           <div class="col-container">
             <div>
               &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run, only to cursor</label>
-              &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />Debug Mode</label>
+              &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />debug mode</label>
             </div>
             <div>
+              <div v-show="false && tooltip">tooltip</div>
               <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)"
                 placeholder="Enter Pounce words here" spellcheck="false"
                 v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
@@ -173,7 +176,8 @@
       </div>
       -->
     </div>
-          <script src="ui/io_canvas_basic.js"></script>
+
+    <script src="ui/io_canvas_basic.js"></script>
 
     <script>
       const parser_actions = {
@@ -236,8 +240,7 @@
           return null;
         }
       };
-
-    
+      
       function loadExample(s, desc) {
         try_pounce.ps = s;
         try_pounce.runPounce();
@@ -265,6 +268,12 @@
         , "helpWordEffects": ""
         , "exampleDesc": ""
         , "exampleGotIt": true
+        , "tooltip": false
+        },
+        computed: {
+          exampleMarkdown: function () {
+            return marked(this.exampleDesc, { sanitize: true })
+          }
         },
         methods: {
          "runPounce": function (e) {
@@ -430,6 +439,10 @@
           }
         }
       });
+      function onHashChange() {
+        try_pounce.tooltip = !try_pounce.tooltip;
+      }
+      
       let show_category = '';
       var examples_section = new Vue({
         el: '#examples_section',
