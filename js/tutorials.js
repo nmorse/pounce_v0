@@ -2,10 +2,10 @@
 const tutorials = ['introduction', 'hello world', 'calculate', 'rearrange the stack', 'your own words', 'some I/O'];
 const examples = [
   ['', {summary:'start here', desc:`
-  ##  The page is layed out to help you understand how your 'Pounce' program works 
+  ##  The page is layed out to help you understand how your 'Pounce' program works
   1. The [Blue Box](#tooltip-pl) is for program code (to be run). As you go through the tutorial, code will be entered for you or you can type in your own 'words' at any time.
   2. The [Gray Box](#tooltip-stack) to the left is the 'stack'. The working memory of the program will show up here. Also, just to the right, when running in debug mode, you will see the history of the program and the stack as it ran.
-  3. The [top area](#tooltip-map) will show you the definition of words. When the cursor is on a word in the program code the definition of that word will pop up. 
+  3. The [top area](#tooltip-map) will show you the definition of words. When the cursor is on a word in the program code the definition of that word will pop up.
   `, tutorial: 'introduction', level:1}],
   ['', {summary:'using this tutorial', desc:'', tutorial: 'introduction', level:2}],
   ['', {summary:'how to code differently', desc:`
@@ -72,7 +72,14 @@ desc:'Prime factors of a number'
 210 factor
 `, {summary:'find the prime factors of a number', desc:'', level:2, tutorial:'your own words'}],
 [`[[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
-4 [15] 6 dup3 [4 push] dip`, {summary:'define dup3', desc:'dup3', level:3, tutorial:'your own words'}]
+4 [15] 6 dup3
+[4 push] dip`, {summary:'duplicate 3', desc:`
+## Duplicate the top 3 items on the stack
+Each line on the program
+ 1. defined (dup3) duplicates the top 3 stack items.
+ 2. \`a [15] 6 dup3\` a quick test shows that it works
+ 3. \`[4 push] dip\` and to show that it is truely a copy and not just an array reference
+`, level:3, tutorial:'your own words'}]
 ];
 
 const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial]+(a[1].level*0.01) > level_order[b[1].tutorial]+(b[1].level*0.01))? 1: -1);
