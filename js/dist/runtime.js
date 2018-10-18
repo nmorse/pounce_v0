@@ -407,7 +407,13 @@ var pounce = (function () {
       definition: [['apply'], 'dip2', 'if-else']},
     'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ], 'if'],
     'fact': ['count-down', 'n*'],
-    'floor': ['dup', 1, '%', '-']
+    'floor': ['dup', 1, '%', '-'],
+    'rollup': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rollup', ['C', 'A', 'B']], desc: 'roll up 3 elements on the stack, the top item ends up under the other two',
+      definition: ['swap', ['swap'], 'dip']},
+    'rolldown': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rolldown', ['B', 'C', 'A']], desc: 'roll down 3 elements in the stack, the bottom item ends up at the top',
+      definition: [['swap'], 'dip', 'swap']},
+    'rotate': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rotate', ['C', 'B', 'A']], desc: 'inverts the order of the top three elements',
+      definition: ['swap', ['swap'], 'dip', 'swap']}
   };
   
   function cloneItem(item) {
