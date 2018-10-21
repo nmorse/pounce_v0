@@ -13,33 +13,33 @@
 
   
   let parser_tests = [
-    ['hello world', ['hello', 'world']],
+    ['hello world', [{'word':'hello'}, {'word':'world'}]],
     ['"hello world"', ['hello world']],
-    ['abc def eee ', ['abc', 'def', 'eee']],
-    [' abc def  eee ', ['abc', 'def', 'eee']],
+    ['abc def eee ', [{'word':'abc'}, {'word':'def'}, {'word':'eee'}]],
+    [' abc def  eee ', [{'word':'abc'}, {'word':'def'}, {'word':'eee'}]],
     ['"abc def" "123 456"', ['abc def', "123 456"]],
-    ['abc "def" "123 " 456', ['abc', 'def', "123 ", 456]],
-    ['5.5 2.1 + 456', [5.5, 2.1, '+', 456]],
-    ['[5.5 2.1] .456 +', [[5.5, 2.1], 0.456, '+']],
-    ['[[5.5 2.1] [1 2 3]] .456 +', [[[5.5, 2.1], [1, 2, 3]], 0.456, '+']],
-    [' [ [5.5 2.1]  [1 2 3] ]  .456  +   ', [[[5.5, 2.1], [1, 2, 3]], 0.456, '+']],
-    ['[["5.5" 2.1] [1 "2" 3]] .456 +', [[['5.5', 2.1], [1, '2', 3]], 0.456, '+']],
-    [' [ ["5.5" 2.1]  [1 "2" "3 3"] ]  .456  +   ', [[['5.5', 2.1], [1, '2', '3 3']], 0.456, '+']],
-    ['[4 5 +] ', [[4, 5, '+']]],
-    ['[4 5 +] [4 5 +]', [[4, 5, '+'], [4, 5, '+']]],
-    ['[4 5 +] [4 5 +] [4 5 +]', [[4, 5, '+'],[4, 5, '+'],[4, 5, '+']]],
-    ['[4 5 +] foo [4 5 +]', [[4, 5, '+'], 'foo', [4, 5, '+']]],
-    ['{a:5.5 b:2.1} .456 +', [{"a":5.5, "b":2.1}, 0.456, '+']],
-    ['- / *', ['-', '/', '*']],
-    [' {a:5.5 b:`2.1`} .456 +', [{"a":5.5, "b":"2.1"}, 0.456, '+']],
-    ['{ a:5.5 b:2.1} .456 +', [{"a":5.5, "b":2.1}, 0.456, '+']],
-    [' { a:5.5  b:2.1 } .456 + { a:5.5  b:2.1 } ', [{"a":5.5, "b":2.1}, 0.456, '+', {"a":5.5, "b":2.1}]],
+    ['abc "def" "123 " 456', [{'word':'abc'}, 'def', "123 ", 456]],
+    ['5.5 2.1 + 456', [5.5, 2.1, {'word':'+'}, 456]],
+    ['[5.5 2.1] .456 +', [[5.5, 2.1], 0.456, {'word':'+'}]],
+    ['[[5.5 2.1] [1 2 3]] .456 +', [[[5.5, 2.1], [1, 2, 3]], 0.456, {'word':'+'}]],
+    [' [ [5.5 2.1]  [1 2 3] ]  .456  +   ', [[[5.5, 2.1], [1, 2, 3]], 0.456, {'word':'+'}]],
+    ['[["5.5" 2.1] [1 "2" 3]] .456 +', [[['5.5', 2.1], [1, '2', 3]], 0.456, {'word':'+'}]],
+    [' [ ["5.5" 2.1]  [1 "2" "3 3"] ]  .456  +   ', [[['5.5', 2.1], [1, '2', '3 3']], 0.456, {'word':'+'}]],
+    ['[4 5 +] ', [[4, 5, {'word':'+'}]]],
+    ['[4 5 +] [4 5 +]', [[4, 5, {'word':'+'}], [4, 5, {'word':'+'}]]],
+    ['[4 5 +] [4 5 +] [4 5 +]', [[4, 5, {'word':'+'}],[4, 5, {'word':'+'}],[4, 5, {'word':'+'}]]],
+    ['[4 5 +] foo [4 5 +]', [[4, 5, {'word':'+'}], {'word':'foo'}, [4, 5, {'word':'+'}]]],
+    ['{a:5.5 b:2.1} .456 +', [{"a":5.5, "b":2.1}, 0.456, {'word':'+'}]],
+    ['- / *', [{'word':'-'}, {'word':'/'}, {'word':'*'}]],
+    [' {a:5.5 b:`2.1`} .456 +', [{"a":5.5, "b":"2.1"}, 0.456, {'word':'+'}]],
+    ['{ a:5.5 b:2.1} .456 +', [{"a":5.5, "b":2.1}, 0.456, {'word':'+'}]],
+    [' { a:5.5  b:2.1 } .456 + { a:5.5  b:2.1 } ', [{"a":5.5, "b":2.1}, 0.456, {'word':'+'}, {"a":5.5, "b":2.1}]],
     ['{a:[1 2 3] 3b_g:{a:1 y:3}}', [{"a":[1, 2, 3], "3b_g":{"a":1, "y":3}}]],
     [`[{a:[1 2 3]
      3b_g:{
      a:1 y:3}}
   abc]
-  cdef`, [[{"a":[1, 2, 3], "3b_g":{"a":1, "y":3}}, 'abc'], 'cdef']],
+  cdef`, [[{"a":[1, 2, 3], "3b_g":{"a":1, "y":3}}, {'word':'abc'}], {'word':'cdef'}]],
     ['.0.', ['SyntaxError']],
     ['.0', [0]],
     ['0.', [0]],
@@ -47,22 +47,22 @@
     ['5...', ['SyntaxError']],
     ['5.', [5]],
     ['.5', [0.5]],
-    ['t.t', ['t.t']],
-    ['a[abc]e', ['a', ['abc'], 'e']],
-    ['a[abc]e[f]', ['a', ['abc'], 'e', ['f']]],
+    ['t.t', [{'word':'t.t'}]],
+    ['a[abc]e', [{'word':'a'}, [{'word':'abc'}], {'word':'e'}]],
+    ['a[abc]e[f]', [{'word':'a'}, [{'word':'abc'}], {'word':'e'}, [{'word':'f'}]]],
     ['"1a1"', ["1a1"]],
     ['{a:[}', ['SyntaxError']],
     [`
     `, []],
     [`[hello
   r
-  t [f.]][2]`, [["hello", "r", "t", ["f." ]], [2]]],
+  t [f.]][2]`, [[{'word':"hello"}, {'word':"r"}, {'word':"t"}, [{'word':"f."}]], [2]]],
     [`# comment 1
-3 
+3
 # comment 2
 4 + #comment test 3
 7 *
-    `, [3, 4, '+', 7, '*']],
+    `, [3, 4, {'word':'+'}, 7, {'word':'*'}]],
     ['[[0 0] [0 1] [1 1] [1 0]]', [[[0, 0], [0, 1], [1, 1], [1, 0]]]],
     ['{ a:{c:{d:[2 3]}} b:[{e:2} {f:4}]}', [{'a':{'c':{'d':[2, 3]}}, 'b':[{'e':2}, {'f':4}]}]],
     ['', []],
@@ -70,67 +70,7 @@
     ['', []]
   ];
   
-  const parser_actions = {
-    make_pounce_empty: function(input, start, end, elements) {
-      return [];
-    },
-    
-    make_pounce_pl: function(input, start, end, elements) {
-      var list = [elements[1]];
-      elements[2].forEach(function(el) { list.push(el.value) });
-      return list;
-    },
-    
-    make_word: function(input, start, end, elements) {
-      return input.substring(start, end);
-    },
-  
-    make_map: function(input, start, end, elements) {
-      var map = {};
-      // console.log('making a map ',  elements.length);
-      // console.log('elements ', elements);
-      if (elements.length = 6) {
-        map[elements[2][0]] = elements[2][1];
-        elements[3].elements.forEach(function(el) {
-          map[el.elements[2][0]] = el.elements[2][1];
-        });
-      }
-      return map;
-    },
-  
-    make_pair: function(input, start, end, elements) {
-      // console.log('making a pair ',  elements.length);
-      // console.log('--elements ', elements);
-      return [elements[0], elements[4]];
-    },
-  
-    make_string: function(input, start, end, elements) {
-      return elements[1].text;
-    },
-  
-    make_list: function(input, start, end, elements) {
-      var list = [elements[2]];
-      elements[3].forEach(function(el) { list.push(el.value) });
-      return list;
-    },
-  
-    make_list_empty: function(input, start, end, elements) {
-      return [];
-    },
-  
-    make_integer: function(input, start, end, elements) {
-      return parseInt(input.substring(start, end), 10);
-    },
-  
-    make_float: function(input, start, end, elements) {
-      return parseFloat(input.substring(start, end));
-    },
-  
-    make_ws: function(input, start, end, elements) {
-      return null;
-    }
-  };
-  
+
   function cmpLists (a, b) {
     let same = true;
     if (a.length === b.length) {
@@ -263,7 +203,7 @@
     return true;
   }
 
-  var parser_test = function (Pounce_ast) {
+  var parser_test = function (Pounce_ast, parser_actions) {
     console.log('Starting parser tests:');
     let testCount = 0;
     let testsFailed = 0;

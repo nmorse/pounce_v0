@@ -4,6 +4,7 @@
     <script src="dist/runtime.js"></script>
     <script src="dist/parser.js"></script>
     <script src="parser/Pounce_ast.js"></script>
+    <script src="parser/Pounce_ast_actions.js"></script>
     <script src="test/canopy_parser_test.js"></script>
     <script src="test/runtime_test.js"></script>
 
@@ -57,7 +58,7 @@
             return [s, pl];
           }};
           
-          canopy_parser_test.run_parser_test(Pounce_ast);
+          canopy_parser_test.run_parser_test(Pounce_ast, pounce_ast_actions.parser_actions);
 
           var intro = new Vue({
             el: '#intro',

@@ -4,6 +4,7 @@
     <script src="dist/runtime.js"></script>
     <!--<script src="dist/parser.js"></script>-->
     <script src="parser/Pounce_ast.js"></script>
+    <script src="parser/Pounce_ast_actions.js"></script>
     <!--<script src="test/runtime_test.js"></script>
     -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -165,7 +166,7 @@
       <!--
       <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
       -->
-      <!-- 
+      <!--
       <div class="column-container" id="some_examples2" v-show="showExamples">
         <div v-for="category in tutorials">
           <button v-on:click="show_example_toggle(category)">{{category}}</button>
@@ -180,66 +181,6 @@
     <script src="ui/io_canvas_basic.js"></script>
 
     <script>
-      const parser_actions = {
-        make_pounce_empty: function(input, start, end, elements) {
-          return [];
-        },
-        
-        make_pounce_pl: function(input, start, end, elements) {
-          var list = [elements[1]];
-          elements[2].forEach(function(el) { list.push(el.value) });
-          return list;
-        },
-        
-        make_word: function(input, start, end, elements) {
-          return input.substring(start, end);
-        },
-      
-        make_map: function(input, start, end, elements) {
-          var map = {};
-          // console.log('making a map ',  elements.length);
-          // console.log('elements ', elements);
-          if (elements.length = 6) {
-            map[elements[2][0]] = elements[2][1];
-            elements[3].elements.forEach(function(el) {
-              map[el.elements[2][0]] = el.elements[2][1];
-            });
-          }
-          return map;
-        },
-      
-        make_pair: function(input, start, end, elements) {
-          // console.log('making a pair ',  elements.length);
-          // console.log('--elements ', elements);
-          return [elements[0], elements[4]];
-        },
-      
-        make_string: function(input, start, end, elements) {
-          return elements[1].text;
-        },
-      
-        make_list: function(input, start, end, elements) {
-          var list = [elements[2]];
-          elements[3].forEach(function(el) { list.push(el.value) });
-          return list;
-        },
-      
-        make_list_empty: function(input, start, end, elements) {
-          return [];
-        },
-      
-        make_integer: function(input, start, end, elements) {
-          return parseInt(input.substring(start, end), 10);
-        },
-      
-        make_float: function(input, start, end, elements) {
-          return parseFloat(input.substring(start, end));
-        },
-      
-        make_ws: function(input, start, end, elements) {
-          return null;
-        }
-      };
       
       function loadExample(s, desc) {
         try_pounce.ps = s;
@@ -406,7 +347,7 @@
             this.last_ps = pounce_script;
             this.vs_history = this.debugMode? []: false;
             try {
-              this.pl = Pounce_ast.parse(pounce_script, {actions: parser_actions});
+              this.pl = Pounce_ast.parse(pounce_script, {actions: pounce_ast_actions.parser_actions});
               this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
             }
             catch(syntax_error) {

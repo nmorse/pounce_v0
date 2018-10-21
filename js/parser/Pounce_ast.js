@@ -77,7 +77,7 @@
 
   var TreeNode5 = function(text, offset, elements) {
     TreeNode.apply(this, arguments);
-    this['word'] = elements[0];
+    this['key_word'] = elements[0];
     this['value'] = elements[4];
   };
   inherit(TreeNode5, TreeNode);
@@ -362,6 +362,99 @@
       return address0;
     },
 
+    _read_key_word: function() {
+      var address0 = FAILURE, index0 = this._offset;
+      this._cache._key_word = this._cache._key_word || {};
+      var cached = this._cache._key_word[index0];
+      if (cached) {
+        this._offset = cached[1];
+        return cached[0];
+      }
+      var index1 = this._offset, elements0 = new Array(2);
+      var address1 = FAILURE;
+      var remaining0 = 1, index2 = this._offset, elements1 = [], address2 = true;
+      while (address2 !== FAILURE) {
+        var chunk0 = null;
+        if (this._offset < this._inputSize) {
+          chunk0 = this._input.substring(this._offset, this._offset + 1);
+        }
+        if (chunk0 !== null && /^[a-zA-Z0-9\_\-\+\=\/\~\!\@\$\%\^\&\*\?\<\>]/.test(chunk0)) {
+          address2 = new TreeNode(this._input.substring(this._offset, this._offset + 1), this._offset);
+          this._offset = this._offset + 1;
+        } else {
+          address2 = FAILURE;
+          if (this._offset > this._failure) {
+            this._failure = this._offset;
+            this._expected = [];
+          }
+          if (this._offset === this._failure) {
+            this._expected.push('[a-zA-Z0-9\\_\\-\\+\\=\\/\\~\\!\\@\\$\\%\\^\\&\\*\\?\\<\\>]');
+          }
+        }
+        if (address2 !== FAILURE) {
+          elements1.push(address2);
+          --remaining0;
+        }
+      }
+      if (remaining0 <= 0) {
+        address1 = new TreeNode(this._input.substring(index2, this._offset), index2, elements1);
+        this._offset = this._offset;
+      } else {
+        address1 = FAILURE;
+      }
+      if (address1 !== FAILURE) {
+        elements0[0] = address1;
+        var address3 = FAILURE;
+        var remaining1 = 0, index3 = this._offset, elements2 = [], address4 = true;
+        while (address4 !== FAILURE) {
+          var chunk1 = null;
+          if (this._offset < this._inputSize) {
+            chunk1 = this._input.substring(this._offset, this._offset + 1);
+          }
+          if (chunk1 !== null && /^[a-zA-Z0-9\_\-\+\=\/\~\!\@\#\$\%\^\&\*\?\.\<\>]/.test(chunk1)) {
+            address4 = new TreeNode(this._input.substring(this._offset, this._offset + 1), this._offset);
+            this._offset = this._offset + 1;
+          } else {
+            address4 = FAILURE;
+            if (this._offset > this._failure) {
+              this._failure = this._offset;
+              this._expected = [];
+            }
+            if (this._offset === this._failure) {
+              this._expected.push('[a-zA-Z0-9\\_\\-\\+\\=\\/\\~\\!\\@\\#\\$\\%\\^\\&\\*\\?\\.\\<\\>]');
+            }
+          }
+          if (address4 !== FAILURE) {
+            elements2.push(address4);
+            --remaining1;
+          }
+        }
+        if (remaining1 <= 0) {
+          address3 = new TreeNode(this._input.substring(index3, this._offset), index3, elements2);
+          this._offset = this._offset;
+        } else {
+          address3 = FAILURE;
+        }
+        if (address3 !== FAILURE) {
+          elements0[1] = address3;
+        } else {
+          elements0 = null;
+          this._offset = index1;
+        }
+      } else {
+        elements0 = null;
+        this._offset = index1;
+      }
+      if (elements0 === null) {
+        address0 = FAILURE;
+      } else {
+        address0 = this._actions.make_key_word(this._input, index1, this._offset, elements0);
+        this._offset = this._offset;
+      }
+      this._cache._key_word[index0] = [address0, this._offset];
+      return address0;
+    },
+
     _read_value: function() {
       var address0 = FAILURE, index0 = this._offset;
       this._cache._value = this._cache._value || {};
@@ -599,7 +692,7 @@
       }
       var index1 = this._offset, elements0 = new Array(5);
       var address1 = FAILURE;
-      address1 = this._read_word();
+      address1 = this._read_key_word();
       if (address1 !== FAILURE) {
         elements0[0] = address1;
         var address2 = FAILURE;
