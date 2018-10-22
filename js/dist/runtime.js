@@ -404,16 +404,16 @@ var pounce = (function () {
       return [s, pl];
     }},
     'ifte': {expects: [{desc: 'conditional', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}, {desc: 'then clause', ofType: 'list'}], effects:[-3], tests: [], desc: 'conditionally apply the first or second quotation',
-      definition: [['apply'], 'dip2', 'if-else']},
-    'count-down': ['dup', 1, '-', [ 'dup', 1, '-', 'count-down' ], 'if'],
-    'fact': ['count-down', 'n*'],
-    'floor': ['dup', 1, '%', '-'],
+      definition: [[{toJSON: function(){return this.word;}, word:'apply'}], {toJSON: function(){return this.word;}, word:'dip2'}, {toJSON: function(){return this.word;}, word:'if-else'}]},
+    'count-down': [{toJSON: function(){return this.word;}, word:'dup'}, 1, {toJSON: function(){return this.word;}, word:'-'}, [ {toJSON: function(){return this.word;}, word:'dup'}, 1, {toJSON: function(){return this.word;}, word:'-'}, {toJSON: function(){return this.word;}, word:'count-down'} ], {toJSON: function(){return this.word;}, word:'if'}],
+    'fact': [{toJSON: function(){return this.word;}, word:'count-down'}, {toJSON: function(){return this.word;}, word:'n*'}],
+    'floor': [{toJSON: function(){return this.word;}, word:'dup'}, 1, {toJSON: function(){return this.word;}, word:'%'}, {toJSON: function(){return this.word;}, word:'-'}],
     'rollup': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rollup', ['C', 'A', 'B']], desc: 'roll up 3 elements on the stack, the top item ends up under the other two',
-      definition: ['swap', ['swap'], 'dip']},
+      definition: [{toJSON: function(){return this.word;}, word:'swap'}, [{toJSON: function(){return this.word;}, word:'swap'}], {toJSON: function(){return this.word;}, word:'dip'}]},
     'rolldown': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rolldown', ['B', 'C', 'A']], desc: 'roll down 3 elements in the stack, the bottom item ends up at the top',
-      definition: [['swap'], 'dip', 'swap']},
+      definition: [[{toJSON: function(){return this.word;}, word:'swap'}], {toJSON: function(){return this.word;}, word:'dip'}, {toJSON: function(){return this.word;}, word:'swap'}]},
     'rotate': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rotate', ['C', 'B', 'A']], desc: 'inverts the order of the top three elements',
-      definition: ['swap', ['swap'], 'dip', 'swap']}
+      definition: [{toJSON: function(){return this.word;}, word:'swap'}, [{toJSON: function(){return this.word;}, word:'swap'}], {toJSON: function(){return this.word;}, word:'dip'}, {toJSON: function(){return this.word;}, word:'swap'}]}
   };
   
   function cloneItem(item) {
@@ -498,8 +498,8 @@ var pounce = (function () {
           term = pl.shift();
           let num;
           let handled = false;
-          if (typeof term === 'string') {
-            let thisWord = findWord(term);
+          if (term['word']) {
+            let thisWord = findWord(term['word']);
             if (isArray(thisWord)) {
               // console.log('unquote list ', stack, term, pl);
               pl = thisWord.concat(pl);

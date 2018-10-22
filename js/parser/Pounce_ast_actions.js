@@ -22,7 +22,7 @@
     },
     
     make_word: function(input, start, end, elements) {
-      return {"word": input.substring(start, end)};
+      return {"word": input.substring(start, end), toJSON() {return this.word;}};
     },
   
     make_key_word: function(input, start, end, elements) {
