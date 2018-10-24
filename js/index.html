@@ -2,8 +2,11 @@
 <html>
   <head>
     <script src="dist/runtime.js"></script>
-    <script src="dist/parser.js"></script>
+    <script src="modules/str-module.js"></script>
+    
+    <!-- <script src="dist/parser.js"></script> -->
     <script src="parser/Pounce_ast.js"></script>
+    <script src="parser/Pounce_ast_actions.js"></script>
     <script src="test/canopy_parser_test.js"></script>
     <script src="test/runtime_test.js"></script>
 
@@ -50,19 +53,20 @@
 
       <script>
           var date_now = new Date();
-          pounce.words['years-since'] = pounce.parse(date_now.getFullYear() + ' - -1 *');
+          pounce.words['years-since'] = Pounce_ast.parse(date_now.getFullYear() + ' - -1 *', {actions: parser_actions.parser_actions});
           pounce.words['floor'] = {definition:(s, pl) => {
             const num = s.pop();
             s.push(Math.floor(num));
             return [s, pl];
           }};
           
-          canopy_parser_test.run_parser_test(Pounce_ast);
+          canopy_parser_test.run_parser_test(Pounce_ast, parser_actions.parser_actions);
+          runtime_test.runtime_test(Pounce_ast, parser_actions.parser_actions);
 
           var intro = new Vue({
             el: '#intro',
             data: {
-              "pounce": (ps) => pounce.run(pounce.parse(ps), [], [pounce.words])[0]
+              "pounce": (ps) => pounce.run(Pounce_ast.parse(ps, {actions: parser_actions.parser_actions}), [], [pounce.words])[0]
             }
           });
           var testing = new Vue({
@@ -73,9 +77,9 @@
             , "total_tests": canopy_parser_test.parser_tests.length
             , "failed_tests": canopy_parser_test.parser_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0),
               "showRuntimeTests": false
-            , "runtime_tests": runtime_tests
-            , "totalRuntime_tests": runtime_tests.length
-            , "failedRuntime_tests": runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
+            , "runtime_tests": runtime_test.runtime_tests
+            , "totalRuntime_tests": runtime_test.runtime_tests.length
+            , "failedRuntime_tests": runtime_test.runtime_tests.reduce(function (acc, o, i) { if (!o[2]) {return acc+1;} return acc; }, 0)
             }
           });
         </script>

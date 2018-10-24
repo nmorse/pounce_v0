@@ -54,42 +54,6 @@ var pounce = (function () {
       wordstack.pop();
       return [s];
     }},
-    'str-first': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
-      [`'hello' str-first`, ['ello', 'h']]
-      ], desc: 'extract the first character from a string',
-      definition: function(s) {
-      const str = s.pop();
-      const first = str.slice(0, 1);
-      const last_part = str.slice(1);
-      s.push(last_part, first);
-      return [s];
-    }},
-    'str-last': {expects: [{desc: 'source', ofType: 'string'}], effects:[1], tests: [
-      [`'hello' str-last`, ['hell', 'o']]
-      ], desc: 'extract the last character from a string',
-      definition: function(s) {
-      const str = s.pop();
-      const last = str.slice(-1);
-      const first_part = str.slice(0, -1);
-      s.push(first_part, last);
-      return [s];
-    }},
-    'str-length': {expects: [{desc: 'source string', ofType: 'string'}], effects:[0], tests: [
-      [`'hello' str-length`, [5]]
-      ], desc: 'lenth of a string',
-      definition: function(s) {
-      const str = s.pop();
-      s.push(str.length);
-      return [s];
-    }},
-    'str-append': {expects: [{desc: 'source 1', ofType: 'string'}, {desc: 'source 2', ofType: 'string'}], effects:[-1], tests: [
-      [`'hello' ' ' str-append 'world'`, ['hello world']]
-      ], desc: 'append two strings together',
-      definition: function(s) {
-      const str = s.pop();
-      s[s.length - 1] = s[s.length - 1] + str;
-      return [s];
-    }},
     'push': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [], desc: 'push an item on end of a list',
       definition: function(s) {
       const item = s.pop();
@@ -418,7 +382,10 @@ var pounce = (function () {
   
   function cloneItem(item) {
     // return cloneObject(item);
-    return JSON.parse(JSON.stringify(item));
+    if (item !== undefined) {
+      return JSON.parse(JSON.stringify(item));
+    }
+    return item;
   }
   
   function cloneObject(obj) {

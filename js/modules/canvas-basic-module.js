@@ -1,9 +1,12 @@
 (function (pounce) {
-  
+ 'use strict';
+ 
   if (!pounce) {
-    console.error('pounce parser.js must be after the pounce runtime is defined.')
+    console.error('pounce add-ons must be after the pounce runtime is defined.')
+    return;
   }
-    var cb_words = {
+  
+  const cb_words = {
     'cb-init': {expects: [{desc: 'canvas tag id', ofType: 'string'}],
       effects:[0], desc: 'init the graphics context for a canvas element',
       definition: function(s) {
