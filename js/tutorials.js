@@ -15,10 +15,10 @@ const examples = [
   
 ['"hello " "world" str-append', {summary:'Working with strings', desc:'"hello world", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'hello world', level:1}],
 ['`a` \'b\' "c" d str-append str-append str-append', {summary:'Strings can be quoted or words with no spaces can be strings as well.', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack.', tutorial: 'hello world', level:2}],
-['2 3 +', {summary:'Sum of two numbers', desc:'the operator \'+\' (for addition) comes after the two numbers being added.', tutorial: 'calculate', level: 1}],
-['2 3 *', {summary:'same for multiplication', desc:'the \'*\' is placed after the two numbers to be multiplied.', tutorial: 'calculate', level: 2}],
-['9 7 + 2.5 /', {summary:'combining opererations', desc:'To add and then divide, say (9 + 7) / 2.5. Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level: 3}],
-['9 7 2.5 + /', {summary:'another combination', desc:'To divide by a sum, say 9  / (7 + 2.5). Notice how no parenthases are needed when the operators are after the numbers. ', tutorial: 'calculate', level: 4}],
+['2 3 +', {summary:'Sum of two numbers', desc:'the operator \'+\' (for addition) comes after the two numbers being added.', level: 1, tutorial: 'calculate'}],
+['2 3 *', {summary:'same for multiplication', desc:'the \'*\' is placed after the two numbers to be multiplied.', level: 2, tutorial: 'calculate'}],
+['9 7 + 2.5 /', {summary:'combining opererations', desc:'To add and then divide, say (9 + 7) / 2.5. Notice how no parenthases are needed when the operators are after the numbers. ', level: 3, tutorial: 'calculate'}],
+['9 7 2.5 + /', {summary:'another combination', desc:'To divide by a sum, say 9  / (7 + 2.5). Notice how no parenthases are needed when the operators are after the numbers.', level: 4, tutorial: 'calculate'}],
 ['9 7 swap', {summary:'swap the two top', desc:'\'swap\' comes in handy when you want to swap the position of the top two items on the stack.', level:1, tutorial:'rearrange the stack'}],
 ['3 dup', {summary:'duplicate the top', desc:'\'dup\' is short for duplicate and it makes a copy of what on the top of the stack leaving you with two of them.', level:2, tutorial:'rearrange the stack'}],
 ['9 7 swap dup',{summary:'combine dup and swap', desc:'Combining a couple stack rearranging words  together allows you to arrange the stack in a new order', level:3, tutorial:'rearrange the stack'}],
@@ -54,20 +54,21 @@ images/pounce-cat1.png cb-load-image
 [
 `[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:1, tutorial:'your own words'}],
-[`{local-words:{
-p-n-get:[n get [p get] dip]
-n-f-get:[n get [f get] dip]
-n-inc:[n get 1 + n set]
-prime-factor?:[p-n-get % 0 == [n-f-get push f set p-n-get / p set] [n-inc] if-else]
-factorize:[p get 1 <= [f get] [prime-factor? factorize] if-else]
-check-integer:[dup 0 > not [drop 1] if]
-package:[{n:2 f:[]} swap check-integer p set]
-clean-up:[swap drop]
+[`
+{desc:'Prime factors of a number'
+local-words:{
+ package:[{n:2 f:[]} swap check-integer p set] # builds {n:2 f:[] p:210}
+ p-n:[n get [p get] dip] # p-n pulls p and n out of the package
+ n-f:[n get [f get] dip]
+ n-inc:[n get 1 + n set]
+ prime-factor?:[p-n % 0 == [n-f push f set p-n / p set] [n-inc] if-else]
+ factorize:[p get 1 <= [f get] [prime-factor? factorize] if-else]
+ check-integer:[dup 0 > not [drop 1] if]
+ clean-up:[swap drop]
 }
 expects: [{desc: 'a positive' ofType: 'integer'}]
 effects: [0]
 definition:[package factorize clean-up]
-desc:'Prime factors of a number'
 } [factor] define
 210 factor
 `, {summary:'find the prime factors of a number', desc:'', level:2, tutorial:'your own words'}],

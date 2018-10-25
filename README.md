@@ -1,7 +1,7 @@
 
 # Pounce, a concatenative programming language
 Pounce is a programming language that targets the Browser, Server and IoT.
-The aim of Pounce is to encourage programmers to try __conatenative__ programming. Since Pounce works in the browser, you can try it out easily (with zero installation). A [Toutorial](https://nmorse.github.io/pounce/js/try_pounce.html) is being developed to teach 'pounce' to anyone interested. If you end up liking this style of programming, you may also try out other Pounce interpreters written in Python, C (still in development at this time) or check out [purr](https://github.com/bbqbaron/purr) written in Clojure.
+The aim of Pounce is to encourage programmers to try a stack-based, __conatenative__ programming. Since Pounce works in the browser, you can try it out easily (with zero installation). A [Toutorial](https://nmorse.github.io/pounce/js/try_pounce.html) is being developed to teach 'pounce' to anyone interested. If you end up liking this style of programming, you may also try out other Pounce interpreters tht will be written in Python, C (maybe Nim) (still in development at this time) or check out [purr](https://github.com/bbqbaron/purr) written in Clojure.
 
 _disclaimer_
 Pounce is currently in an Alpha development phase, so it's not production ready, but the core is fairly stable. Look for updates on development posted here.
@@ -28,7 +28,7 @@ Pounce borrows from a long line of CP languages. These include Forth, Joy, Facto
  * To be portable to the major computing platforms.
 
 ## Simple and Consistent...
-For simplicity sake in language design Pounce will maintain a minimal core that only contains what is common to all applications (modules in the form of word maps are coming soon). The consistency of Pounce will also help maintain simplicity. One example is that Pounce will always follow post-fix notation. Historically, CP languages switch over to prefix when defining functions, but Pounce supports a post-fix style consistency (note that other notations are also offered, but post-fix is always supported).
+the aim is for Pounce to maintain a minimal core that only contains what is common to all applications (modules in the form of word maps will fill in application specific words). Consistency in post-fix notation is one thing that CP languages had failed to keep, switching over to prefix when defining functions, but Pounce supports a post-fix style consistency (other notations may be included, but post-fix is always the default).
 
 ## IDEs and help in learning and debugging...
 For all dynamic languages, the REPL has survived the test of time and will continue to be alive and well, but IDEs have given programmers more power and productivity. Pounce has a browser based IDE (under development) that will help you interact with and visualize your code. The aim is to keep the edit-run-debug cycle as short as possible. Tests may be built into any word (function) definition so that testes may be run while you code. Offering visualizations of your code and its affect on the stack, is the business of the IDE.

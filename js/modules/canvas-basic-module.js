@@ -1,11 +1,6 @@
-(function (pounce) {
- 'use strict';
- 
-  if (!pounce) {
-    console.error('pounce add-ons must be after the pounce runtime is defined.')
-    return;
-  }
-  
+(function() {
+  'use strict';
+
   const cb_words = {
     'cb-init': {expects: [{desc: 'canvas tag id', ofType: 'string'}],
       effects:[0], desc: 'init the graphics context for a canvas element',
@@ -109,7 +104,12 @@
     }}
   };
   
-  // TBD: Should access a module style export/import methods, instead of redefining any word collisions...
-  pounce.words = Object.assign(cb_words, pounce.words);
-  
-})((typeof pounce !== 'undefined')? pounce: false);
+  var exported = {words: cb_words};
+
+  if (typeof require === 'function' && typeof exports === 'object') {
+    extend(exports, exported);
+  } else {
+    var namespace = typeof this !== 'undefined' ? this : window;
+    namespace.canvas_basic_module = exported;
+  }
+})();

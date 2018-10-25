@@ -181,6 +181,8 @@
 
 
     <script>
+      // load in the canvas_basic words...
+      pounce.words = Object.assign(canvas_basic_module.words, pounce.words);
 
       function loadExample(s, desc) {
         try_pounce.ps = s;
