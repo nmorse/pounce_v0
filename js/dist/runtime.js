@@ -385,6 +385,12 @@ var pounce = (function () {
           [['drop', 'drop'], 'dip'], 'if-else']
       },
       'definition':[[], 'map-aux']
+    },
+    'filter': {
+      'local-words':{
+        'filt':[ [ "dup", "list-length" ], "dip2", "rolldown", 0, ">", [ "rotate", "pop", "rolldown", [ "dup" ], "dip", "dup", [ "apply" ], "dip", "swap", [ [ "swap" ], "dip2", [ "prepend" ], "dip" ], [ [ "swap" ], "dip2", [ "drop" ], "dip" ], "if-else", "swap", "filt" ], [ [ "drop", "drop" ], "dip" ], "if-else" ]
+      },
+      'definition':[[], 'filt']
     }
   };
   

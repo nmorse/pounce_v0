@@ -67,8 +67,9 @@
    ]
   } [map] define
   [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
+  ['[5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[ [ 5, true ], [ 4, false ], [ 3, false ] ] ]],
     ['[1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
-    ['', []]
+    ['[1 2 3 4 5 6] [3 >] filter', [4,5,6]]
   ];
   
   var runtime_test = function(Pounce_ast, parser_actions) {
