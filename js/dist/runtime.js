@@ -93,11 +93,12 @@ var pounce = (function () {
       s.push(list.length);
       return [s];
     }},
-    'cons': {expects: [{desc: 'a', ofType: 'list'}, {desc: 'an item', ofType: 'any'}], effects:[-1], tests: [], desc: 'add an item at the begining of a list',
+    'cons': {expects: [{desc: 'an item', ofType: 'any'}, {desc: 'a', ofType: 'list'}], effects:[-1], tests: [], desc: 'add an item at the begining of a list',
       definition: function(s) {
       const list = s.pop();
       const item = s.pop();
-      list.push(item);
+      list.unshift(item);
+      s.push(list);
       return [s];
     }},
     'apply': {expects: [{desc: 'a runable', ofType: 'list'}], effects:[-1], tests: [], desc: 'run the contents of a list',
@@ -377,7 +378,14 @@ var pounce = (function () {
     'rolldown': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rolldown', ['B', 'C', 'A']], desc: 'roll down 3 elements in the stack, the bottom item ends up at the top',
       definition: [['swap'], 'dip', 'swap']},
     'rotate': {expects: [{desc: 'a', ofType: 'any'}, {desc: 'b', ofType: 'any'}, {desc: 'c', ofType: 'any'}], effects:[0], tests: ['A B C rotate', ['C', 'B', 'A']], desc: 'inverts the order of the top three elements',
-      definition: ['swap', ['swap'], 'dip', 'swap']}
+      definition: ['swap', ['swap'], 'dip', 'swap']},
+    'map': {
+      'local-words':{
+        'map-aux':[['dup', 'list-length'], 'dip2', 'rolldown', 0, '>', ['rotate', 'pop', 'rolldown', 'dup', ['apply'], 'dip', ['swap'], 'dip2', ['prepend'], 'dip', 'swap', 'map-aux'],
+          [['drop', 'drop'], 'dip'], 'if-else']
+      },
+      'definition':[[], 'map-aux']
+    }
   };
   
   function cloneItem(item) {
