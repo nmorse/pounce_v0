@@ -22,7 +22,8 @@ const examples = [
 ['9 7 swap', {summary:'swap the two top', desc:'\'swap\' comes in handy when you want to swap the position of the top two items on the stack.', level:1, tutorial:'rearrange the stack'}],
 ['3 dup', {summary:'duplicate the top', desc:'\'dup\' is short for duplicate and it makes a copy of what on the top of the stack leaving you with two of them.', level:2, tutorial:'rearrange the stack'}],
 ['9 7 swap dup',{summary:'combine dup and swap', desc:'Combining a couple stack rearranging words  together allows you to arrange the stack in a new order', level:3, tutorial:'rearrange the stack'}],
-['10 20 30 40 2 bubble-up',{summary:'roll up', desc:'To rearranging the stack your own way, you may write your own words, like this bubble-up', level:4, tutorial:'rearrange the stack'}],
+['10 20 30 rollup',{summary:'roll up', desc:'To rearranging three items on the stack, you can use `rollup`, `rolldown` and `rotate`', level:4, tutorial:'rearrange the stack'}],
+['10 20 30 40 2 bubble-up',{summary:'roll up', desc:'To rearranging the stack your own way, you may write your own words, like this bubble-up', level:8, tutorial:'rearrange the stack'}],
 [
 `canvas cb-init cb-clear
 4 7 30 112 cb-line
@@ -84,4 +85,4 @@ Each line on the program
 ];
 
 const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial]+(a[1].level*0.01) > level_order[b[1].tutorial]+(b[1].level*0.01))? 1: -1);
-const level_order = {"introduction":1, "hello world":2, "basic":3, "rearrange the stack":4, "canvas": 5, "advanced":6};
+const level_order = {"introduction":1, "hello world":2, "calculate":3, "rearrange the stack":4, "canvas": 5, "advanced":6};
