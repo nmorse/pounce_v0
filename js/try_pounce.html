@@ -1,21 +1,21 @@
-
 <html>
-  <head>
-    <script src="dist/runtime.js"></script>
-    <script src="modules/str-module.js"></script>
-    <script src="modules/canvas-basic-module.js"></script>
 
-    <script src="parser/Pounce_ast.js"></script>
-    <script src="parser/Pounce_ast_actions.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="dist/vue.js"></script>
-    <script src="tutorials.js"></script>
-    <script src="https://unpkg.com/marked@0.3.6"></script>
-    <script src="https://unpkg.com/lodash@4.16.0"></script>
-    
-    <style>
-      body {
+<head>
+  <script src="dist/runtime.js"></script>
+  <script src="modules/str-module.js"></script>
+  <script src="modules/canvas-basic-module.js"></script>
+
+  <script src="parser/Pounce_ast.js"></script>
+  <script src="parser/Pounce_ast_actions.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="dist/vue.js"></script>
+  <script src="tutorials.js"></script>
+  <script src="https://unpkg.com/marked@0.3.6"></script>
+  <script src="https://unpkg.com/lodash@4.16.0"></script>
+
+  <style>
+    body {
         margin: 0;
         font-family: "helvetica neue", roboto;
         color: #614c23;
@@ -73,7 +73,7 @@
       .pounce-program-list-color {
          background-color: rgba(20, 80, 250, 0.2);
       }
-      }
+      
       td {
         vertical-align: top;
       }
@@ -83,91 +83,92 @@
         border: none;
       }
     </style>
-  </head>
-  <body onhashchange="onHashChange()">
-    <div class="top-bar row-container" id="examples_section" >Try Pounce
-        <div class="top-bar-toutorial" v-for="category in tutorials">
-          <button v-on:click="show_example_toggle(category)">{{category}}</button>
-          <div v-show="show_category === category" class="menu-drop">
-            <div class="row-container" v-for="t in examples.filter((e)=>e[1].tutorial === category)">
-              <button v-on:click="loadExample(t[0], t[1].desc)"><code>{{t[1].summary}}</code></button>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class="content-area" id="try_pounce">
-      <div v-if="exampleDesc && !exampleGotIt" class="pop-over" v-html="exampleMarkdown"></div>
-      <div class="row-container">
-        <canvas id="canvas" width="250" height="150"></canvas>
-        <div class="stack-up">
-          <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
-            <option v-for="word in Object.keys(words)" v-bind:value="word">
-              {{ word }}
-            </option>
-          </select>
+</head>
 
-          <div>{{helpWordDef}}</div>
-          <div class="box">{{helpWordDesc}}</div>
-          <div class="box" v-show="helpWordEffects">net stack effect: {{helpWordEffects}} </div>
-          <div class="box" v-show="helpWordExpects">expects: {{helpWordExpects}} </div>
+<body onhashchange="onHashChange()">
+  <div class="top-bar row-container" id="examples_section">Try Pounce
+    <div class="top-bar-toutorial" v-for="category in tutorials">
+      <button v-on:click="show_example_toggle(category)">{{category}}</button>
+      <div v-show="show_category === category" class="menu-drop">
+        <div class="row-container" v-for="t in examples.filter((e)=>e[1].tutorial === category)">
+          <button v-on:click="loadExample(t[0], t[1].desc)"><code>{{t[1].summary}}</code></button>
         </div>
       </div>
-      <div class="col-container">
-        <div class="row-container">
-          <div class="box" style="min-width:100px;">
-            <canvas id="pounce-animation" width="100" height="61"></canvas>
+    </div>
+  </div>
+  <div class="content-area" id="try_pounce">
+    <div v-if="exampleDesc && !exampleGotIt" class="pop-over" v-html="exampleMarkdown"></div>
+    <div class="row-container">
+      <canvas id="canvas" width="250" height="150"></canvas>
+      <div class="stack-up">
+        <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
+          <option v-for="word in Object.keys(words)" v-bind:value="word">
+            {{ word }}
+          </option>
+        </select>
+
+        <div>{{helpWordDef}}</div>
+        <div class="box">{{helpWordDesc}}</div>
+        <div class="box" v-show="helpWordEffects">net stack effect: {{helpWordEffects}} </div>
+        <div class="box" v-show="helpWordExpects">expects: {{helpWordExpects}} </div>
+      </div>
+    </div>
+    <div class="col-container">
+      <div class="row-container">
+        <div class="box" style="min-width:100px;">
+          <canvas id="pounce-animation" width="100" height="61"></canvas>
+        </div>
+        <div class="col-container">
+          <div>
+            &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor"
+                type="checkbox" />run, only to cursor</label>
+            &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />debug
+              mode</label>
           </div>
-          <div class="col-container">
-            <div>
-              &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor" type="checkbox" />run, only to cursor</label>
-              &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />debug mode</label>
-            </div>
-            <div>
-              <div v-show="false && tooltip">tooltip</div>
-              <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)"
-                placeholder="Enter Pounce words here" spellcheck="false"
-                v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color"
-                rows="3" cols="80"
-                wrap="hard"></textarea>
-            </div>
+          <div>
+            <div v-show="false && tooltip">tooltip</div>
+            <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)" placeholder="Enter Pounce words here"
+              spellcheck="false" v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color" rows="3"
+              cols="80" wrap="hard"></textarea>
           </div>
         </div>
-        <div class="row-container">
-          <div class="stack-down  box" style="min-width:200px;">
-            <div v-for="ele in vs" class="box">
-              {{ ele }} &nbsp;
-            </div>
+      </div>
+      <div class="row-container">
+        <div class="stack-down  box" style="min-width:200px;">
+          <div v-for="ele in vs" class="box">
+            {{ ele }} &nbsp;
           </div>
-            <!--
+        </div>
+        <!--
               <div class="col-container box" style="height:300px; width: 600px;">
                 <div v-for="(value, key) in words" class="box" style="width:100px;">
                   {{ key }}: {{ value.desc }}
                 </div>
               </div>
             -->
-          <div class="row-container" style="min-height:300px;">
-            <div v-for="h_instance in vs_history" class="stack-down box">
-              <!--
+        <div class="row-container" style="min-height:300px;">
+          <div v-for="h_instance in vs_history" class="stack-down box">
+            <!--
               -->
-              <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color" style="width:100px; overflow: hidden;">
-                {{ pl_item }}&nbsp;
-              </div>
-              <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
-                {{ h_instance.term }}
-              </div>
-              <div v-for="item in h_instance.stack" class="box" style="width:100px; overflow: hidden;">
-                {{ item }}&nbsp;
-              </div>
+            <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color" style="width:100px; overflow: hidden;">
+              {{ pl_item }}&nbsp;
+            </div>
+            <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
+              {{ h_instance.term }}
+            </div>
+            <div v-for="item in h_instance.stack" class="box" style="width:100px; overflow: hidden;">
+              {{ item }}&nbsp;
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="content-area" id="examples_section2">
-      <!--
+  </div>
+  <div class="content-area" id="examples_section2">
+    <!--
       <button v-on:click="showExamples = !showExamples">{{ ((showExamples)? 'hide': 'show')}} examples</button> check out these {{ totalexamples }} examples.
       -->
-      <!--
+    <!--
       <div class="column-container" id="some_examples2" v-show="showExamples">
         <div v-for="category in tutorials">
           <button v-on:click="show_example_toggle(category)">{{category}}</button>
@@ -177,26 +178,26 @@
         </div>
       </div>
       -->
-    </div>
+  </div>
 
 
-    <script>
-      // load in the canvas_basic words...
-      pounce.words = Object.assign(canvas_basic_module.words, pounce.words);
+  <script>
+    // load in the canvas_basic words...
+    pounce.words = Object.assign(canvas_basic_module.words, pounce.words);
 
-      function loadExample(s, desc) {
-        try_pounce.ps = s;
-        try_pounce.runPounce();
-        try_pounce.exampleDesc = desc;
-        try_pounce.exampleGotIt = false;
-        Vue.set(examples_section, 'show_category', '');
-        // TBD focus
-        // examples_section.examples[s].shown = true;
-      }
-      var try_pounce = new Vue({
-        el: '#try_pounce',
-        data: {
-          "ps": ""
+    function loadExample(s, desc) {
+      try_pounce.ps = s;
+      try_pounce.runPounce();
+      try_pounce.exampleDesc = desc;
+      try_pounce.exampleGotIt = false;
+      Vue.set(examples_section, 'show_category', '');
+      // TBD focus
+      // examples_section.examples[s].shown = true;
+    }
+    var try_pounce = new Vue({
+      el: '#try_pounce',
+      data: {
+        "ps": ""
         , "last_ps": ""
         , "pl": []
         , "vs": []
@@ -212,204 +213,211 @@
         , "exampleDesc": ""
         , "exampleGotIt": true
         , "tooltip": false
-        },
-        computed: {
-          exampleMarkdown: function () {
-            return marked(this.exampleDesc, { sanitize: true })
+      },
+      computed: {
+        exampleMarkdown: function () {
+          return marked(this.exampleDesc, { sanitize: true })
+        }
+      },
+      methods: {
+        "runPounce": function (e) {
+          const w = this.wordAtCursor(e);
+          this.lookupWord(w);
+          if (this.runUpToCursor) {
+            this.runPounceToCursor(e);
           }
-        },
-        methods: {
-         "runPounce": function (e) {
-            const w = this.wordAtCursor(e);
-            this.lookupWord(w);
-            if (this.runUpToCursor) {
-              this.runPounceToCursor(e);
-            }
-            else {
-              if (this.ps !== this.last_ps) {
-                this.executePounceScript(this.ps);
-              }
+          else {
+            if (this.ps !== this.last_ps) {
+              this.executePounceScript(this.ps);
             }
           }
+        }
         , "lookupWord": function (w) {
-            this.helpWord = w;
-            if (w && this.words[w]) {
-              if (this.words[w].definition) {
+          this.helpWord = w;
+          if (w && this.words[w]) {
+            if (this.words[w].definition) {
+              if (Array.isArray(this.words[w].definition)) {
+                this.helpWordDef = this.words[w].definition;
+              } else {
                 this.helpWordDef = 'internal definition'; //this.words[w].definition;
-              }
-              else {
-                this.helpWordDef = pounce.unParse(this.words[w]);
-              }
-              this.helpWordDesc = this.words[w].desc;
-              if (this.words[w].expects) {
-                this.helpWordExpects =
-                  this.words[w].expects.length + ' item(s)' +
-                    this.words[w].expects.map(i => ' ' + i.desc + ' (' + i.ofType + ')');
-              }
-              else {
-                if (this.words[w].expects === []) {
-                  this.helpWordExpects = 'nothing';
-                }
-                else {
-                  this.helpWordExpects = '';
-                }
-              }
-              if (this.words[w].effects) {
-                
-                this.helpWordEffects = '' + this.words[w].effects[0];
-              }
-              else {
-                this.helpWordEffects = '';
+
               }
             }
             else {
-              this.helpWordDef = '';
-              this.helpWordDesc = '';
-              this.helpWordExpects = '';
+              this.helpWordDef = pounce.unParse(this.words[w]);
+            }
+            this.helpWordDesc = this.words[w].desc;
+            if (this.words[w].expects) {
+              this.helpWordExpects =
+                this.words[w].expects.length + ' item(s)' +
+                this.words[w].expects.map(i => ' ' + i.desc + ' (' + i.ofType + ')');
+            }
+            else {
+              if (this.words[w].expects === []) {
+                this.helpWordExpects = 'nothing';
+              }
+              else {
+                this.helpWordExpects = '';
+              }
+            }
+            if (this.words[w].effects) {
+
+              this.helpWordEffects = '' + this.words[w].effects[0];
+            }
+            else {
               this.helpWordEffects = '';
             }
+          }
+          else {
+            this.helpWordDef = '';
+            this.helpWordDesc = '';
+            this.helpWordExpects = '';
+            this.helpWordEffects = '';
+          }
 
         }
         , "wordAtCursor": function (e) {
-            if (e && e.target) {
-              const i1a = this.ps.lastIndexOf(' ', e.target.selectionStart-1);
-              const i1b = this.ps.lastIndexOf('[', e.target.selectionStart-1);
-              const i1c = this.ps.lastIndexOf(']', e.target.selectionStart-1);
-              const i1d = this.ps.lastIndexOf('\n', e.target.selectionStart-1);
-              let first_i = Math.max(Math.max(Math.max(i1a, i1b), i1c), i1d);
-              
-              first_i += 1;
-            
-              let i2a = this.ps.indexOf(' ', e.target.selectionStart);
-              if (i2a === -1) {
-                i2a = this.ps.length;
-              }
-              let i2b = this.ps.indexOf('[', e.target.selectionStart);
-              if (i2b === -1) {
-                i2b = this.ps.length;
-              }
-              let i2c = this.ps.indexOf(']', e.target.selectionStart);
-              if (i2c === -1) {
-                i2c = this.ps.length;
-              }
-              let i2d = this.ps.indexOf('\n', e.target.selectionStart);
-              if (i2d === -1) {
-                i2d = this.ps.length;
-              }
-              let last_i = Math.min(Math.min(Math.min(i2a, i2b), i2c), i2d);
-              
-              return this.ps.slice(first_i, last_i);
-            }
-            return '';
-          }
-        , "runPounceToCursor": function (e) {
-            if (e && e.target) {
-              if (this.cursorAtWordEnd(e) || /* its not a word */ !this.words[this.wordAtCursor(e)] ) {
-                // console.log('cursor a end of word: '+proceed);
-                // console.log(e.target.selectionStart, e.target.selectionEnd);
-                // console.log(this.ps.slice(0, e.target.selectionStart));
-                const new_ps = this.ps.slice(0, e.target.selectionStart);
-                if (new_ps !== this.last_ps) {
-                  this.executePounceScript(new_ps);
-                }
-              }
-            }
-          }
-        , "cursorAtWordEnd": function (e) {
-            if (e && e.target) {
-              const start_i = e.target.selectionStart;
-              //console.log(e.target.selectionStart, e.target.selectionEnd);
-              if (start_i < this.ps.length) {
-                const charAfter = this.ps[start_i];
-                if ( charAfter === ' '
-                  || charAfter === '{'
-                  || charAfter === '['
-                  || charAfter === ']'
-                  || charAfter === '\n'
-                ) {
-                  return true;
-                }
-                return false;
-              }
-              else {
-                // cursor at end of string
-                return true;
-              }
-              
-            }
-          }
-        , "focusEditor" : function () {
-            //this.focus();
-            console.log('deadwood here?');
-          }
-        , "executePounceScript" : function (pounce_script) {
-            if (this.scan_recall(pounce_script)) {
-              return;
-            }
-            this.last_ps = pounce_script;
-            this.vs_history = this.debugMode? []: false;
-            try {
-              this.pl = Pounce_ast.parse(pounce_script, {actions: parser_actions.parser_actions});
-            }
-            catch(syntax_error) {
-              console.log(syntax_error.stack);
-              console.log(syntax_error.message);
-            }
-            try {
-              this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
-            }
-            catch(run_error) {
-              console.log(run_error);
-            }
+          if (e && e.target) {
+            const i1a = this.ps.lastIndexOf(' ', e.target.selectionStart - 1);
+            const i1b = this.ps.lastIndexOf('[', e.target.selectionStart - 1);
+            const i1c = this.ps.lastIndexOf(']', e.target.selectionStart - 1);
+            const i1d = this.ps.lastIndexOf('\n', e.target.selectionStart - 1);
+            let first_i = Math.max(Math.max(Math.max(i1a, i1b), i1c), i1d);
 
+            first_i += 1;
+
+            let i2a = this.ps.indexOf(' ', e.target.selectionStart);
+            if (i2a === -1) {
+              i2a = this.ps.length;
+            }
+            let i2b = this.ps.indexOf('[', e.target.selectionStart);
+            if (i2b === -1) {
+              i2b = this.ps.length;
+            }
+            let i2c = this.ps.indexOf(']', e.target.selectionStart);
+            if (i2c === -1) {
+              i2c = this.ps.length;
+            }
+            let i2d = this.ps.indexOf('\n', e.target.selectionStart);
+            if (i2d === -1) {
+              i2d = this.ps.length;
+            }
+            let last_i = Math.min(Math.min(Math.min(i2a, i2b), i2c), i2d);
+
+            return this.ps.slice(first_i, last_i);
           }
-        , 'scan_recall': function (ps) {
-              if (ps.indexOf(' recall') >= 1) {
-                const pl = Pounce_ast.parse(ps);
-                if (pl.length === 2) {
-                  let key = pl[0][0];
-                  this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';
-                  this.vs = [];
-                  return true;
-                }
+          return '';
+        }
+        , "runPounceToCursor": function (e) {
+          if (e && e.target) {
+            if (this.cursorAtWordEnd(e) || /* its not a word */ !this.words[this.wordAtCursor(e)]) {
+              // console.log('cursor a end of word: '+proceed);
+              // console.log(e.target.selectionStart, e.target.selectionEnd);
+              // console.log(this.ps.slice(0, e.target.selectionStart));
+              const new_ps = this.ps.slice(0, e.target.selectionStart);
+              if (new_ps !== this.last_ps) {
+                this.executePounceScript(new_ps);
               }
-              return false;
-            
-            //      s.push('recall error: requested word is internal (i.e. defined as a function) and is not divisable into words');
-          }
-        },
-        directives: {
-          focus: {
-            update: function(el) {
-              Vue.nextTick(() => el.focus());
             }
           }
         }
-      });
-      function onHashChange() {
-        try_pounce.tooltip = !try_pounce.tooltip;
+        , "cursorAtWordEnd": function (e) {
+          if (e && e.target) {
+            const start_i = e.target.selectionStart;
+            //console.log(e.target.selectionStart, e.target.selectionEnd);
+            if (start_i < this.ps.length) {
+              const charAfter = this.ps[start_i];
+              if (charAfter === ' '
+                || charAfter === '{'
+                || charAfter === '['
+                || charAfter === ']'
+                || charAfter === '\n'
+              ) {
+                return true;
+              }
+              return false;
+            }
+            else {
+              // cursor at end of string
+              return true;
+            }
+
+          }
+        }
+        , "focusEditor": function () {
+          //this.focus();
+          console.log('deadwood here?');
+        }
+        , "executePounceScript": function (pounce_script) {
+          if (this.scan_recall(pounce_script)) {
+            return;
+          }
+          this.last_ps = pounce_script;
+          this.vs_history = this.debugMode ? [] : false;
+          try {
+            this.pl = Pounce_ast.parse(pounce_script, { actions: parser_actions.parser_actions });
+          }
+          catch (syntax_error) {
+            console.log(syntax_error.stack);
+            console.log(syntax_error.message);
+          }
+          try {
+            this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
+          }
+          catch (run_error) {
+            console.log(run_error);
+          }
+
+        }
+        , 'scan_recall': function (ps) {
+          if (ps.indexOf(' recall') >= 1) {
+            const pl = Pounce_ast.parse(ps);
+            if (pl.length === 2) {
+              let key = pl[0][0];
+              this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';
+              this.vs = [];
+              return true;
+            }
+          }
+          return false;
+
+          //      s.push('recall error: requested word is internal (i.e. defined as a function) and is not divisable into words');
+        }
+      },
+      directives: {
+        focus: {
+          update: function (el) {
+            Vue.nextTick(() => el.focus());
+          }
+        }
       }
-      
-      let show_category = '';
-      var examples_section = new Vue({
-        el: '#examples_section',
-        data: {
-          "showExamples": true
+    });
+    function onHashChange() {
+      try_pounce.tooltip = !try_pounce.tooltip;
+    }
+
+    let show_category = '';
+    var examples_section = new Vue({
+      el: '#examples_section',
+      data: {
+        "showExamples": true
         , "examples": sortBylevel(examples)
         , "tutorials": tutorials
         , "show_category": show_category
         , "totalexamples": examples.length
         , "loadExample": loadExample
+      },
+      methods: {
+        show_example_toggle: (category) => {
+          if (examples_section.show_category === category) { Vue.set(examples_section, 'show_category', ''); }
+          else { Vue.set(examples_section, 'show_category', category); }
         },
-        methods: {
-          show_example_toggle: (category) => {
-            if (examples_section.show_category === category) {Vue.set(examples_section, 'show_category', '');}
-            else {Vue.set(examples_section, 'show_category', category);}},
-          show_example: category =>this.show_category
-        }
-      });
+        show_example: category => this.show_category
+      }
+    });
 
-    </script>
+  </script>
 
-  </body>
+</body>
+
 </html>

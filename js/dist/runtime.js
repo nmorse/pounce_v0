@@ -488,6 +488,9 @@ var pounce = (function () {
               handled = true;
             }
             if (thisWord && isArray(thisWord.definition)) {
+              if (record_histrory !== false && ixnay([term]) !== []) {
+                record_histrory.unshift({stack:cloneItem(stack).reverse(), term:term, pl:ixnay(cloneItem(pl).reverse())});
+              }
               if (thisWord['local-words']) {
                 wordstack.push(thisWord['local-words']);
                 pl = thisWord.definition.concat(['internal=>drop-local-words']).concat(pl);
