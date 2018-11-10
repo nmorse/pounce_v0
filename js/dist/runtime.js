@@ -464,32 +464,34 @@ var pounce = (function () {
     },
     'map': {
       'local-words': {
-        'map-aux': [
-          ['dup', 'list-length'], 'dip2', 'rolldown', 0, '>', 
-          ['rotate', 'pop', 'rolldown', 'dup', ['apply'], 'dip', ['swap'], 'dip2', ['prepend'], 'dip', 'swap', 'map-aux'],
+        'setup-map': [[]],
+        'process-map': [
+          ['dup', 'list-length'], 'dip2', 'rolldown', 0, '>',
+          ['rotate', 'pop', 'rolldown', 'dup', ['apply'], 'dip', ['swap'], 'dip2', ['prepend'], 'dip', 'swap', 'process-map'],
           [['drop', 'drop'], 'dip'], 'if-else']
       },
-      'definition': [[], 'map-aux']
+      'definition': ['setup-map', 'process-map']
     },
     'filter': {
       'local-words': {
-        'filt': [
-          ["dup", "list-length"], "dip2", "rolldown", 0, ">", 
-          ["rotate", "pop", "rolldown", ["dup"], "dip", "dup", ["apply"], "dip", "swap", 
-            [["swap"], "dip2", ["prepend"], "dip"], 
-            [["swap"], "dip2", ["drop"], "dip"], "if-else", "swap", "filt"], 
+        'setup-filter': [[]],
+        'process-filter': [
+          ["dup", "list-length"], "dip2", "rolldown", 0, ">",
+          ["rotate", "pop", "rolldown", ["dup"], "dip", "dup", ["apply"], "dip", "swap",
+            [["swap"], "dip2", ["prepend"], "dip"],
+            [["swap"], "dip2", ["drop"], "dip"], "if-else", "swap", "process-filter"],
           [["drop", "drop"], "dip"], "if-else"]
       },
-      'definition': [[], 'filt']
+      'definition': ['setup-filter', 'process-filter']
     },
     'reduce': {
       'local-words': {
         'more?': ['rolldown', 'dup', 'list-length', 0, '>', ['rollup'], 'dip'],
-        'process-reduce': ['more?', ['reduce1', 'process-reduce'], 'if'],
-        'reduce1': [['pop'], 'dip2', 'dup', ['apply'], 'dip'],
-        'finish-reduce': ['drop', ['drop'], 'dip'],
+        'process-reduce': ['more?', ['reduce-step', 'process-reduce'], 'if'],
+        'reduce-step': [['pop'], 'dip2', 'dup', ['apply'], 'dip'],
+        'teardown-reduce': ['drop', ['drop'], 'dip'],
       },
-      'definition': ['process-reduce', 'finish-reduce']
+      'definition': ['process-reduce', 'teardown-reduce']
     }
   };
 
@@ -535,9 +537,13 @@ var pounce = (function () {
     return newObj;
   }
 
-  // a filter that filters out internal words
+  function isInternalWord(term) {
+    return (term === 'internal=>drop-local-words');
+  }
+
+  // a filter that filters out internal words 'internal=>drop-local-words'
   function ixnay(l) {
-    const new_l = l.filter(e => e !== 'internal=>drop-local-words');
+    const new_l = l.filter(element => !isInternalWord(element));
     return new_l;
   }
 
@@ -637,7 +643,7 @@ var pounce = (function () {
               handled = true;
             }
             if (thisWord && isArray(thisWord.definition)) {
-              if (record_histrory !== false && ixnay([term]) !== []) {
+              if (record_histrory !== false && !isInternalWord(term)) {
                 record_histrory.unshift({ stack: cloneItem(cleanQuotedItems(stack)).reverse(), term: term, pl: ixnay(cloneItem(cleanQuotedItems(pl)).reverse()) });
               }
               if (thisWord['local-words']) {
@@ -653,7 +659,7 @@ var pounce = (function () {
             }
             if (thisWord && thisWord.definition && typeof thisWord.definition === 'function') {
               // console.log('pre-execute ', stack, term, pl);
-              if (record_histrory !== false && ixnay([term]) !== []) {
+              if (record_histrory !== false && !isInternalWord(term)) {
                 record_histrory.unshift({ stack: cloneItem(cleanQuotedItems(stack)).reverse(), term: term, pl: ixnay(cloneItem(cleanQuotedItems(pl)).reverse()) });
               }
               [stack, pl = pl] = thisWord.definition(stack, pl, wordstack);
