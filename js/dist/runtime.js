@@ -390,7 +390,7 @@ var pounce = (function () {
         }
         if (case_record[key]) {
           if (isArray(case_record[key])) {
-            pl = case_record[key].concat(pl);
+            pl = [case_record[key]].concat(pl);
           }
           else {
             pl.unshift(case_record[key]);
@@ -535,7 +535,7 @@ var pounce = (function () {
 
   function cleanQuotedItems(stack) {
     return stack.map(e => {
-      if (isArray(e)) {
+      if (isArray(e) || typeof e === "object") {
         return unParse([e]);
       } else {
         return e;
@@ -545,36 +545,40 @@ var pounce = (function () {
   
   function unParse(pl) {
     let ps = '';
+    let spacer = '';
     for (let i in pl) {
       if (pl[i] && typeof pl[i] == "object") {
         if (isArray(pl[i])) {
-          ps += ' [' + unParse(pl[i]) + ' ]';
+          ps += spacer + '[' + unParse(pl[i]) + ']';
         }
         else {
-          ps += ' {' + unParseKeyValuePair(pl[i]) + ' }';
+          ps += spacer + '{' + unParseKeyValuePair(pl[i]) + '}';
         }
       }
       else {
-        ps += ' ' + pl[i];
+        ps += spacer + pl[i];
       }
+      spacer = ' ';
     }
     return ps;
   }
 
   function unParseKeyValuePair(pl) {
     let ps = '';
+    let spacer = '';
     for (let i in pl) {
       if (pl[i] && typeof pl[i] == "object") {
         if (isArray(pl[i])) {
-          ps += i + ':[' + unParse(pl[i]) + ']';
+          ps += spacer + i + ':[' + unParse(pl[i]) + ']';
         }
         else {
-          ps += i + ':{' + unParseKeyValuePair(pl[i]) + '}';
+          ps += spacer + i + ':{' + unParseKeyValuePair(pl[i]) + '}';
         }
       }
       else {
-        ps += ' ' + i + ':' + pl[i];
+        ps += spacer + i + ':' + pl[i];
       }
+      spacer = ' ';
     }
     return ps;
   }

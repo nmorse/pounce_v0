@@ -364,7 +364,7 @@
           try {
             this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
             this.vs = this.vs.map(e => {
-              if (pounce.isArray(e)) {
+              if (pounce.isArray(e) || typeof e === "object") {
                 return pounce.unParse([e]);
               } else {
                 return e;
