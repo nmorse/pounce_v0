@@ -464,16 +464,32 @@ var pounce = (function () {
     },
     'map': {
       'local-words': {
-        'map-aux': [['dup', 'list-length'], 'dip2', 'rolldown', 0, '>', ['rotate', 'pop', 'rolldown', 'dup', ['apply'], 'dip', ['swap'], 'dip2', ['prepend'], 'dip', 'swap', 'map-aux'],
-        [['drop', 'drop'], 'dip'], 'if-else']
+        'map-aux': [
+          ['dup', 'list-length'], 'dip2', 'rolldown', 0, '>', 
+          ['rotate', 'pop', 'rolldown', 'dup', ['apply'], 'dip', ['swap'], 'dip2', ['prepend'], 'dip', 'swap', 'map-aux'],
+          [['drop', 'drop'], 'dip'], 'if-else']
       },
       'definition': [[], 'map-aux']
     },
     'filter': {
       'local-words': {
-        'filt': [["dup", "list-length"], "dip2", "rolldown", 0, ">", ["rotate", "pop", "rolldown", ["dup"], "dip", "dup", ["apply"], "dip", "swap", [["swap"], "dip2", ["prepend"], "dip"], [["swap"], "dip2", ["drop"], "dip"], "if-else", "swap", "filt"], [["drop", "drop"], "dip"], "if-else"]
+        'filt': [
+          ["dup", "list-length"], "dip2", "rolldown", 0, ">", 
+          ["rotate", "pop", "rolldown", ["dup"], "dip", "dup", ["apply"], "dip", "swap", 
+            [["swap"], "dip2", ["prepend"], "dip"], 
+            [["swap"], "dip2", ["drop"], "dip"], "if-else", "swap", "filt"], 
+          [["drop", "drop"], "dip"], "if-else"]
       },
       'definition': [[], 'filt']
+    },
+    'reduce': {
+      'local-words': {
+        'more?': ['rolldown', 'dup', 'list-length', 0, '>', ['rollup'], 'dip'],
+        'process-reduce': ['more?', ['reduce1', 'process-reduce'], 'if'],
+        'reduce1': [['pop'], 'dip2', 'dup', ['apply'], 'dip'],
+        'finish-reduce': ['drop', ['drop'], 'dip'],
+      },
+      'definition': ['process-reduce', 'finish-reduce']
     }
   };
 
@@ -542,7 +558,7 @@ var pounce = (function () {
       }
     });
   }
-  
+
   function unParse(pl) {
     let ps = '';
     let spacer = '';
