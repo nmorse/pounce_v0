@@ -12,6 +12,7 @@
       ctx.fillStyle = 'white';
       ctx.lineWidth = 8;
       ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
       ctx.images = [];
       s.push(ctx);
       return [s];

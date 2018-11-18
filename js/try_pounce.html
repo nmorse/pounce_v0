@@ -99,7 +99,6 @@
   <div class="content-area" id="try_pounce">
     <div v-if="exampleDesc && !exampleGotIt" class="pop-over" v-html="exampleMarkdown"></div>
     <div class="row-container">
-      <canvas id="canvas" width="250" height="150"></canvas>
       <div class="stack-up">
         <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
           <option v-for="word in Object.keys(words)" v-bind:value="word">
@@ -112,6 +111,7 @@
         <div class="box" v-show="helpWordEffects">net stack effect: {{helpWordEffects}} </div>
         <div class="box" v-show="helpWordExpects">expects: {{helpWordExpects}} </div>
       </div>
+      <canvas id="canvas" width="250" height="150"></canvas>
     </div>
     <div class="col-container">
       <div class="row-container">
@@ -318,6 +318,36 @@
         }
         , "runPounceToCursor": function (e) {
           if (e && e.target) {
+            if (this.cursorAtWordEnd(e) && this.words[this.wordAtCursor(e)]) {
+              const animation1 = `
+              [[x set] dip y set] [pack] def
+ [y get [x get] dip] [unpack] def
+ pounce-animation cb-init cb-clear
+ 90 25 pack unpack cb-begin-path unpack [50 -] dip cb-line-to
+ 40 5 pack unpack cb-line-to 
+ unpack [10 +] dip 10 + cb-line-to 
+ 40 5  pack unpack cb-line-to
+ unpack [10 -] dip 10 + cb-line-to 
+ cb-end-path
+ drop `;
+              this.executePounceScript(animation1, true);
+
+            }
+            if (this.cursorAtWordEnd(e) && !this.words[this.wordAtCursor(e)]) {
+              const animUp = `
+              [[x set] dip y set] [pack] def
+ [y get [x get] dip] [unpack] def
+ pounce-animation cb-init cb-clear
+ 90 25 pack unpack cb-begin-path unpack [50 -] dip cb-line-to
+ 40 50 pack unpack cb-line-to 
+ unpack [10 +] dip 10 - cb-line-to 
+ 40 50  pack unpack cb-line-to
+ unpack [10 -] dip 10 - cb-line-to 
+ cb-end-path
+ drop `;
+              this.executePounceScript(animUp, true);
+
+            }
             if (this.cursorAtWordEnd(e) || /* its not a word */ !this.words[this.wordAtCursor(e)]) {
               // console.log('cursor a end of word: '+proceed);
               // console.log(e.target.selectionStart, e.target.selectionEnd);
@@ -356,12 +386,15 @@
           //this.focus();
           console.log('deadwood here?');
         }
-        , "executePounceScript": function (pounce_script) {
+        , "executePounceScript": function (pounce_script, noDebug = false) {
           if (this.scan_recall(pounce_script)) {
             return;
           }
           this.last_ps = pounce_script;
-          this.vs_history = this.debugMode ? [] : false;
+          const debug = (!noDebug && this.debugMode);
+          if (debug) {
+            this.vs_history = [];
+          }
           try {
             this.pl = Pounce_ast.parse(pounce_script+' ', { actions: parser_actions.parser_actions });
           }
@@ -370,7 +403,12 @@
             console.log(syntax_error.message);
           }
           try {
-            this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
+            if (debug) {
+              this.vs = pounce.run(this.pl, [], [pounce.words], this.vs_history).reverse();
+            }
+            else {
+              this.vs = pounce.run(this.pl, [], [pounce.words], false).reverse();
+            }
             this.vs = this.vs.map(e => {
               if (pounce.isArray(e) || typeof e === "object") {
                 return pounce.unParse([e]);
