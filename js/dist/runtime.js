@@ -589,18 +589,20 @@ var pounce = (function () {
     let ps = '';
     let spacer = '';
     for (let i in pl) {
-      if (pl[i] && typeof pl[i] == "object") {
-        if (isArray(pl[i])) {
-          ps += spacer + i + ':[' + unParse(pl[i]) + ']';
+      if (pl.hasOwnProperty(i)) {
+        if (pl[i] && typeof pl[i] == "object") {
+          if (isArray(pl[i])) {
+            ps += spacer + i + ':[' + unParse(pl[i]) + ']';
+          }
+          else {
+            ps += spacer + i + ':{' + unParseKeyValuePair(pl[i]) + '}';
+          }
         }
         else {
-          ps += spacer + i + ':{' + unParseKeyValuePair(pl[i]) + '}';
+          ps += spacer + i + ':' + pl[i];
         }
+        spacer = ' ';
       }
-      else {
-        ps += spacer + i + ':' + pl[i];
-      }
-      spacer = ' ';
     }
     return ps;
   }
