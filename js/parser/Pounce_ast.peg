@@ -4,7 +4,7 @@ grammar Pounce_ast
   pounce_empty  <- ws*                              %make_pounce_empty
 
   word    <-  [a-zA-Z0-9\_\-\+\=\/\~\!\@\$\%\^\&\*\?\<\>]+ [a-zA-Z0-9\_\-\+\=\/\~\!\@\#\$\%\^\&\*\?\.\<\>]* %make_word
-  value   <-  list / number / word / string / map
+  value   <-  list / word / number / string / map
 
   map     <-  "{" ws* pair? (ws*  ws* pair)* ws* "}" %make_map
   pair    <-  word ws* ":" ws* value                %make_pair
@@ -17,7 +17,7 @@ grammar Pounce_ast
 
   list        <-  list_empty / list_full
   list_empty  <-  "[" ws* "]"                         %make_list_empty
-  list_full   <-  "[" ws* value (ws+ value)* ws* "]"  %make_list
+  list_full   <-  "[" ws* value (ws* value)* ws* "]"  %make_list
 
   number    <-  float1 / float2 / float3 / integer
   float1    <-  "-"? [0-9]+ "." [0-9]+   %make_float

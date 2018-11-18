@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var extend = function (destination, source) {
+  var extend = function(destination, source) {
     if (!destination || !source) return destination;
     for (var key in source) {
       if (destination[key] !== source[key])
@@ -10,7 +10,7 @@
     return destination;
   };
 
-  var formatError = function (input, offset, expected) {
+  var formatError = function(input, offset, expected) {
     var lines = input.split(/\n/g),
         lineNo = 0,
         position = 0;
@@ -32,7 +32,7 @@
     return message + '^';
   };
 
-  var inherit = function (subclass, parent) {
+  var inherit = function(subclass, parent) {
     var chain = function() {};
     chain.prototype = parent.prototype;
     subclass.prototype = new chain();

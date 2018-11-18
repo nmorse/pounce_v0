@@ -182,6 +182,14 @@
 
 
   <script>
+    window.addEventListener("beforeunload", function (event) {
+      // Cancel the event as stated by the standard.
+      alert(try_pounce.ps);
+      event.preventDefault();
+      // Chrome requires returnValue to be set.
+      event.returnValue = '';
+    });
+
     // load in the canvas_basic words...
     pounce.words = Object.assign(canvas_basic_module.words, pounce.words);
 
