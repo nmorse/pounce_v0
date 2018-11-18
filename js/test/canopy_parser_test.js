@@ -18,7 +18,7 @@
     ['abc def eee ', ['abc', 'def', 'eee']],
     [' abc def  eee ', ['abc', 'def', 'eee']],
     ['"abc def" "123 456"', ['"abc def"', '"123 456"']],
-    ['abc "def" "123 " 456', ['abc', '"def"', '"123 "', 456]],
+    ['abc "def" "123 " 456 ', ['abc', '"def"', '"123 "', 456]],
     ['5.5 2.1 + 456', [5.5, 2.1, '+', 456]],
     ['[5.5 2.1] .456 +', [[5.5, 2.1], 0.456, '+']],
     ['[[5.5 2.1] [1 2 3]] .456 +', [[[5.5, 2.1], [1, 2, 3]], 0.456, '+']],
@@ -44,7 +44,7 @@
     ['.0', [0]],
     ['0.', [0]],
     ['.0..', ['SyntaxError']],
-    ['5...', ['SyntaxError']],
+    ['5...', ['5...']],
     ['5.', [5]],
     ['.5', [0.5]],
     ['t.t', ['t.t']],
@@ -215,7 +215,7 @@
         //console.log('starting parse test for: ', ps);
         // old parser // const result_pl = pounce.parse(ps);
         try {
-          result_pl = Pounce_ast.parse(ps, {actions: parser_actions});
+          result_pl = Pounce_ast.parse(ps+' ', {actions: parser_actions});
         }
         catch(syntax_error) {
           if (expected_stack && expected_stack[0] && expected_stack[0] !== 'SyntaxError') {
@@ -227,7 +227,7 @@
         if (!deepCompare(result_pl, expected_stack)) {
             testsFailed += 1;
             console.log(result_pl, ' expected:', expected_stack);
-            console.log('---- Failed parse test for: ', ps);
+            console.log('---- Failed parse test for: ', '`'+ps+'`' );
             parser_tests[i][2] = false;
             parser_tests[i][3] = result_pl;
         }

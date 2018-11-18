@@ -363,7 +363,7 @@
           this.last_ps = pounce_script;
           this.vs_history = this.debugMode ? [] : false;
           try {
-            this.pl = Pounce_ast.parse(pounce_script, { actions: parser_actions.parser_actions });
+            this.pl = Pounce_ast.parse(pounce_script+' ', { actions: parser_actions.parser_actions });
           }
           catch (syntax_error) {
             console.log(syntax_error.stack);
@@ -386,7 +386,7 @@
         }
         , 'scan_recall': function (ps) {
           if (ps.indexOf(' recall') >= 1) {
-            const pl = Pounce_ast.parse(ps);
+            const pl = Pounce_ast.parse(ps+' ', { actions: parser_actions.parser_actions });
             if (pl.length === 2) {
               let key = pl[0][0];
               this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';
