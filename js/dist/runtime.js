@@ -61,6 +61,20 @@ var pounce = (function () {
         return [s];
       }
     },
+    'import': {
+      definition: function (s, pl, wordstack) {
+        const importable = s.pop();
+        if (typeof importable === 'string') {
+          // given a path to a dictionary...
+          wordstack.push(window[importable].words);
+          //Object.assign(window[importable].words, wordstack[0]);
+        } else {
+          // given a dictionary
+          wordstack.push(importable);
+        }
+        return [s];
+      }
+    },
     'push': {
       expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an item', ofType: 'any' }], effects: [-1], tests: [], desc: 'push an item on end of a list',
       definition: function (s) {

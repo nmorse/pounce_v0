@@ -27,7 +27,8 @@ const examples = [
 ['rock paper scissors rotate',{summary:'rotate', desc:'To rearranging three items on the stack, you can use `rollup`, `rolldown` and `rotate`', level:6, tutorial:'rearrange the stack'}],
 ['10 20 30 40 2 bubble-up',{summary:'define your own stack changing words', desc:'To rearranging the stack your own way, you may write your own words, like this bubble-up', level:8, tutorial:'rearrange the stack'}],
 [
-`canvas cb-init cb-clear
+`canvas_basic_module import
+canvas cb-init cb-clear
 4 7 30 112 cb-line
 59 122 130 99 cb-line
 {color:{r:64 g:0 b:255 a:0.5} x:30 y:40 w:60 h:40} cb-box
@@ -35,7 +36,8 @@ const examples = [
 drop
 `,{summary:'Draw some shapes', desc:'Draws lines and rectangles on the canvas as a drawing demo', level:1, tutorial:'some I/O'}],
 [
-`canvas cb-init cb-clear
+`canvas_basic_module import
+canvas cb-init cb-clear
 30 45 cb-begin-path
 50 60 cb-line-to
 100 10 cb-line-to
@@ -43,7 +45,8 @@ cb-end-path
 drop
 `, {summary:'Draw a check-mark', desc:'Draws a line on the canvas', level:2, tutorial:'some I/O'}],
 [
-`[[x set] dip y set] [pack] def
+`canvas_basic_module import
+[[x set] dip y set] [pack] def
 [y get [x get] dip] [unpack] def
 canvas cb-init cb-clear
 30 45 pack unpack cb-begin-path unpack [20 +] dip 20 + cb-line-to
@@ -51,7 +54,8 @@ canvas cb-init cb-clear
 drop
 `, {summary:'Turtle Graphics', desc:'Draws a line, relative to possition', level:3, tutorial:'some I/O'}],
 [
-`canvas cb-init cb-clear
+`canvas_basic_module import
+canvas cb-init cb-clear
 images/pounce-cat1.png cb-load-image
 `, {summary:'Image on the canvas', desc:'Draws an image on the canvas', level:4, tutorial:'some I/O'}],
 [
