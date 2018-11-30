@@ -65,8 +65,12 @@ var pounce = (function () {
       definition: function (s, pl, wordstack) {
         const importable = s.pop();
         if (typeof importable === 'string') {
-          // given a path to a dictionary...
-          wordstack.push(window[importable].words);
+          // given a path to a dictionary load it or fetch and load
+          if (window[importable]) {
+            wordstack.push(window[importable].words);
+          } else {
+            console.log('TBD: code to load resourse:', importable)
+          }
           //Object.assign(window[importable].words, wordstack[0]);
         } else {
           // given a dictionary
