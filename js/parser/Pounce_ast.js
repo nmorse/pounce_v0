@@ -2212,7 +2212,7 @@
       if (address1 !== FAILURE) {
         elements0[0] = address1;
         var address2 = FAILURE;
-        var remaining0 = 1, index2 = this._offset, elements1 = [], address3 = true;
+        var remaining0 = 0, index2 = this._offset, elements1 = [], address3 = true;
         while (address3 !== FAILURE) {
           var chunk1 = null;
           if (this._offset < this._inputSize) {

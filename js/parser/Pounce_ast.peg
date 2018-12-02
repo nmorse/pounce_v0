@@ -35,7 +35,7 @@ grammar Pounce_ast
   newline1  <-  [\r]  %make_ws
   newline2  <-  [\n]  %make_ws
 
-  comment <- "#" [^\n]+
+  comment <- "#" [^\n]*
   end_of_string <- [$]   %make_ws
 
 # # # # tried many interations of a blacklist word definition rules # # # #
