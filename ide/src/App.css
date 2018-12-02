@@ -1,0 +1,65 @@
+
+
+.App-logo {
+  animation: App-logo-spin infinite 2s linear;
+  height: 10vmin;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 20vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(60deg);
+  }
+}
+
+.pounce-phrase-row {
+  padding: 3px;
+  margin: 2px;
+  background-color: rgb(226, 226, 226);
+}
+.pounce-word {
+  padding: 3px;
+  margin: 2px;
+}
+
+.col-container {
+  display: flex;
+  flex-flow: column wrap;
+}
+.stack-up {
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: column-reverse wrap;
+  align-content: flex-end;
+}
+.stack-down {
+  display: flex;
+  flex-wrap: wrap;
+  flex-flow: column;
+  align-content: flex-start;
+}
+.row-container {
+  display: flex;
+  flex-flow: row nowrap;
+  overflow-x: auto;
+}
+.scroll {
+   overflow-x: scroll;
+}
