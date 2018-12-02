@@ -322,6 +322,7 @@
               const animation1 = `
               [[x set] dip y set] [pack] def
  [y get [x get] dip] [unpack] def
+ canvas_basic_module import
  pounce-animation cb-init cb-clear
  90 25 pack unpack cb-begin-path unpack [50 -] dip cb-line-to
  40 5 pack unpack cb-line-to 
@@ -337,6 +338,7 @@
               const animUp = `
               [[x set] dip y set] [pack] def
  [y get [x get] dip] [unpack] def
+ canvas_basic_module import
  pounce-animation cb-init cb-clear
  90 25 pack unpack cb-begin-path unpack [50 -] dip cb-line-to
  40 50 pack unpack cb-line-to 
