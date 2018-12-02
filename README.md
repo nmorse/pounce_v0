@@ -39,3 +39,7 @@ Future development could include assemblers and compilers, to improve efficiency
  
 ## Getting started...
 First try Pounce in your browser to get a feel for the concatenative style of programming. The examples in the toutorial will help you start off small and then move into making larger applications. https://nmorse.github.io/pounce/js/try_pounce.html -- enjoy
+
+## Copyright & License
+Copyright © 2018 Nate Morse.
+Distributed under the MIT License (see [LICENSE](./LICENSE)).
