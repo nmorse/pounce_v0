@@ -383,8 +383,8 @@ var pounce = (function () {
       expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }], effects: [0], tests: [], desc: 'get the value of a property from a record',
       definition: function (s) {
         const key = s.pop();
-        const rec = cloneItem(s[s.length - 1]);
-        s.push(rec[key])
+        const rec = s[s.length - 1];
+        s.push(cloneItem(rec[key]));
         return [s];
       }
     },
@@ -394,7 +394,37 @@ var pounce = (function () {
         const key = s.pop();
         const value = s.pop();
         let rec = s[s.length - 1];
-        rec[key] = value;
+        rec[key] = cloneItem(value);
+        return [s];
+      }
+    },
+    'get*': {
+      expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }], effects: [0], tests: [], desc: 'get the value of a property from a record',
+      definition: function (s) {
+        const key = s.pop();
+        let i = s.length - 1;
+        while (i >= 0 && !isObject(s[i])) {
+          i--;
+        }
+        if (i >= 0 && isObject(s[i])) {
+          const rec = s[i];
+          s.push(cloneItem(rec[key]));
+        }
+        return [s];
+      }
+    },
+    'set*': {
+      expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }, { desc: 'value', ofType: 'any' }], effects: [-2], tests: [], desc: 'set the value of a property in a record',
+      definition: function (s) {
+        const key = s.pop();
+        const value = s.pop();
+        let i = s.length - 1;
+        while (i >= 0 && !isObject(s[i])) {
+          i--;
+        }
+        if (i >= 0 && isObject(s[i])) {
+          s[i][key] = cloneItem(value);
+        }
         return [s];
       }
     },
@@ -567,6 +597,10 @@ var pounce = (function () {
 
   function isArray(candidate) {
     return Array.isArray(candidate);
+  }
+
+  function isObject(candidate) {
+    return (typeof candidate === 'object' && !isArray(candidate));
   }
 
   function isNumber(value) {
