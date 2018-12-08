@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html>
-
 <head>
   <script src="dist/runtime.js"></script>
   <script src="modules/str-module.js"></script>
-  <script src="modules/canvas-basic-module.js"></script>
+  <script src="modules/list_module.js"></script>
+  <script src="modules/canvas_basic_module.js"></script>
 
   <script src="parser/Pounce_ast.js"></script>
   <script src="parser/Pounce_ast_actions.js"></script>
@@ -190,9 +191,6 @@
       event.returnValue = '';
     });
 
-    // load in the canvas_basic words...
-    //pounce.words = Object.assign(canvas_basic_module.words, pounce.words);
-
     function loadExample(s, desc) {
       try_pounce.ps = s;
       try_pounce.runPounce();
@@ -319,7 +317,7 @@
         , "runPounceToCursor": function (e) {
           if (e && e.target) {
             if (this.cursorAtWordEnd(e) && this.words[this.wordAtCursor(e)]) {
-              const animation1 = `
+              const animation1 = `list_module import 
               [[x set] dip y set] [pack] def
  [y get [x get] dip] [unpack] def
  canvas_basic_module import
@@ -335,7 +333,7 @@
 
             }
             if (this.cursorAtWordEnd(e) && !this.words[this.wordAtCursor(e)]) {
-              const animUp = `
+              const animUp = `list_module import 
               [[x set] dip y set] [pack] def
  [y get [x get] dip] [unpack] def
  canvas_basic_module import
@@ -401,8 +399,10 @@
             this.pl = Pounce_ast.parse(pounce_script+' ', { actions: parser_actions.parser_actions });
           }
           catch (syntax_error) {
-            console.log(syntax_error.stack);
+            // console.log(syntax_error);
             console.log(syntax_error.message);
+            // console.log(syntax_error.stack);
+            return;
           }
           try {
             if (debug) {

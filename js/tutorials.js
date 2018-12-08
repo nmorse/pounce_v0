@@ -13,7 +13,7 @@ const examples = [
   A word about 'words': Words are the basic unit of programming Pounce. In Pounce, words can be data or functions, but we thought you should know that everything in the Pounce language is refered to as a word.Its a "Noun then Verb" pattern
   `, tutorial: 'introduction', level:3}],
   
-['"hello " "world" str-append', {summary:'Working with strings', desc:'"hello world", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'hello world', level:1}],
+['"hello " "world!" str-append', {summary:'Working with strings', desc:'"hello world!", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'hello world', level:1}],
 ['`a` \'b\' "c" d str-append str-append str-append', {summary:'Strings can be quoted or words with no spaces can be strings as well.', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack.', tutorial: 'hello world', level:2}],
 ['2 3 +', {summary:'Sum of two numbers', desc:'the operator \'+\' (for addition) comes after the two numbers being added.', level: 1, tutorial: 'calculate'}],
 ['2 3 *', {summary:'same for multiplication', desc:'the \'*\' is placed after the two numbers to be multiplied.', level: 2, tutorial: 'calculate'}],
@@ -58,10 +58,10 @@ drop
 canvas cb-init cb-clear
 images/pounce-cat1.png cb-load-image
 `, {summary:'Image on the canvas', desc:'Draws an image on the canvas', level:4, tutorial:'some I/O'}],
-[
-`[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
+[`list_module import
+[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] 8 repeat`, {summary:'define a word "repeat" and use it to fill an array', desc:'', level:1, tutorial:'your own words'}],
-[`
+[`list_module import
 {desc:'Prime factors of a number'
 local-words:{
  package:[{n:2 f:[]} swap check-integer p set] # builds {n:2 f:[] p:210}
@@ -79,7 +79,8 @@ definition:[package factorize clean-up]
 } [factor] define
 210 factor
 `, {summary:'find the prime factors of a number', desc:'', level:2, tutorial:'your own words'}],
-[`[[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
+[`list_module import
+[[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
 4 [15] 6 dup3
 [4 push] dip`, {summary:'duplicate 3', desc:`
 ## Duplicate the top 3 items on the stack

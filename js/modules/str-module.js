@@ -52,7 +52,7 @@
       ], desc: 'lenth of a string',
       definition: function(stack) {
       const ud = un_decorate_string(stack.pop());
-      stack.push(ud.str.length);
+      if (ud && typeof ud.str === 'string') { stack.push(ud.str.length); }
       return [stack];
     }},
     'str-append': {expects: [{desc: 'source 1', ofType: 'string'}, {desc: 'source 2', ofType: 'string'}], effects:[-1], tests: [

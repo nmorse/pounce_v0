@@ -81,63 +81,6 @@ var pounce = (function () {
         return [s];
       }
     },
-    'push': {
-      expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an item', ofType: 'any' }], effects: [-1], tests: [], desc: 'push an item on end of a list',
-      definition: function (s) {
-        const item = s.pop();
-        const top = s.length - 1;
-        const list = s[top];
-        list.push(item);
-        return [s];
-      }
-    },
-    'prepend': {
-      expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an item', ofType: 'any' }], effects: [-1], tests: [
-        [`[6 7] 5 prepend`, [[5, 6, 7]]]
-      ], desc: 'push an item on end of a list',
-      definition: function (s) {
-        const item = s.pop();
-        const top = s.length - 1;
-        const list = s[top];
-        list.unshift(item);
-        return [s];
-      }
-    },
-    'pop': {
-      expects: [{ desc: 'a', ofType: 'list' }], effects: [1], tests: [], desc: 'pop the last item off the end of a list',
-      definition: function (s) {
-        const top = s.length - 1;
-        const list = s[top];
-        if (isArray(list)) {
-          const item = cloneItem(list.pop());
-          s.push(item);
-        }
-        else {
-          console.log({ 'word': 'pop', 'error': "unable to 'pop' from non-Array" });
-        }
-        return [s];
-      }
-    },
-    'list-length': {
-      expects: [{ desc: 'source', ofType: 'list' }], effects: [0], tests: [
-        [`[1 2 3] str-length`, [3]]
-      ], desc: 'lenth of a list',
-      definition: function (s) {
-        const list = s.pop();
-        s.push(list.length);
-        return [s];
-      }
-    },
-    'cons': {
-      expects: [{ desc: 'an item', ofType: 'any' }, { desc: 'a', ofType: 'list' }], effects: [-1], tests: [], desc: 'add an item at the begining of a list',
-      definition: function (s) {
-        const list = s.pop();
-        const item = s.pop();
-        list.unshift(item);
-        s.push(list);
-        return [s];
-      }
-    },
     'apply': {
       expects: [{ desc: 'a runable', ofType: 'list' }], effects: [-1], tests: [], desc: 'run the contents of a list',
       definition: function (s, pl) {
@@ -386,7 +329,7 @@ var pounce = (function () {
       definition: function (s) {
         const key = s.pop();
         const rec = s[s.length - 1];
-        s.push(cloneItem(rec[key]));
+        if (rec) { s.push(cloneItem(rec[key])); }
         return [s];
       }
     },
@@ -396,7 +339,7 @@ var pounce = (function () {
         const key = s.pop();
         const value = s.pop();
         let rec = s[s.length - 1];
-        rec[key] = cloneItem(value);
+        if (rec) { rec[key] = cloneItem(value); }
         return [s];
       }
     },
@@ -520,7 +463,7 @@ var pounce = (function () {
           ['rotate', 'pop', 'rolldown', 'dup', ['apply'], 'dip', ['swap'], 'dip2', ['prepend'], 'dip', 'swap', 'process-map'],
           [['drop', 'drop'], 'dip'], 'if-else']
       },
-      'definition': ['setup-map', 'process-map']
+      'definition': ['list_module', 'import', 'setup-map', 'process-map']
     },
     'filter': {
       'local-words': {
@@ -532,7 +475,7 @@ var pounce = (function () {
             [["swap"], "dip2", ["drop"], "dip"], "if-else", "swap", "process-filter"],
           [["drop", "drop"], "dip"], "if-else"]
       },
-      'definition': ['setup-filter', 'process-filter']
+      'definition': ['list_module', 'import', 'setup-filter', 'process-filter']
     },
     'reduce': {
       'local-words': {
@@ -541,7 +484,7 @@ var pounce = (function () {
         'reduce-step': [['pop'], 'dip2', 'dup', ['apply'], 'dip'],
         'teardown-reduce': ['drop', ['drop'], 'dip'],
       },
-      'definition': ['process-reduce', 'teardown-reduce']
+      'definition': ['list_module', 'import', 'process-reduce', 'teardown-reduce']
     }
   };
 
@@ -751,7 +694,7 @@ var pounce = (function () {
       }
 
     , isArray: isArray
-
+    , cloneItem: cloneItem
     , isNumber: isNumber
 
     // move to parse lib??

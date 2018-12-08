@@ -22,7 +22,8 @@
         ['alpha {beta:b alpha:a} case', ['a']],
         ['0 {0:[wow] +:[555]} case', [['wow']]],
         ['[+] {0:[wow] +:[555]} case', [[555]]],
-        [`t {j:9 d:8 t:{s:" " g:[1 2 {a:3 b:4}]}} case g swap case pop a swap case`, [[1,2],3]],
+        [`list_module import
+        t {j:9 d:8 t:{s:" " g:[1 2 {a:3 b:4}]}} case g swap case pop a swap case`, [[1, 2], 3]],
         ['c {a:A b:B} case', [false]],
         ['2 6 dup2', [2, 6, 2, 6]],
         ['abc str-last', ['ab', 'c']],
@@ -30,11 +31,11 @@
         ["'abc ' str-first", ["'bc '", "a"]],
         ['abcdef str-length', [6]],
         ['"1a1" str-length', [3]],
-        ['[a 1] 3 push', [['a', 1, 3]]],
-        ['[a 1] dup 3 push', [['a', 1], ['a', 1, 3]]],
-        ['[a 1 3] pop', [['a', 1], 3]],
-        ['[] str-length', [0]],
-        ['[[]] str-length', [1]],
+        ['list_module import [a 1] 3 push', [['a', 1, 3]]],
+        ['list_module import [a 1] dup 3 push', [['a', 1], ['a', 1, 3]]],
+        ['list_module import [a 1 3] pop', [['a', 1], 3]],
+        ['list_module import [] list-length', [0]],
+        ['list_module import [[]] list-length', [1]],
         ['7 [dup +] apply', [14]],
         ['[B] [A] dip', ['A', ['B']]],
         ['[C] [B] [A] dip2', ['A', ['C'], ['B']]],
@@ -49,26 +50,18 @@
         ['{a:5 b:3} b get', [{ 'a': 5, 'b': 3 }, 3]],
         ['{a:5 b:3} b get 8 + a set', [{ 'a': 11, 'b': 3 }]],
         ['{a:5 b:3} dup b get 8 + a set', [{ 'a': 5, 'b': 3 }, { 'a': 11, 'b': 3 }]],
-        ['{a:{b:[1 2 3]}} dup a get b get 4 push b set a set', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3, 4] } }]],
-        ['{a:{b:[1 2 3]}} dup a get b get 4 push', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3] } }, { 'b': [1, 2, 3] }, [1, 2, 3, 4]]],
-        ['[ rel-x get [ rel-y get] dip [] swap push swap push] [get-rel-vec] def', []],
-        ['[{rel-x:12 rel-y:-2}] [mouse-move-sim] def', []],
-        ['[[pop swap] [dup str-length] dip swap repeat drop] [pop-all] def', []],
-        ['mouse-move-sim get-rel-vec pop-all', [{ 'rel-x': 12, 'rel-y': -2 }, -2, 12]],
-        ['0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply', [1, 1, [1]]],
+        ['list_module import {a:{b:[1 2 3]}} dup a get b get 4 push b set a set', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3, 4] } }]],
+        ['list_module import {a:{b:[1 2 3]}} dup a get b get 4 push', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3] } }, { 'b': [1, 2, 3] }, [1, 2, 3, 4]]],
+        [`list_module import
+        [ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
+         [ rel-x get [ rel-y get] dip [] swap push swap push] [get-rel-vec] def
+         [{rel-x:12 rel-y:-2}] [mouse-move-sim] def
+         [[pop swap] [dup list-length] dip swap repeat drop] [pop-all] def
+         mouse-move-sim get-rel-vec pop-all`, [{ 'rel-x': 12, 'rel-y': -2 }, -2, 12]],
+        ['list_module import 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply', [1, 1, [1]]],
         ['[true] [true] [false] ifte', ["true"]],
-        [`{
-   local-words:{
-    map-repeat: [dup 0 > [1 - swap dup dip2 swap map-repeat] [drop drop drop r get [drop] dip] if-else ]
-    map-package: [{} swap f set swap o set [] r set]
-   }
-   definition:[map-package
-    [o get dup str-length 0 > [pop [f get] dip2 2 bubble-up apply [o set] dip [r get ] dip prepend r set] if]
-    [dup [apply] dip] [o get str-length] dip2 2 bubble-up map-repeat
-   ]
-  } [map] define
-  [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
-        ['[5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[[5, true], [4, false], [3, false]]]],
+        [`[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
+        ['list_module import [5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[[5, true], [4, false], [3, false]]]],
         ['[1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
         ['[1 2 3 4 5 6] [3 >] filter', [[4, 5, 6]]]
     ];
@@ -82,7 +75,7 @@
             const expected_stack = test[1];
 
             //console.log('starting parse test for: ', ps);
-            const result_pl = pounce.run(Pounce_ast.parse(ps+' ', { actions: parser_actions }), [], [pounce.words]);
+            const result_pl = pounce.run(Pounce_ast.parse(ps + ' ', { actions: parser_actions }), [], [pounce.words]);
             RTtestCount += 1;
             if (!deepCompare(result_pl, expected_stack)) {
                 RTtestsFailed += 1;
