@@ -1,7 +1,7 @@
 
 # Pounce, a concatenative programming language
 Pounce is a programming language that targets the Browser, Server and IoT.
-The aim of Pounce is to encourage programmers to try a stack-based, __conatenative__ programming. Since Pounce works in the browser, you can try it out easily (with zero installation). A [Toutorial](https://nmorse.github.io/pounce/js/try_pounce.html) is being developed to teach 'pounce' to anyone interested. If you end up liking this style of programming, you may also try out other Pounce interpreters tht will be written in Python, C (maybe Nim) (still in development at this time) or check out [purr](https://github.com/bbqbaron/purr) written in Clojure.
+The aim of Pounce is to encourage programmers to try a stack-based, __conatenative__ programming. Since Pounce works in the browser, you can try it out easily (with zero installation). A [Toutorial](https://nmorse.github.io/pounce/js/try_pounce.html) is being developed to teach 'pounce' to anyone interested. If you end up liking this style of programming, you may also try out other Pounce interpreters that will be written in Python, C (or ReasonML, Nim, ...) (still in development at this time) or check out [purr](https://github.com/bbqbaron/purr) written in Clojure.
 
 _disclaimer_
 Pounce is currently in an Alpha development phase, so it's not production ready, but the core is fairly stable. Look for updates on development posted here.
