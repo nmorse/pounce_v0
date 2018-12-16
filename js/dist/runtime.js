@@ -55,6 +55,18 @@ var pounce = (function () {
         return [s];
       }
     },
+    'local-def': {
+      expects: [{ ofType: 'list', desc: 'composition of words' }, { ofType: 'list', desc: 'name of this new word' }], effects: [-2], tests: [], desc: 'defines a local word',
+      definition: function (s, pl, wordstack) {
+        const top = wordstack.length - 1;
+        if (top > 0) {
+          const key = s.pop();
+          const definition = s.pop();
+          wordstack[top][key] = definition;
+        }
+        return [s];
+      }
+    },
     'internal=>drop-local-words': {
       definition: function (s, pl, wordstack) {
         wordstack.pop();
@@ -645,9 +657,18 @@ var pounce = (function () {
               if (record_histrory !== false && !isInternalWord(term)) {
                 record_histrory.unshift({ stack: cloneItem(cleanQuotedItems(stack)).reverse(), term: term, pl: ixnay(cloneItem(cleanQuotedItems(pl)).reverse()) });
               }
-              if (thisWord['local-words']) {
-                wordstack.push(thisWord['local-words']);
-                pl = thisWord.definition.concat(['internal=>drop-local-words']).concat(pl);
+              if (thisWord['local-words'] || thisWord['named-args']) {
+                if (thisWord['local-words']) {
+                  wordstack.push(thisWord['local-words']);
+                  pl = thisWord.definition.concat(['internal=>drop-local-words']).concat(pl);
+                }
+                if (thisWord['named-args'] && isArray(thisWord['named-args'])) {
+                  const top = wordstack.length - 1;
+                  for (let var_name of thisWord['named-args']) {
+                    // [] swap push [c] local-def
+                    pl = [[], 'swap', 'push', [var_name], 'local-def'].concat(pl);
+                  }
+                }
               }
               else {
                 // console.log('unquote definition list ', stack, term, pl);

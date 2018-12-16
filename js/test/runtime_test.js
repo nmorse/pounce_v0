@@ -63,7 +63,25 @@
         [`[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
         ['list_module import [5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[[5, true], [4, false], [3, false]]]],
         ['[1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
-        ['[1 2 3 4 5 6] [3 >] filter', [[4, 5, 6]]]
+        ['[1 2 3 4 5 6] [3 >] filter', [[4, 5, 6]]],
+        [
+`list_module import
+{
+ named-args:[a b]
+ local-words:{}
+ definition:[a b /]
+} [test-named_args] define
+# test of named_args
+3 4 test-named_args`, [0.75]],
+        [`list_module import
+str_module import
+{named-args:[a b]
+ local-words:{see-arg:[dup apply swap pop swap drop ' is ' str-append swap str-append]}
+ definition:[[a] see-arg [b] see-arg]
+} [test-named_args] define
+# test of named_args
+[4 5] {a:x} test-named_args
+`, ['a is [4 5]', 'b is {a:x}']]
     ];
 
     var runtime_test = function (Pounce_ast, parser_actions) {
