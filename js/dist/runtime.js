@@ -169,7 +169,7 @@ var pounce = (function () {
     },
     'dup2': {
       expects: [{ desc: 'some item', ofType: 'any' }, { desc: 'another item', ofType: 'any' }], effects: [2], tests: [], desc: 'duplicate the top two elements on the stack',
-      definition: [[dup] dip dup [swap] dip]
+      definition: [['dup'], 'dip', 'dup', ['swap'], 'dip']
       //function (s) {
       //  const top = s.length - 1;
       //  const a = cloneItem(s[top]);
