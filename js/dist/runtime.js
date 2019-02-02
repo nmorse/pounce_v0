@@ -169,13 +169,14 @@ var pounce = (function () {
     },
     'dup2': {
       expects: [{ desc: 'some item', ofType: 'any' }, { desc: 'another item', ofType: 'any' }], effects: [2], tests: [], desc: 'duplicate the top two elements on the stack',
-      definition: function (s) {
-        const top = s.length - 1;
-        const a = cloneItem(s[top]);
-        const b = cloneItem(s[top - 1]);
-        s.push(b, a);
-        return [s];
-      }
+      definition: [[dup] dip dup [swap] dip]
+      //function (s) {
+      //  const top = s.length - 1;
+      //  const a = cloneItem(s[top]);
+      //  const b = cloneItem(s[top - 1]);
+      //  s.push(b, a);
+      //  return [s];
+      //}
     },
     'swap': {
       expects: [{ desc: 'some item', ofType: 'any' }, { desc: 'another item', ofType: 'any' }], effects: [0], tests: [], desc: 'swap the top two elements on the stack',
