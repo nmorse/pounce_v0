@@ -1,81 +1,53 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { useState } from "react";
+// import { ReactDOM } from "react-dom";
+import "./App.css";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <p>
-            Pounce IDE
-          </p>
-        </header>
-        <Phrase />
-      </div>
-    );
-  }
-}
-
-// a Pounce Phrase
-class Phrase extends Component {
-  state = { };
-  constructor(props) {
-    super(props);
-    this.state = {
-      editing: false,
-      words: [['+', 'dup2'], '[fib]', 'def', '0', '1', ['fib'], '6', 'repeat']
+function Word({ word, words, offset }) {
+    const [state, setState] = useState({isExpanded:false, offset});
+    const toggleExpand = e => {e.preventDefault(); setState({isExpanded: !state.isExpanded})};
+    const getOffset = () => { 
+        const tooltipNode = React.useRef(this);
+        return [tooltipNode.offsetTop + offset[0],
+        tooltipNode.offsetLeft + offset[1]];
     };
-  }
-
-  getColor(i) {
-    const w = this.state.words[i];
-    if (Array.isArray(w)) {
-      return 'rgb(100,200,200,0.4)';
-    }
-    return (w === 'def' || w === 'repeat')? 'rgb(200,200,100,0.4)': 'rgb(200,100,200,0.4)';
-  }
-
-  getWord(i) {
-    const w = this.state.words[i];
-    if (Array.isArray(w)) {
-      return '[' + w.join(' ') + ']';
-    }
-    else {
-      return w;
-    }
-  }
-
-  renderWordRow() {
-    let dynamic_words = [];
-    const start_index = 0;
-    const end_index = this.state.words.length;
-    for (let word_index = start_index; word_index < end_index; word_index++) {
-      dynamic_words.push(<Word key={word_index} color={this.getColor(word_index)} word={this.getWord(word_index)} />);
-    }
-    return (
-      <div className="pounce-phrase-row row-container">
-        {dynamic_words}
-      </div>
+    // const style = {
+    //     // zIndex: (state.opacity) ? 1000 : -1000,
+    //     // opacity: +state.opacity,
+    //     // position: 'relative',
+    //     top: (getOffset()[0] || 0) + 70,
+    //     left: (getOffset()[1] || 0) + 90
+    //   };
+return (
+        <div className="pounce-word row-container"  onClick={toggleExpand} >
+            {state.isExpanded && words[word] &&  words[word].map((w, i) => 
+                <Word word={w} words={words} key={i} offset={[50,0]} />
+            )}
+            {word}
+        </div>
     );
-  }
-
-  render() {
-    return (
-      <div >
-        {this.renderWordRow()}
-      </div>
-    );
-  }
 }
 
-// A graphic representation of a Pounce word
-function Word(props) {
-  return (
-    <div className="pounce-word"
-      style={{ backgroundColor: props.color }}>
-      {props.word}
-    </div>
-  );
+
+function App() {
+    const words = {"is":["a", "is", "c"]};
+    const [pl] = useState([
+        "this", "is", "a"  // , ["list", "of", "words"]
+    ]);
+
+    return (
+        <div className="app">
+            <div className="pounce-phrase-row row-container">
+                {pl.map((word, index) => (
+                    <Word
+                        key={index}
+                        word={word}
+                        words={words}
+                        offset={[0,0]}
+                    />
+                ))}
+            </div>
+        </div>
+    );
 }
 
 export default App;
