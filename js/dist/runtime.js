@@ -468,6 +468,26 @@ var pounce = (function () {
       expects: [{ desc: 'a', ofType: 'any' }, { desc: 'b', ofType: 'any' }, { desc: 'c', ofType: 'any' }], effects: [0], tests: ['A B C rotate', ['C', 'B', 'A']], desc: 'inverts the order of the top three elements',
       definition: ['swap', ['swap'], 'dip', 'swap']
     },
+    'tmap': {
+      'named-args': ['collection', 'quote'],
+      'local-words': {
+        'setup-map': [[]],
+        'process-map': [
+          'quote']
+      },
+      'definition': ['list_module', 'import', 'setup-map', 'process-map']
+    },
+    'umap': {
+      'named-args': ['collection', 'quote'],
+      'local-words': {
+        'setup-map': [[]],
+        'process-map': [
+          'collection', 'list-length', 0, '>',
+          [['collection', 'pop', 'quote', 'apply'], 'apply', 'swap', 'push', 'process-map'],
+          [], 'if-else']
+      },
+      'definition': ['list_module', 'import', 'setup-map', 'process-map']
+    },
     'map': {
       'local-words': {
         'setup-map': [[]],

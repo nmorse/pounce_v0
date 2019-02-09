@@ -81,7 +81,22 @@ str_module import
 } [test-named_args] define
 # test of named_args
 [4 5] {a:x} test-named_args
-`, ['a is [4 5]', 'b is {a:x}']]
+`, ['a is [4 5]', 'b is {a:x}']],
+[`list_module import
+{
+ named-args:[c q]
+ local-words:{
+  destructive-first:[c pop swap [] cons [c] local-def]
+  update-a: [a cons [] cons [a] def]
+  construct-a:[[[]] [a] local-def]
+  maponto:[c list-length 0 > 
+    [destructive-first q apply update-a maponto ]
+   [] if-else]
+ }
+ definition: [construct-a maponto a]
+} [maptest] define
+10 10 10 10 10 [0 1 2 3] [*] maptest 
+[0 1 2 3] [9 +] maptest`, [10, [0, 10, 20, 30], [9,10,11,12]]]
     ];
 
     var runtime_test = function (Pounce_ast, parser_actions) {
@@ -98,7 +113,7 @@ str_module import
             if (!deepCompare(result_pl, expected_stack)) {
                 RTtestsFailed += 1;
                 console.log(result_pl, ' expected:', expected_stack);
-                console.log('---- Failed parse test for: ', ps);
+                console.log('---- Failed tun test for: ', ps);
                 runtime_tests[i][2] = false;
                 runtime_tests[i][3] = result_pl;
             }
