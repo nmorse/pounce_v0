@@ -468,27 +468,20 @@ var pounce = (function () {
       expects: [{ desc: 'a', ofType: 'any' }, { desc: 'b', ofType: 'any' }, { desc: 'c', ofType: 'any' }], effects: [0], tests: ['A B C rotate', ['C', 'B', 'A']], desc: 'inverts the order of the top three elements',
       definition: ['swap', ['swap'], 'dip', 'swap']
     },
-    'tmap': {
-      'named-args': ['collection', 'quote'],
-      'local-words': {
-        'setup-map': [[]],
-        'process-map': [
-          'quote']
-      },
-      'definition': ['list_module', 'import', 'setup-map', 'process-map']
-    },
-    'umap': {
-      'named-args': ['collection', 'quote'],
-      'local-words': {
-        'setup-map': [[]],
-        'process-map': [
-          'collection', 'list-length', 0, '>',
-          [['collection', 'pop', 'quote', 'apply'], 'apply', 'swap', 'push', 'process-map'],
-          [], 'if-else']
-      },
-      'definition': ['list_module', 'import', 'setup-map', 'process-map']
-    },
     'map': {
+      //'requires':['list_module'],
+      'named-args':['c', 'q'],
+      'local-words':{
+         'init-a':[[[ ]], ['a'], 'local-def'],
+         'update-a': ['a', 'cons', [], 'cons', ['a'], 'local-def'],
+         'destructive-first':['c', 'pop', 'swap', [], 'cons', ['c'], 'local-def'],
+         'maping':['c', 'list-length', 0, '>', 
+             ['destructive-first', 'q', 'apply', 'update-a', 'maping'],
+             [], 'if-else']
+      },
+      'definition': ['init-a', 'maping', 'a']
+     },
+    'map-version-0': {
       'local-words': {
         'setup-map': [[]],
         'process-map': [
@@ -687,7 +680,7 @@ var pounce = (function () {
                   const top = wordstack.length - 1;
                   for (let var_name of thisWord['named-args']) {
                     // [] swap push [c] local-def
-                    pl = [[], 'swap', 'push', [var_name], 'local-def'].concat(pl);
+                    pl = [[], 'cons', [var_name], 'local-def'].concat(pl);
                   }
                 }
               }

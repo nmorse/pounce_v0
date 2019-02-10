@@ -60,12 +60,12 @@
          mouse-move-sim get-rel-vec pop-all`, [{ 'rel-x': 12, 'rel-y': -2 }, -2, 12]],
         ['list_module import 0 1 [] [[swap] dip [dup] dip2 [+] dip swap dup [push] dip swap] apply', [1, 1, [1]]],
         ['[true] [true] [false] ifte', ["true"]],
-        [`[1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
+        [`list_module import [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
         ['list_module import [5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[[5, true], [4, false], [3, false]]]],
-        ['[1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
+        ['list_module import [1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
         ['[1 2 3 4 5 6] [3 >] filter', [[4, 5, 6]]],
         [
-`list_module import
+            `list_module import
 {
  named-args:[a b]
  local-words:{}
@@ -82,22 +82,32 @@ str_module import
 # test of named_args
 [4 5] {a:x} test-named_args
 `, ['a is [4 5]', 'b is {a:x}']],
-[`list_module import
+        [`list_module import
 {
  named-args:[c q]
  local-words:{
-  destructive-first:[c pop swap [] cons [c] local-def]
-  update-a: [a cons [] cons [a] def]
-  construct-a:[[[]] [a] local-def]
-  maponto:[c list-length 0 > 
-    [destructive-first q apply update-a maponto ]
+    init-a:[[[ ]] [a] local-def]
+    update-a: [a cons [] cons [a] local-def]
+    destructive-first:[c pop swap [] cons [c] local-def]
+    maponto:[c list-length 0 > 
+        [destructive-first q apply update-a maponto ]
    [] if-else]
  }
- definition: [construct-a maponto a]
+ definition: [init-a maponto a]
 } [maptest] define
 10 10 10 10 10 [0 1 2 3] [*] maptest 
-[0 1 2 3] [9 +] maptest`, [10, [0, 10, 20, 30], [9,10,11,12]]]
-    ];
+[0 1 2 3] [9 +] maptest`, [10, [0, 10, 20, 30], [9, 10, 11, 12]]],
+        [`
+list_module import
+[7 1] [5 +] map
+10 10 10 10 [0 1 2 3] [swap /] map
+[dup 3 + swap -1 * 7 + [] cons cons] [myword] def
+[1 2 3] [myword] map
+`
+            , [[12, 6],
+            [0, 0.1, 0.2, 0.3],
+            [[4, 6], [5, 5], [6, 4]]]
+        ]];
 
     var runtime_test = function (Pounce_ast, parser_actions) {
         console.log('Starting runtime tests:');
@@ -113,7 +123,7 @@ str_module import
             if (!deepCompare(result_pl, expected_stack)) {
                 RTtestsFailed += 1;
                 console.log(result_pl, ' expected:', expected_stack);
-                console.log('---- Failed tun test for: ', ps);
+                console.log('---- Failed run test for: ', ps);
                 runtime_tests[i][2] = false;
                 runtime_tests[i][3] = result_pl;
             }
