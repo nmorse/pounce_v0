@@ -337,7 +337,17 @@ var pounce = (function () {
         return [s];
       }
     },
-    'get': {
+    'bubbleup': {
+      //'requires':['list_module'],
+      'named-args':['c'],
+      'local-words':{
+      },
+      'definition': [[], ['cons'], 'c', 'repeat', 'swap', [['un-cons'], 'c', 'repeat', 'drop'], 'dip']
+     },
+     'repeat': {
+      'definition': ['dup', 0, '>', [1, '-', 'swap', 'dup', 'dip2', 'swap', 'repeat'], ['drop', 'drop'], 'if-else' ]
+     },
+     'get': {
       expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }], effects: [0], tests: [], desc: 'get the value of a property from a record',
       definition: function (s) {
         const key = s.pop();

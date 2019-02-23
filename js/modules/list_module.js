@@ -39,6 +39,27 @@
         return [s];
       }
     },
+    'uncons': {
+      expects: [{ desc: 'a', ofType: 'list' }], effects: [1], tests: [], desc: 'take the first item off the front of a list and leave it under the list',
+      definition: function (s) {
+        let list = s.pop();
+
+        if (Array.isArray(list)) {
+          if (list.length >= 1) {
+            const item = pounce.cloneItem(list.splice(0, 1));
+            s.push(item[0]);
+            s.push(list);
+          }
+          else {
+            console.log({ 'word': 'un-cons', 'error': "unable to 'un-cons' from an empty list" });
+          }
+        }
+        else {
+          console.log({ 'word': 'un-cons', 'error': "unable to 'un-cons' from a non-list" });
+        }
+        return [s];
+      }
+    },
     'list-length': {
       expects: [{ desc: 'source', ofType: 'list' }], effects: [0], tests: [
         [`[1 2 3] str-length`, [3]]
