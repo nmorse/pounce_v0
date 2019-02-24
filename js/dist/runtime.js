@@ -4,7 +4,8 @@ var pounce = (function () {
   // a stack that usually would be empty, but may be primed with an existing state
   // a stack of dictionaries of words.
   // and optionaly a history array to record stack and pl state
-
+  let imported = {};
+  
   function tryConvertToNumber(w) {
     return number_or_str(w);
   }
@@ -77,11 +78,17 @@ var pounce = (function () {
       definition: function (s, pl, wordstack) {
         const importable = s.pop();
         if (typeof importable === 'string') {
+          if (imported[importable]) {
+// already imported
+            return [s];
+          }
+    
           // given a path to a dictionary load it or fetch and load
           // options are to extend the core dictionary or pushit on a stack
           // 1. Object.assign(window[importable].words, wordstack[0]);
           // 2. wordstack.push(window[importable].words);
           if (window[importable]) {
+            imported[importable] = true;
             wordstack.push(window[importable].words);
           } else {
             console.log('TBD: code to load resourse:', importable)
@@ -329,22 +336,14 @@ var pounce = (function () {
       }
     },
     'bubble-up': {
-      expects: [{ desc: 'offset', ofType: 'integer' }], effects: [-1], tests: [], desc: 'move a stack element up to the top',
-      definition: function (s) {
-        const i = s.pop();
-        const item = s.splice(-i - 1, 1);
-        s.push(item[0]);
-        return [s];
-      }
-    },
-    'bubbleup': {
-      //'requires':['list_module'],
+      'requires':'list_module',
       'named-args':['c'],
       'local-words':{
       },
-      'definition': [[], ['cons'], 'c', 'repeat', 'swap', [['un-cons'], 'c', 'repeat', 'drop'], 'dip']
+      'definition': [[], ['cons'], 'c', 'repeat', 'swap', [['uncons'], 'c', 'repeat', 'drop'], 'dip']
      },
      'repeat': {
+      // 'requires':'list_module',
       'definition': ['dup', 0, '>', [1, '-', 'swap', 'dup', 'dip2', 'swap', 'repeat'], ['drop', 'drop'], 'if-else' ]
      },
      'get': {
@@ -479,7 +478,7 @@ var pounce = (function () {
       definition: ['swap', ['swap'], 'dip', 'swap']
     },
     'map': {
-      //'requires':['list_module'],
+      'requires': 'list_module',
       'named-args':['c', 'q'],
       'local-words':{
          'init-a':[[[ ]], ['a'], 'local-def'],
@@ -502,6 +501,7 @@ var pounce = (function () {
       'definition': ['list_module', 'import', 'setup-map', 'process-map']
     },
     'filter': {
+      'requires': 'list_module',
       'local-words': {
         'setup-filter': [[]],
         'process-filter': [
@@ -511,16 +511,17 @@ var pounce = (function () {
             [["swap"], "dip2", ["drop"], "dip"], "if-else", "swap", "process-filter"],
           [["drop", "drop"], "dip"], "if-else"]
       },
-      'definition': ['list_module', 'import', 'setup-filter', 'process-filter']
+      'definition': ['setup-filter', 'process-filter']
     },
     'reduce': {
+      'requires': 'list_module',
       'local-words': {
         'more?': ['rolldown', 'dup', 'list-length', 0, '>', ['rollup'], 'dip'],
         'process-reduce': ['more?', ['reduce-step', 'process-reduce'], 'if'],
         'reduce-step': [['pop'], 'dip2', 'dup', ['apply'], 'dip'],
         'teardown-reduce': ['drop', ['drop'], 'dip'],
       },
-      'definition': ['list_module', 'import', 'process-reduce', 'teardown-reduce']
+      'definition': ['process-reduce', 'teardown-reduce']
     }
   };
 
@@ -645,9 +646,10 @@ var pounce = (function () {
     , halt: false
     , run:
       function run(pl, stack, wordstack, record_histrory = false) {
+        imported = {};
         let term;
         let reps = 0;
-        const maxReps = 10000000;
+        const maxReps = 1000000;
         const findWord = (term) => {
           let i = wordstack.length - 1;
           let w = wordstack[i][term];
@@ -680,6 +682,10 @@ var pounce = (function () {
             if (thisWord && isArray(thisWord.definition)) {
               if (record_histrory !== false && !isInternalWord(term)) {
                 record_histrory.unshift({ stack: cloneItem(cleanQuotedItems(stack)).reverse(), term: term, pl: ixnay(cloneItem(cleanQuotedItems(pl)).reverse()) });
+              }
+              if (thisWord.requires && !imported[thisWord.requires]) {
+                stack.push(thisWord.requires);
+                [stack] = wordstack[0].import.definition(stack, pl, wordstack);
               }
               if (thisWord['local-words'] || thisWord['named-args']) {
                 if (thisWord['local-words']) {
