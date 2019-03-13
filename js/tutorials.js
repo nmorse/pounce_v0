@@ -1,5 +1,5 @@
 
-const tutorials = ['introduction', 'hello world', 'calculate', 'rearrange the stack', 'your own words', 'some I/O'];
+const tutorials = ['introduction', 'strings', 'calculate', 'rearrange the stack', 'lists and records', 'higher order words', 'your own words', 'some I/O'];
 const examples = [
   ['', {summary:'start here', desc:`
   ##  The page is layed out to help you understand how your 'Pounce' program works
@@ -13,8 +13,8 @@ const examples = [
   A word about 'words': Words are the basic unit of programming Pounce. In Pounce, words can be data or functions, but we thought you should know that everything in the Pounce language is refered to as a word.Its a "Noun then Verb" pattern
   `, tutorial: 'introduction', level:3}],
   
-['"hello " "world!" str-append', {summary:'Working with strings', desc:'"hello world!", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'hello world', level:1}],
-['`a` \'b\' "c" d str-append str-append str-append', {summary:'Strings can be quoted or words with no spaces can be strings as well.', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack.', tutorial: 'hello world', level:2}],
+['"hello " "world!" str-append', {summary:'Working with strings', desc:'"Hello world!", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'strings', level:1}],
+['`a` \'b\' "c" d str-append str-append str-append', {summary:'Strings can be quoted or words with no spaces can be strings as well.', desc:'Here is how concatenative programming works: Values are pushed on to a stack then verbs (the functions) act on the stack, you can see that two strings preceed "str-append", and the result is left on the stack.', tutorial: 'strings', level:2}],
 ['2 3 +', {summary:'Sum of two numbers', desc:'the operator \'+\' (for addition) comes after the two numbers being added.', level: 1, tutorial: 'calculate'}],
 ['2 3 *', {summary:'same for multiplication', desc:'the \'*\' is placed after the two numbers to be multiplied.', level: 2, tutorial: 'calculate'}],
 ['9 7 + 2.5 /', {summary:'combining opererations', desc:'To add and then divide, say (9 + 7) / 2.5. Notice how no parenthases are needed when the operators are after the numbers. ', level: 3, tutorial: 'calculate'}],
@@ -25,7 +25,16 @@ const examples = [
 ['rock paper scissors rollup',{summary:'roll up', desc:'To rearranging three items on the stack, you can use `rollup`, `rolldown` and `rotate`', level:4, tutorial:'rearrange the stack'}],
 ['rock paper scissors rolldown',{summary:'roll down', desc:'To rearranging three items on the stack, you can use `rollup`, `rolldown` and `rotate`', level:5, tutorial:'rearrange the stack'}],
 ['rock paper scissors rotate',{summary:'rotate', desc:'To rearranging three items on the stack, you can use `rollup`, `rolldown` and `rotate`', level:6, tutorial:'rearrange the stack'}],
-['10 20 30 40 2 bubble-up',{summary:'define your own stack changing words', desc:'To rearranging the stack your own way, you may write your own words, like this bubble-up', level:8, tutorial:'rearrange the stack'}],
+['10 20 30 40 2 bubble-up',{summary:'bubble-up', desc:'bubble-up is a word that pulls an indexed element on the stack, up to the top.', level:8, tutorial:'rearrange the stack'}],
+
+[`list_module import
+5 [] cons`, {summary:'cons', desc:'\'cons\' adds an item to the beginning of a list.', level:2, tutorial:'lists and records'}],
+[`list_module import
+[3 4] uncons`, {summary:'uncons', desc:'\'uncons\' removes an item from the beginning of a list.', level:3, tutorial:'lists and records'}],
+
+
+['7 [6 *] apply', {summary:'apply', desc:'\'apply\' demonstraits that a list of words on the value stack, can be executed as code.', level:1, tutorial:'higher order words'}],
+['"bottom" "top" ["-dollar" str-append] dip', {summary:'dip (under)', desc:'\'dip\' is used to apply quotted words one place under the top of the stack.', level:4, tutorial:'higher order words'}],
 [
 `canvas_basic_module import
 canvas cb-init cb-clear
@@ -92,4 +101,4 @@ Each line on the program
 ];
 
 const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial]+(a[1].level*0.01) > level_order[b[1].tutorial]+(b[1].level*0.01))? 1: -1);
-const level_order = {"introduction":1, "hello world":2, "calculate":3, "rearrange the stack":4, "canvas": 5, "advanced":6};
+const level_order = {"introduction":1, "strings":2, "calculate":3, "rearrange the stack":4, "lists and records":5, "higher order words": 6, "canvas": 7, "advanced":8};
