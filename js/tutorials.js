@@ -2,15 +2,21 @@
 const tutorials = ['introduction', 'strings', 'calculate', 'rearrange the stack', 'lists and records', 'higher order words', 'your own words', 'some I/O'];
 const examples = [
   ['', {summary:'start here', desc:`
-  ##  The page is layed out to help you understand how your 'Pounce' program works
-  1. The [Blue Box](#tooltip-pl) is for program code (to be run). As you go through the tutorial, code will be entered for you or you can type in your own 'words' at any time.
-  2. The [Gray Box](#tooltip-stack) to the left is the 'stack'. The working memory of the program will show up here. Also, just to the right, when running in debug mode, you will see the history of the program and the stack as it ran.
-  3. The [top area](#tooltip-map) will show you the definition of words. When the cursor is on a word in the program code the definition of that word will pop up.
+  ## Try 'Pounce' on this page.
+  Here is the quick tour.
+  1. The [top area](#tooltip-map) shows the definition of the word at your cursor. The top area also hosts a canvas for graphic output.
+  2. The [Blue Box](#tooltip-pl) is for your code. As you click through the tutorials, code will appear in this text area. Also you may type in code to change the code. Experiment.
+  3. The [Gray Area](#tooltip-stack) to the bottom left is the 'stack'. It represents the working memory of the Pounce program. Also, just to the right of that, when running in debug mode, you will see the history of the program and the stack as it ran.
   `, tutorial: 'introduction', level:1}],
-  ['', {summary:'using this tutorial', desc:'', tutorial: 'introduction', level:2}],
   ['', {summary:'how to code differently', desc:`
-  Pounce is a programming language, with the goal of letting anyone try out this rather 'different' style of programming. Everything you need is right here.
-  A word about 'words': Words are the basic unit of programming Pounce. In Pounce, words can be data or functions, but we thought you should know that everything in the Pounce language is refered to as a word.Its a "Noun then Verb" pattern
+  Pounce is a stack-based concatenative programming (CP) language. Pounce's goal is to allow and encorage anyone to try out this rather 'different' style of programming.
+  
+  'Words' are the most basic unit. words can be data or functions, yes everything is refered to as a word. The only exceptions are '[', ']' for list and '{' and '}' for records. 
+
+  At first the words of a program will seem backward to you. That is because CP languages use post-fix notation. 
+  CP programming is coded in a "Noun" then "Verb" pattern. For example \`4 2 *\` is an expression that multiplies 4 and 2, see how the nouns (data) come before the verb (function). 
+
+  So hopefully that is enough to get you ready to dive in. Click on the toutorials in the top navagation bar. Have fun and experiment.
   `, tutorial: 'introduction', level:3}],
   
 ['"hello " "world!" str-append', {summary:'Working with strings', desc:'"Hello world!", The iconic example starts with two strings. These are pushed on to the stack, then the word "str-append" is applied and the result, a single string is left on the stack.', tutorial: 'strings', level:1}],
