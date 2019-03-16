@@ -39,6 +39,17 @@
         return [s];
       }
     },
+    'fan-open': {
+      'named-args': ['list'],
+      'requires': 'list_module',
+      'local-words': {
+        'len': [],
+        'record-len': ['list', 'list-length', [], 'cons', ['len'], 'local-def'],
+        'fan-out': ['list', ['uncons'], 'len', 'repeat', 'drop']
+      },
+      'definition': ['record-len', 'fan-out']
+    },
+
     'uncons': {
       expects: [{ desc: 'a', ofType: 'list' }], effects: [1], tests: [], desc: 'take the first item off the front of a list and leave it under the list',
       definition: function (s) {
