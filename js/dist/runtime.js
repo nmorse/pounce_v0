@@ -5,11 +5,16 @@ var pounce = (function () {
   // a stack of dictionaries of words.
   // and optionaly a history array to record stack and pl state
   let imported = {};
-  
+
   function tryConvertToNumber(w) {
     return number_or_str(w);
   }
-
+  function toBoolean(s) {
+    if (typeof s === 'string') {
+      return (s === 'true')
+    }
+    return s;
+  }
   function number_or_str(s) {
     var num;
     if (!isNaN(parseFloat(s))) {
@@ -79,10 +84,10 @@ var pounce = (function () {
         const importable = s.pop();
         if (typeof importable === 'string') {
           if (imported[importable]) {
-// already imported
+            // already imported
             return [s];
           }
-    
+
           // given a path to a dictionary load it or fetch and load
           // options are to extend the core dictionary or pushit on a stack
           // 1. Object.assign(window[importable].words, wordstack[0]);
@@ -312,8 +317,8 @@ var pounce = (function () {
     'and': {
       expects: [{ desc: 'a', ofType: 'boolean' }, { desc: 'b', ofType: 'boolean' }], effects: [-1], tests: [], desc: 'logical and',
       definition: function (s) {
-        const b = s.pop();
-        const a = s.pop();
+        const b = toBoolean(s.pop());
+        const a = toBoolean(s.pop());
         s.push(a && b);
         return [s];
       }
@@ -321,8 +326,8 @@ var pounce = (function () {
     'or': {
       expects: [{ desc: 'a', ofType: 'boolean' }, { desc: 'b', ofType: 'boolean' }], effects: [-1], tests: [], desc: 'logical or',
       definition: function (s) {
-        const b = s.pop();
-        const a = s.pop();
+        const b = toBoolean(s.pop());
+        const a = toBoolean(s.pop());
         s.push(a || b);
         return [s];
       }
@@ -330,23 +335,23 @@ var pounce = (function () {
     'not': {
       expects: [{ desc: 'a', ofType: 'boolean' }], effects: [0], tests: [], desc: 'logical not',
       definition: function (s) {
-        const a = s.pop();
+        const a = toBoolean(s.pop());
         s.push(!a);
         return [s];
       }
     },
     'bubble-up': {
-      'requires':'list_module',
-      'named-args':['c'],
-      'local-words':{
+      'requires': 'list_module',
+      'named-args': ['c'],
+      'local-words': {
       },
       'definition': [[], ['cons'], 'c', 'repeat', 'swap', [['uncons'], 'c', 'repeat', 'drop'], 'dip']
-     },
-     'repeat': {
+    },
+    'repeat': {
       // 'requires':'list_module',
-      'definition': ['dup', 0, '>', [1, '-', 'swap', 'dup', 'dip2', 'swap', 'repeat'], ['drop', 'drop'], 'if-else' ]
-     },
-     'get': {
+      'definition': ['dup', 0, '>', [1, '-', 'swap', 'dup', 'dip2', 'swap', 'repeat'], ['drop', 'drop'], 'if-else']
+    },
+    'get': {
       expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }], effects: [0], tests: [], desc: 'get the value of a property from a record',
       definition: function (s) {
         const key = s.pop();
@@ -421,7 +426,7 @@ var pounce = (function () {
       expects: [{ desc: 'conditional', ofType: 'boolean' }, { desc: 'then clause', ofType: 'list' }], effects: [-2], tests: [], desc: 'conditionally apply a quotation',
       definition: function (s, pl) {
         const then_block = s.pop();
-        const expression = s.pop();
+        const expression = toBoolean(s.pop());
         if (expression) {
           if (isArray(then_block)) {
             pl = then_block.concat(pl);
@@ -438,7 +443,7 @@ var pounce = (function () {
       definition: function (s, pl) {
         const else_block = s.pop();
         const then_block = s.pop();
-        const expression = s.pop();
+        const expression = toBoolean(s.pop());
         if (expression) {
           if (isArray(then_block)) {
             pl = then_block.concat(pl);
@@ -479,17 +484,17 @@ var pounce = (function () {
     },
     'map': {
       'requires': 'list_module',
-      'named-args':['c', 'q'],
-      'local-words':{
-         'init-a':[[[ ]], ['a'], 'local-def'],
-         'update-a': ['a', 'cons', [], 'cons', ['a'], 'local-def'],
-         'destructive-first':['c', 'pop', 'swap', [], 'cons', ['c'], 'local-def'],
-         'maping':['c', 'list-length', 0, '>', 
-             ['destructive-first', 'q', 'apply', 'update-a', 'maping'],
-             [], 'if-else']
+      'named-args': ['c', 'q'],
+      'local-words': {
+        'init-a': [[[]], ['a'], 'local-def'],
+        'update-a': ['a', 'cons', [], 'cons', ['a'], 'local-def'],
+        'destructive-first': ['c', 'pop', 'swap', [], 'cons', ['c'], 'local-def'],
+        'maping': ['c', 'list-length', 0, '>',
+          ['destructive-first', 'q', 'apply', 'update-a', 'maping'],
+          [], 'if-else']
       },
       'definition': ['init-a', 'maping', 'a']
-     },
+    },
     'map-version-0': {
       'local-words': {
         'setup-map': [[]],
