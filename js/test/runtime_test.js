@@ -35,6 +35,10 @@
         ['false true and', [false]],
         ['true false and', [false]],
         ['true true and', [true]],
+        ['false false or', [false]],
+        ['false true or', [true]],
+        ['true false or', [true]],
+        ['true true or', [true]],
         ['list_module import [a 1] 3 push', [['a', 1, 3]]],
         ['list_module import [a 1] dup 3 push', [['a', 1], ['a', 1, 3]]],
         ['list_module import [a 1 3] pop', [['a', 1], 3]],
@@ -67,6 +71,10 @@
         [`list_module import [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
         ['list_module import [5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[[5, true], [4, false], [3, false]]]],
         ['list_module import [1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
+        ['list_module import [true true false true] true [and] reduce # all', [false]],
+        ['list_module import [true true true true] true [and] reduce # all', [true]],
+        ['list_module import [false false false false] false [or] reduce # any', [false]],
+        ['list_module import [false true false true] false [or] reduce # any', [true]],
         ['[1 2 3 4 5 6] [3 >] filter', [[4, 5, 6]]],
         [
             `list_module import
