@@ -41,7 +41,7 @@
     },
     'fan-open': {
       'named-args': ['list'],
-      'requires': 'list_module',
+     // 'requires': 'list_module',
       'local-words': {
         'len': [],
         'record-len': ['list', 'list-length', [], 'cons', ['len'], 'local-def'],
