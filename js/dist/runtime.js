@@ -523,7 +523,7 @@ var pounce = (function () {
       'local-words': {
         'more?': ['rolldown', 'dup', 'list-length', 0, '>', ['rollup'], 'dip'],
         'process-reduce': ['more?', ['reduce-step', 'process-reduce'], 'if'],
-        'reduce-step': [['pop'], 'dip2', 'dup', ['apply'], 'dip'],
+        'reduce-step': [['pop'], 'dip2', 'dup', [['swap'], 'dip', 'apply'], 'dip'],
         'teardown-reduce': ['drop', ['drop'], 'dip'],
       },
       'definition': ['process-reduce', 'teardown-reduce']
