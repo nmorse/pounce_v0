@@ -70,7 +70,7 @@
           var intro = new Vue({
             el: '#intro',
             data: {
-              "pounce": (ps) => pounce.run(Pounce_ast.parse(ps+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[0]
+              "pounce": (ps) => pounce.run(Pounce_ast.parse(ps+' ', {actions: parser_actions.parser_actions}), [], [pounce.words])[1][0]
             }
           });
           var testing = new Vue({

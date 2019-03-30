@@ -130,7 +130,7 @@ list_module import
             const expected_stack = test[1];
 
             //console.log('starting parse test for: ', ps);
-            const result_pl = pounce.run(Pounce_ast.parse(ps + ' ', { actions: parser_actions }), [], [pounce.words]);
+            const [remainder_pl, result_pl] = pounce.run(Pounce_ast.parse(ps + ' ', { actions: parser_actions }), [], [pounce.words]);
             RTtestCount += 1;
             if (!deepCompare(result_pl, expected_stack)) {
                 RTtestsFailed += 1;
