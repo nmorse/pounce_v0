@@ -5,7 +5,7 @@ var pounce = (function () {
   // a stack of dictionaries of words.
   // and optionaly a history array to record stack and pl state
   let imported = {};
-  let resumable = {};
+  let resumable = { pl: [] };
   function tryConvertToNumber(w) {
     return number_or_str(w);
   }

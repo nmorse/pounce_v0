@@ -99,10 +99,11 @@
   </div>
   <div class="content-area" id="try_pounce">
     <div v-if="exampleDesc && !exampleGotIt" class="pop-over" v-html="exampleMarkdown"></div>
+    <button v-if="exampleDesc && !exampleGotIt" v-on:click="exampleGotIt = true">OK got it</button>
     <div class="row-container">
       <div class="stack-up">
         <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
-          <option v-for="word in Object.keys(words)" v-bind:value="word">
+          <option v-for="word in Object.keys(words).sort()" v-bind:value="word">
             {{ word }}
           </option>
         </select>
@@ -135,7 +136,7 @@
         </div>
       </div>
       <div class="row-container">
-        <div class="stack-down  box" style="min-width:200px;">
+        <div class="stack-down  box" style="min-width:200px; min-height:300px;">
           <div v-for="ele in vs" class="box">
             {{ ele }} &nbsp;
           </div>
@@ -147,7 +148,7 @@
                 </div>
               </div>
             -->
-        <div class="row-container" style="min-height:300px;">
+        <div v-if="debugMode" class="row-container" style="min-height:300px;">
           <div v-for="h_instance in vs_history" class="stack-down box">
             <!--
               -->
@@ -193,7 +194,9 @@
 
     function loadExample(s, desc) {
       try_pounce.ps = s;
-      try_pounce.runPounce();
+      if (try_pounce.ps !== try_pounce.last_ps) {
+        try_pounce.executePounceScript(try_pounce.ps);
+      }
       try_pounce.exampleDesc = desc;
       try_pounce.exampleGotIt = false;
       Vue.set(examples_section, 'show_category', '');
@@ -209,8 +212,8 @@
         , "vs": []
         , "vs_history": []
         , "words": pounce.words
-        , "runUpToCursor": false
-        , "debugMode": true
+        , "runUpToCursor": true
+        , "debugMode": false
         , "helpWord": ""
         , "helpWordDef": ""
         , "helpWordDesc": ""
@@ -222,7 +225,7 @@
       },
       computed: {
         exampleMarkdown: function () {
-          return marked(this.exampleDesc, { sanitize: true })
+          return marked(this.exampleDesc, { sanitize: true });
         }
       },
       methods: {
