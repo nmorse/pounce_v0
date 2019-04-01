@@ -2,7 +2,7 @@
   'use strict';
 
   function runMouse(event) {
-    console.log(event);
+    // console.log(event);
     // console.log(`event: ${event.type} run ${lookup[event.type]}`);
     const x = event.offsetX;
     const y = event.offsetY;
