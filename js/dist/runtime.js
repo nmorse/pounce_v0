@@ -5,7 +5,7 @@ var pounce = (function () {
   // a stack of dictionaries of words.
   // and optionaly a history array to record stack and pl state
   let imported = {};
-
+  let resumable = { pl: [] };
   function tryConvertToNumber(w) {
     return number_or_str(w);
   }
@@ -650,11 +650,17 @@ var pounce = (function () {
     words: words
     , halt: false
     , run:
-      function run(pl, stack, wordstack, record_histrory = false) {
+      function run(pl = [], stack = [], wordstack = [], record_histrory = false) {
+        if(pl.length === 0 && resumable.pl.length > 0) {
+          pl = resumable.pl;
+          stack = resumable.stack;
+          wordstack = resumable.wordstack;
+          record_histrory = resumable.record_histrory;
+        }
         imported = {};
         let term;
         let reps = 0;
-        const maxReps = 1000000;
+        const maxReps = 100000;
         const findWord = (term) => {
           let i = wordstack.length - 1;
           let w = wordstack[i][term];
@@ -746,7 +752,15 @@ var pounce = (function () {
             }
           }
         }
-        return stack;
+        if (pl.length > 0) {
+          // setup a resumable environment
+          resumable = {};
+          resumable.pl = pl;
+          resumable.stack = stack;
+          resumable.wordstack = wordstack;
+          resumable.record_histrory = record_histrory;
+        }
+        return [pl, stack];
       }
 
     , isArray: isArray

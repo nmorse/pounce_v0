@@ -66,7 +66,13 @@
       }
       else {
         const ctx = s[s.length - 1];
-        ctx.fillStyle = 'rgba('+d.color.r+', '+d.color.g+', '+d.color.b+', '+d.color.a+')';
+        if (d.color) {
+          ctx.fillStyle = 'rgba('+d.color.r+', '+d.color.g+', '+d.color.b+', '+d.color.a+')';
+        }
+        if (!d.w || !d.h) {
+          d.w = 10;
+          d.h = 10;
+        }
         ctx.fillRect(d.x, d.y, d.w, d.h);
       }
       return [s];

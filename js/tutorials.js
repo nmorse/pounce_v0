@@ -1,5 +1,5 @@
 
-const tutorials = ['introduction', 'strings', 'calculate', 'rearrange the stack', 'lists and records', 'higher order words', 'your own words', 'some I/O'];
+const tutorials = ['introduction', 'strings', 'calculate', 'rearrange the stack', 'lists and records', 'higher order words', 'your own words', 'io on canvas'];
 const examples = [
   ['', {
     summary: 'start here', desc: `
@@ -147,7 +147,7 @@ Each line on the program
   {color:{r:64 g:0 b:255 a:0.5} x:30 y:40 w:60 h:40} cb-box
   {color:{r:255 g:63 b:127 a:0.5} x:60 y:50 w:40 h:50} cb-box
   drop
-  `, { summary: 'Draw some shapes', desc: 'Draws lines and rectangles on the canvas as a drawing demo', level: 1, tutorial: 'some I/O' }],
+  `, { summary: 'Draw some shapes', desc: 'Draws lines and rectangles on the canvas as a drawing demo', level: 1, tutorial: 'io on canvas' }],
   [
     `canvas_basic_module import
   canvas cb-init cb-clear
@@ -156,7 +156,7 @@ Each line on the program
   100 10 cb-line-to
   cb-end-path
   drop
-  `, { summary: 'Draw a check-mark', desc: 'Draws a line on the canvas', level: 2, tutorial: 'some I/O' }],
+  `, { summary: 'Draw a check-mark', desc: 'Draws a line on the canvas', level: 2, tutorial: 'io on canvas' }],
   [
     `canvas_basic_module import
   [[x set] dip y set] [pack] def
@@ -165,13 +165,31 @@ Each line on the program
   30 45 pack unpack cb-begin-path unpack [20 +] dip 20 + cb-line-to
   100 10 cb-line-to cb-end-path
   drop
-  `, { summary: 'Turtle Graphics', desc: 'Draws a line, relative to possition', level: 3, tutorial: 'some I/O' }],
+  `, { summary: 'Turtle Graphics', desc: 'Draws a line, relative to possition', level: 3, tutorial: 'io on canvas' }],
   [
     `canvas_basic_module import
   canvas cb-init cb-clear
   images/pounce-cat1.png cb-load-image
-  `, { summary: 'Image on the canvas', desc: 'Draws an image on the canvas', level: 4, tutorial: 'some I/O' }]
+  `, { summary: 'Image on the canvas', desc: 'Draws an image on the canvas', level: 4, tutorial: 'io on canvas' }]
+  ,
+  [
+    `canvas_basic_module import
+    canvas cb-init cb-clear
+    # drawing a box just to set a color in this context
+    {color:{r:18 g:16 b:125 a:0.3} x:0 y:0 w:1 h:1} cb-box
+    
+  subscription_module import
+  [cb-box] [click] subscribe`, { summary: 'Input click on canvas', desc: 'setup a subscription to listen for click events and then draw a box on the canvas.', level: 5, tutorial: 'io on canvas' }]
+  ,
+  [
+    `canvas_basic_module import
+    canvas cb-init cb-clear
+    # drawing a box just to set a color in this context
+    {color:{r:18 g:163 b:25 a:0.3} x:0 y:0 w:1 h:1} cb-box
+    
+  subscription_module import
+  [cb-box] [mousemove] subscribe`, { summary: 'Input event mousemove', desc: 'draws a box on canvas when a mousemove event fires.', level: 6, tutorial: 'io on canvas' }]
 ];
 
 const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial] + (a[1].level * 0.01) > level_order[b[1].tutorial] + (b[1].level * 0.01)) ? 1 : -1);
-const level_order = { "introduction": 1, "strings": 2, "calculate": 3, "rearrange the stack": 4, "lists and records": 5, "higher order words": 6, "your own words": 7, "canvas": 8, "advanced": 9 };
+const level_order = { "introduction": 1, "strings": 2, "calculate": 3, "rearrange the stack": 4, "lists and records": 5, "higher order words": 6, "your own words": 7, "io on canvas": 8, "advanced": 9 };
