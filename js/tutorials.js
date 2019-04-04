@@ -76,6 +76,14 @@ const examples = [
     summary: 'reduce', desc: '\'reduce\' a list.',
     level: 5, tutorial: 'higher order words'
   }],
+  [`[dup2 +] [fib] def
+  0 1 fib 8 repeat`,
+    {
+      summary: 'define a word "fib"',
+      desc: `[dup2 +] is two words in a list then use \`def\` is defined is as a word.
+      Next, use it to produce the Fibinaci sequence`,
+      level: 0, tutorial: 'your own words'
+    }],
 
   [`list_module import
 [ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
