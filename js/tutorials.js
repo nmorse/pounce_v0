@@ -93,6 +93,54 @@ const examples = [
       desc: `\`repeat\` is defined in Pounce, but it's not too difficult to define your own and see how it works.`,
       level:1, tutorial: 'your own words'
     }],
+  
+  [`list_module import
+[[] cons [p] def [2] [n] def [[]] [f] def] [set-up] def
+[n 1 + [] cons [n] def] [inc-n] def
+[p n % 0 == [n f cons [] cons [f] def p n / [] cons [p] def] [inc-n] if-else] [prime-fact] def
+[p 1 <= [f] [prime-fact factorize] if-else] [factorize] def
+210 set-up factorize
+`, {
+      summary: 'v2 prime factors of a number', desc: `
+Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
+`, level: 12, tutorial: 'your own words'
+    }],
+
+  
+  [`list_module import
+{desc:'factors of a number'
+names-args:[p]
+local-words:{
+ n:[2]
+ f:[[]]
+ n-inc:[n get 1 + n set]
+ prime-factor?:[p n % 0 == [n f cons [] cons [f] def p n / [] cons [p] def] [inc-n] if-else]
+ factorize:[p 1 <= [f] [prime-factor? factorize] if-else]
+ check-integer:[dup 0 > not [drop 1] if]
+ clean-up:[swap drop]
+}
+expects: [{desc: 'a positive' ofType: 'integer'}]
+effects: [0]
+definition:[package factorize clean-up]
+} [factor] define
+210 factor
+
+#
+#[[] cons [p] def [2] [n] def [[]] [f] def] [set-up] def
+#[n 1 + [] cons [n] def] [inc-n] def
+#[p n % 0 == [n f cons [] cons [f] def p n / [] cons [p] def] [inc-n] if-else] [prime-fact] def
+#[p 1 <= [f] [prime-fact factorize] if-else] [factorize] def
+#210 set-up factorize
+#
+
+`, {
+      summary: 'v2 prime factors of a number', desc: `
+Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
+`, level: 10, tutorial: 'your own words'
+    }],
+
+  
+  
   [`list_module import
 {desc:'Prime factors of a number'
 local-words:{
@@ -113,7 +161,7 @@ definition:[package factorize clean-up]
 `, {
       summary: 'find the prime factors of a number', desc: `
 Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
-`, level: 2, tutorial: 'your own words'
+`, level: 9, tutorial: 'your own words'
     }],
   [`list_module import
 [[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
