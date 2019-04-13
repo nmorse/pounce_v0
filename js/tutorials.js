@@ -101,68 +101,68 @@ const examples = [
 [p 1 <= [f] [prime-fact factorize] if-else] [factorize] def
 210 set-up factorize
 `, {
-      summary: 'v2 prime factors of a number', desc: `
+      summary: 'find prime factors v1', desc: `
 Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
-`, level: 12, tutorial: 'your own words'
+`, level: 11, tutorial: 'your own words'
     }],
 
+      
   
   [`list_module import
-{desc:'factors of a number'
-names-args:[p]
-local-words:{
- n:[2]
- f:[[]]
- n-inc:[n get 1 + n set]
- prime-factor?:[p n % 0 == [n f cons [] cons [f] def p n / [] cons [p] def] [inc-n] if-else]
- factorize:[p 1 <= [f] [prime-factor? factorize] if-else]
- check-integer:[dup 0 > not [drop 1] if]
- clean-up:[swap drop]
-}
-expects: [{desc: 'a positive' ofType: 'integer'}]
-effects: [0]
-definition:[package factorize clean-up]
-} [factor] define
-210 factor
+  { desc:'prime factors of a number'
+    local-words:{
+      package:[{n:2 f:[]} swap check-integer p set] # builds {n:2 f:[] p:210}
+      p-n:[n get [p get] dip] # p-n pulls p and n out of the package
+      n-f:[n get [f get] dip]
+      n-inc:[n get 1 + n set]
+      prime-factor?:[p-n % 0 == [n-f push f set p-n / p set] [n-inc] if-else]
+      factorize:[p get 1 <= [f get] [prime-factor? factorize] if-else]
+      check-integer:[dup 0 > not [drop 1] if]
+      clean-up:[swap drop]
+    }
+    expects: [{desc: 'a positive' ofType: 'integer'}]
+    effects: [0]
+    definition:[package factorize clean-up]
+  } [factor] define
+  210 factor
+  `, {
+        summary: 'find prime factors v2', desc: `
+        Version 2 uses \`define\` which takes a record and makes a new word.
+        In this case the new word is called \`factor\` and it has a line in the record \`definition:[package factorize clean-up]\`
 
-#
-#[[] cons [p] def [2] [n] def [[]] [f] def] [set-up] def
-#[n 1 + [] cons [n] def] [inc-n] def
-#[p n % 0 == [n f cons [] cons [f] def p n / [] cons [p] def] [inc-n] if-else] [prime-fact] def
-#[p 1 <= [f] [prime-fact factorize] if-else] [factorize] def
-#210 set-up factorize
-#
-
-`, {
-      summary: 'v2 prime factors of a number', desc: `
-Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
-`, level: 10, tutorial: 'your own words'
-    }],
-
+  Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
+  `, level: 12, tutorial: 'your own words'
+      }],
   
   
-  [`list_module import
-{desc:'Prime factors of a number'
-local-words:{
- package:[{n:2 f:[]} swap check-integer p set] # builds {n:2 f:[] p:210}
- p-n:[n get [p get] dip] # p-n pulls p and n out of the package
- n-f:[n get [f get] dip]
- n-inc:[n get 1 + n set]
- prime-factor?:[p-n % 0 == [n-f push f set p-n / p set] [n-inc] if-else]
- factorize:[p get 1 <= [f get] [prime-factor? factorize] if-else]
- check-integer:[dup 0 > not [drop 1] if]
- clean-up:[swap drop]
-}
-expects: [{desc: 'a positive' ofType: 'integer'}]
-effects: [0]
-definition:[package factorize clean-up]
-} [factor] define
-210 factor
-`, {
-      summary: 'find the prime factors of a number', desc: `
+  
+  [`
+  list_module import
+  {desc:'factors of a number'
+   named-args:[p]
+   local-words:{
+    n:[2]
+    f:[[]]
+    store:[[[] cons] dip local-def]
+    inc-n:[n 1 + [n] store]
+    prime-factor?:[p n % 0 == [n f cons [f] store p n / [p] store] [inc-n] if-else]
+    factorize:[p 1 <= [f] [prime-factor? factorize] if-else]
+    check-integer:[p 0 > not [1 [p] store] if]
+    clean-up:[swap drop]
+   }
+   expects: [{desc: 'a positive' ofType: 'integer'}]
+   effects: [0]
+   definition:[check-integer factorize]
+  } [factor] define
+  27 factor
+  `, {
+      summary: 'prime factors v3', desc: `
+      Not best way but good to experiment, this version (3) makes use of local-def in the for me of the word \`store\`
 Try _disabling_ debugging before factoring any large numbers, try 510510 (made of consecutive primes)
-`, level: 9, tutorial: 'your own words'
+`, level: 13, tutorial: 'your own words'
     }],
+
+
   [`list_module import
 [[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
 4 [15] 6 dup3
