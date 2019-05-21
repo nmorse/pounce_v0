@@ -49,7 +49,7 @@
         ['[C] [B] [A] dip2', ['A', ['C'], ['B']]],
         ['3 [A] [B] [2 +] dip2', [5, ['A'], ['B']]],
         ['[A] apply', ['A']],
-        ['A un-apply', [['A']]],
+        ['2 3 [+] apply', [5]],
         ['1 1 [dup2 +] dup dip dup dip', [1, 1, 2, 3, ['dup2', '+']]],
         ['1 1 15 [dup2 +] dup dip2 swap 1 - swap dup dip2', [1, 1, 2, 3, 14, ['dup2', '+']]],
         ['[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def', []],

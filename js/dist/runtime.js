@@ -118,19 +118,6 @@ var pounce = (function () {
         return [s, pl];
       }
     },
-    'un-apply': {
-      expects: [{ desc: 'an word', ofType: 'any' }], effects: [0], tests: [], desc: 'put a word into list form',
-      definition: function (s, pl) {
-        const item = s.pop();
-        if (isArray(item)) {
-          pl = [item].concat(pl);
-        }
-        else {
-          pl.unshift([item]);
-        }
-        return [s, pl];
-      }
-    },
     'dip': {
       expects: [{ desc: 'a', ofType: 'list' }], effects: [-1], tests: [], desc: 'apply under the top of the stack (see apply)',
       definition: function (s, pl) {
@@ -248,24 +235,6 @@ var pounce = (function () {
       expects: [], effects: [1], tests: [], desc: 'stack depth',
       definition: function (s, pl) {
         s.push(s.length);
-        return [s];
-      }
-    },
-    'n*': {
-      expects: [], effects: [], tests: [], desc: 'multiply a stack numbers (depreceated)',
-      definition: function (s, pl) {
-        if (s.length >= 2) {
-          const a = s.pop();
-          const b = s.pop();
-          if (isNumber(a) && isNumber(b)) {
-            s.push(a * b);
-            pl.unshift('n*');
-            return [s, pl];
-          }
-          else {
-            s.push(b, a);
-          }
-        }
         return [s];
       }
     },
@@ -467,8 +436,6 @@ var pounce = (function () {
       expects: [{ desc: 'conditional', ofType: 'list' }, { desc: 'then clause', ofType: 'list' }, { desc: 'then clause', ofType: 'list' }], effects: [-3], tests: [], desc: 'conditionally apply the first or second quotation',
       definition: [['apply'], 'dip2', 'if-else']
     },
-    'count-down': ['dup', 1, '-', ['dup', 1, '-', 'count-down'], 'if'],
-    'fact': ['count-down', 'n*'],
     'floor': ['dup', 1, '%', '-'],
     'rollup': {
       expects: [{ desc: 'a', ofType: 'any' }, { desc: 'b', ofType: 'any' }, { desc: 'c', ofType: 'any' }], effects: [0], tests: ['A B C rollup', ['C', 'A', 'B']], desc: 'roll up 3 elements on the stack, the top item ends up under the other two',
