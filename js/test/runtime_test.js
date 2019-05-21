@@ -71,6 +71,7 @@
         [`list_module import [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15] [dup 2 % 0 == [-1 *] if] map`, [[1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15]]],
         ['list_module import [5 4 3] [dup 2 / 2 - 0 > [] cons cons] map', [[[5, true], [4, false], [3, false]]]],
         ['list_module import [1 2 3] [2 *] map [3 >] filter 0 [+] reduce', [10]],
+        ['list_module import [[1 2] [2 3] [3 4]] [[-1 *] map] map', [[[-1, -2], [-2, -3], [-3, -4]]]],
         ['list_module import [true true false true] true [and] reduce # all', [false]],
         ['list_module import [true true true true] true [and] reduce # all', [true]],
         ['list_module import [false false false false] false [or] reduce # any', [false]],
@@ -112,9 +113,9 @@ str_module import
         [`
 list_module import
 [7 1] [5 +] map
-10 10 10 10 [0 1 2 3] [swap /] map
+10 10 10 10 [0 1 2 3] [swap /] map-under
 [dup 3 + swap -1 * 7 + [] cons cons] [myword] def
-[1 2 3] [myword] map
+[1 2 3] [myword] map-under
 `
             , [[12, 6],
             [0, 0.1, 0.2, 0.3],

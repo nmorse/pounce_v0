@@ -482,7 +482,7 @@ var pounce = (function () {
       expects: [{ desc: 'a', ofType: 'any' }, { desc: 'b', ofType: 'any' }, { desc: 'c', ofType: 'any' }], effects: [0], tests: ['A B C rotate', ['C', 'B', 'A']], desc: 'inverts the order of the top three elements',
       definition: ['swap', ['swap'], 'dip', 'swap']
     },
-    'map': {
+    'map-under': {
       'requires': 'list_module',
       'named-args': ['c', 'q'],
       'local-words': {
@@ -495,7 +495,7 @@ var pounce = (function () {
       },
       'definition': ['init-a', 'maping', 'a']
     },
-    'map-version-0': {
+    'map': {
       'local-words': {
         'setup-map': [[]],
         'process-map': [
