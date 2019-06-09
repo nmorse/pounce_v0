@@ -202,7 +202,6 @@ Each line on the program
   59 122 130 99 cb-line
   {color:{r:64 g:0 b:255 a:0.5} x:30 y:40 w:60 h:40} cb-box
   {color:{r:255 g:63 b:127 a:0.5} x:60 y:50 w:40 h:50} cb-box
-  drop
   `, { summary: 'Draw some shapes', desc: 'Draws lines and rectangles on the canvas as a drawing demo', level: 1, tutorial: 'io on canvas' }],
   [
     `canvas_basic_module import
@@ -211,11 +210,10 @@ Each line on the program
   50 60 cb-line-to
   100 10 cb-line-to
   cb-end-path
-  drop
   `, { summary: 'Draw a check-mark', desc: 'Draws a line on the canvas', level: 2, tutorial: 'io on canvas' }],
   [
     `canvas_basic_module import
-  [[x set] dip y set] [pack] def
+  {} [[x set] dip y set] [pack] def
   [y get [x get] dip] [unpack] def
   canvas cb-init cb-clear
   30 45 pack unpack cb-begin-path unpack [20 +] dip 20 + cb-line-to
