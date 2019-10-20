@@ -231,6 +231,12 @@ var pounce = (function () {
         return [s];
       }
     },
+    'random':{
+      definition: function(s) {
+        s.push(Math.random());
+        return [s];
+      }
+    },
     'depth': {
       expects: [], effects: [1], tests: [], desc: 'stack depth',
       definition: function (s, pl) {
@@ -319,55 +325,6 @@ var pounce = (function () {
     'repeat': {
       // 'requires':'list_module',
       'definition': ['dup', 0, '>', [1, '-', 'swap', 'dup', 'dip2', 'swap', 'repeat'], ['drop', 'drop'], 'if-else']
-    },
-    'get': {
-      expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }], effects: [0], tests: [], desc: 'get the value of a property from a record',
-      definition: function (s) {
-        const key = s.pop();
-        const rec = s[s.length - 1];
-        if (rec) { s.push(cloneItem(rec[key])); }
-        return [s];
-      }
-    },
-    'set': {
-      expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }, { desc: 'value', ofType: 'any' }], effects: [-2], tests: [], desc: 'set the value of a property in a record',
-      definition: function (s) {
-        const key = s.pop();
-        const value = s.pop();
-        let rec = s[s.length - 1];
-        if (rec) { rec[key] = cloneItem(value); }
-        return [s];
-      }
-    },
-    'get*': {
-      expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }], effects: [0], tests: [], desc: 'get the value of a property from a record',
-      definition: function (s) {
-        const key = s.pop();
-        let i = s.length - 1;
-        while (i >= 0 && !isObject(s[i])) {
-          i--;
-        }
-        if (i >= 0 && isObject(s[i])) {
-          const rec = s[i];
-          s.push(cloneItem(rec[key]));
-        }
-        return [s];
-      }
-    },
-    'set*': {
-      expects: [{ desc: 'a', ofType: 'record' }, { desc: 'key', ofType: 'word' }, { desc: 'value', ofType: 'any' }], effects: [-2], tests: [], desc: 'set the value of a property in a record',
-      definition: function (s) {
-        const key = s.pop();
-        const value = s.pop();
-        let i = s.length - 1;
-        while (i >= 0 && !isObject(s[i])) {
-          i--;
-        }
-        if (i >= 0 && isObject(s[i])) {
-          s[i][key] = cloneItem(value);
-        }
-        return [s];
-      }
     },
     'case': {
       expects: [{ desc: 'key', ofType: 'word' }, { desc: 'a', ofType: 'record' }], effects: [-2], tests: [], desc: 'apply a matching case',

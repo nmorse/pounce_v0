@@ -12,7 +12,7 @@
   }
   let lookup = {};
 
-  // example: [{event:'mouse click' x:10 y:10 } { w:5 h:5 } merge box] [mouse click] subscribe
+  // example: [{event:'mouse click' x:10 y:10 } { w:1 h:5 } merge box] [mouse click] subscribe
   const module_words = {
     'subscribe': {
       expects: [{ desc: 'word to run', ofType: 'list' }, { desc: 'event name', ofType: 'list of one string' }], effects: [-2], tests: [], desc: 'set up a subscription to an event',

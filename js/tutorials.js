@@ -45,11 +45,13 @@ const examples = [
 5 [6 7] cons`, { summary: 'cons to the front', desc: '\'cons\' adds an item to the beginning of a list.', level: 2, tutorial: 'lists and records' }],
   [`list_module import
 [5 6 7] uncons`, { summary: 'uncons off the front', desc: '\'uncons\' removes an item from the beginning of a list.', level: 3, tutorial: 'lists and records' }],
-  [`{a:3 b:7} 1 a set`, {
+  [`rec_module import
+  {a:3 b:7} 1 a set`, {
     summary: 'set a property in a record', desc: '\'set\' takes a key and value and sets the record below.',
     level: 4, tutorial: 'lists and records'
   }],
-  [`{a:3 b:7} b get`, {
+  [`rec_module import
+  {a:3 b:7} b get`, {
     summary: 'get a value from a record', desc: '\'get\' takes a key and gets the value in the record below.',
     level: 5, tutorial: 'lists and records'
   }],
@@ -109,6 +111,7 @@ Try _disabling_ debugging before factoring any large numbers, try 510510 (made o
       
   
   [`list_module import
+    rec_module import
   { desc:'prime factors of a number'
     local-words:{
       package:[{n:2 f:[]} swap check-integer p set] # builds {n:2 f:[] p:210}
@@ -213,6 +216,7 @@ Each line on the program
   `, { summary: 'Draw a check-mark', desc: 'Draws a line on the canvas', level: 2, tutorial: 'io on canvas' }],
   [
     `canvas_basic_module import
+    rec_module import
   {} [[x set] dip y set] [pack] def
   [y get [x get] dip] [unpack] def
   canvas cb-init cb-clear
