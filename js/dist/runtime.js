@@ -231,9 +231,38 @@ var pounce = (function () {
         return [s];
       }
     },
-    'random':{
-      definition: function(s) {
+    'random': {
+      definition: function (s) {
         s.push(Math.random());
+        return [s];
+      }
+    },
+    'round': {
+      definition: function (s) {
+        const pres = s.pop();
+        const n = s.pop();
+        s.push(Math.round(n / pres) * pres);
+        return [s];
+      }
+    },
+    'store.set': {
+      definition: function (s) {
+        const name = s.pop();
+        localStorage.setItem(name, JSON.stringify(s.pop()));
+        return [s];
+      }
+    },
+    'store.get': {
+      definition: function (s) {
+        const name = s.pop();
+        s.push(JSON.parse(localStorage.getItem(name)));
+        return [s];
+      }
+    },
+    'store.remove': {
+      definition: function (s) {
+        const name = s.pop();
+        localStorage.removeItem(name);
         return [s];
       }
     },
@@ -575,7 +604,7 @@ var pounce = (function () {
     , halt: false
     , run:
       function run(pl = [], stack = [], wordstack = [], record_histrory = false) {
-        if(pl.length === 0 && resumable.pl.length > 0) {
+        if (pl.length === 0 && resumable.pl.length > 0) {
           pl = resumable.pl;
           stack = resumable.stack;
           wordstack = resumable.wordstack;

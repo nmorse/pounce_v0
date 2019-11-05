@@ -247,7 +247,47 @@ Each line on the program
     
   subscription_module import
   [cb-box] [mousemove] subscribe`, { summary: 'Input event mousemove', desc: 'draws a box on canvas when a mousemove event fires.', level: 6, tutorial: 'io on canvas' }]
+  ,
+  [
+    `canvas_basic_module import
+    canvas cb-init cb-clear
+    rec_module import
+    
+    [{x:0 y:0 w:0 h:0 color:{r:0 g:0 b:0 a:0.5}} 
+    random 200 * 1 round x set
+    x get random 50 * + 1 round w set 
+    random 100 * 1 round y set
+    random 100 * 1 round h set 
+    {r:180 g:150 b:150 a:0.5}
+    random 255 * 1 round r set
+    random 255 * 1 round g set
+    random 255 * 1 round b set
+    random 0.01 round a set
+    color set dup
+    cb-box
+    ] [boxr] def
+    [boxr] 7 repeat`
+    , { summary: 'random composition', desc: 'draws random rectangles.', level: 7, tutorial: 'io on canvas' }]
 ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const sortBylevel = (e) => e.sort((a, b) => (level_order[a[1].tutorial] + (a[1].level * 0.01) > level_order[b[1].tutorial] + (b[1].level * 0.01)) ? 1 : -1);
 const level_order = { "introduction": 1, "strings": 2, "calculate": 3, "rearrange the stack": 4, "lists and records": 5, "higher order words": 6, "your own words": 7, "io on canvas": 8, "advanced": 9 };
