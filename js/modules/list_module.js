@@ -91,6 +91,24 @@
         return [s];
       }
     }
+    ,
+    'map': {
+      expects: [{ desc: 'a', ofType: 'list' }, { desc: 'a', ofType: 'list' }], effects: [-1], tests: [], desc: 'map a function onto a list',
+      definition: function (s, pl, wordstack) {
+        const wds = s.pop();
+        const list = s.pop();
+        console.log(list, wds);
+        const newlist = list.map((item) => {
+          const pl1 = pounce.cloneItem(wds);
+          console.log('pl1', pl1);
+          const [pl, s] = pounce.run(pl1, [item], wordstack);
+          return s[0];
+        });
+        console.log(newlist);
+        s.push(newlist);
+        return [s];
+      }
+    }
   };
 
   var exported = { words: module_words };

@@ -251,22 +251,25 @@ Each line on the program
   [
     `canvas_basic_module import
     canvas cb-init cb-clear
+    list_module import
     rec_module import
     
-    [{x:0 y:0 w:0 h:0 color:{r:0 g:0 b:0 a:0.5}} 
-    random 200 * 1 round x set
-    x get random 50 * + 1 round w set 
-    random 100 * 1 round y set
-    random 100 * 1 round h set 
-    {r:180 g:150 b:150 a:0.5}
-    random 255 * 1 round r set
-    random 255 * 1 round g set
-    random 255 * 1 round b set
-    random 0.01 round a set
-    color set dup
-    cb-box
-    ] [boxr] def
-    [boxr] 7 repeat`
+    []
+[{x:0 y:0 w:0 h:0 color:{r:0 g:0 b:0 a:0.5}} 
+      random 200 * 1 round x set
+      x get 250 swap - random * 1 round w set 
+      random 100 * 1 round y set
+      y get 150 swap - random * 1 round h set 
+      {r:180 g:150 b:150 a:0.5}
+      random 255 * 1 round r set
+      random 255 * 1 round g set
+      random 255 * 1 round b set
+      random 0.01 round a set
+      color set
+] [boxr] def
+[boxr push] 7 repeat
+    
+[cb-box] map`
     , { summary: 'random composition', desc: 'draws random rectangles.', level: 7, tutorial: 'io on canvas' }]
 ];
 

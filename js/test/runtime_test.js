@@ -55,12 +55,12 @@
         ['[ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def', []],
         ['1 [3 +] 6 repeat', [19]],
         ['10 20 30 40 2 bubble-up', [10, 30, 40, 20]],
-        ['{a:5 b:3} b get', [{ 'a': 5, 'b': 3 }, 3]],
-        ['{a:5 b:3} b get 8 + a set', [{ 'a': 11, 'b': 3 }]],
-        ['{a:5 b:3} dup b get 8 + a set', [{ 'a': 5, 'b': 3 }, { 'a': 11, 'b': 3 }]],
-        ['list_module import {a:{b:[1 2 3]}} dup a get b get 4 push b set a set', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3, 4] } }]],
-        ['list_module import {a:{b:[1 2 3]}} dup a get b get 4 push', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3] } }, { 'b': [1, 2, 3] }, [1, 2, 3, 4]]],
-        [`list_module import
+        ['rec_module import {a:5 b:3} b get', [{ 'a': 5, 'b': 3 }, 3]],
+        ['rec_module import {a:5 b:3} b get 8 + a set', [{ 'a': 11, 'b': 3 }]],
+        ['rec_module import {a:5 b:3} dup b get 8 + a set', [{ 'a': 5, 'b': 3 }, { 'a': 11, 'b': 3 }]],
+        ['list_module import rec_module import {a:{b:[1 2 3]}} dup a get b get 4 push b set a set', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3, 4] } }]],
+        ['list_module import rec_module import {a:{b:[1 2 3]}} dup a get b get 4 push', [{ 'a': { 'b': [1, 2, 3] } }, { 'a': { 'b': [1, 2, 3] } }, { 'b': [1, 2, 3] }, [1, 2, 3, 4]]],
+        [`list_module import rec_module import
         [ dup 0 > [1 - swap dup dip2 swap repeat] [drop drop] if-else ] [repeat] def
          [ rel-x get [ rel-y get] dip [] swap push swap push] [get-rel-vec] def
          [{rel-x:12 rel-y:-2}] [mouse-move-sim] def

@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  function runMouse(event) {
+  function runSub(event) {
     // console.log(event);
     // console.log(`event: ${event.type} run ${lookup[event.type]}`);
     const x = event.offsetX;
@@ -12,27 +12,26 @@
   }
   let lookup = {};
 
+  // eventTypes: ['mousemove', 'click', 'mousedown', ...]
   // example: [{event:'mouse click' x:10 y:10 } { w:1 h:5 } merge box] [mouse click] subscribe
   const module_words = {
     'subscribe': {
       expects: [{ desc: 'word to run', ofType: 'list' }, { desc: 'event name', ofType: 'list of one string' }], effects: [-2], tests: [], desc: 'set up a subscription to an event',
       definition: function (s, pl, wordstack) {
         //const [eventType, eventName] = s.pop();
-        const [eventName] = s.pop();
+        const [eventType] = s.pop();
         const definition = s.pop();
-        lookup[eventName] = [definition, s, wordstack];
+        lookup[eventType] = [definition, s, wordstack];
         const canvas = document.querySelector('#canvas');
-        canvas.removeEventListener('mousemove', runMouse, true);
-        canvas.removeEventListener('click', runMouse, true);
-        canvas.removeEventListener('mousedown', runMouse, true);
-        canvas.addEventListener(eventName, runMouse, true);
+        canvas.addEventListener(eventType, runSub, true);
         return [s];
       }
     },
     'unsubscribe': {
       expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an item', ofType: 'any' }], effects: [-1], tests: [], desc: 'push an item on end of a list',
       definition: function (s) {
-        const eventName = s.pop();
+        const eventType = s.pop();
+        canvas.removeEventListener(eventType, runMouse, true);
         return [s];
       }
     }
