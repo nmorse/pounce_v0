@@ -245,6 +245,68 @@ var pounce = (function () {
         return [s];
       }
     },
+    'abs': {
+      definition: function (s) {
+        const n = s.pop();
+        s.push(Math.abs(n));
+        return [s];
+      }
+    },
+    's2int': {
+      expects: [{desc:'a number in a string', ofType:'string'}, {desc: 'radix', ofType: 'integer'}],
+      definition: function (s) {
+        const radix = s.pop();
+        const str = s.pop();
+        console.log(str, radix, "s2int");
+        s.push(Number.parseInt(str, radix));
+        return [s];
+      }
+    },
+    'int2s': {
+      expects: [{desc:'number', ofType:'integer'}, {desc: 'radix', ofType: 'integer'}],
+      definition: function (s) {
+        const radix = s.pop();
+        const n = s.pop();
+        s.push(n.toString(radix));
+        return [s];
+      }
+    },
+    '<<': {
+      expects: [{desc:'number', ofType:'integer'}, {desc: 'shift', ofType: 'integer'}],
+      definition: function (s) {
+        const shift = s.pop();
+        const n = s.pop();
+        s.push(n << shift);
+        return [s];
+      }
+    },
+    '>>': {
+      expects: [{desc:'number', ofType:'integer'}, {desc: 'shift', ofType: 'integer'}],
+      definition: function (s) {
+        const shift = s.pop();
+        const n = s.pop();
+        s.push(n >> shift);
+        return [s];
+      }
+    },
+    'XOR': {
+      expects: [{desc:'number', ofType:'integer'}, {desc: 'shift', ofType: 'integer'}],
+      definition: function (s) {
+        const shift = s.pop();
+        const n = s.pop();
+        s.push(n ^ shift);
+        return [s];
+      }
+    },
+    'AND': {
+      expects: [{desc:'number', ofType:'integer'}, {desc: 'shift', ofType: 'integer'}],
+      definition: function (s) {
+        const shift = s.pop();
+        const n = s.pop();
+        s.push(n & shift);
+        return [s];
+      }
+    },
     'store.set': {
       definition: function (s) {
         const name = s.pop();

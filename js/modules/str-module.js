@@ -69,6 +69,13 @@
       const ud1 = un_decorate_string(coerse_to_string(stack.pop()));
       stack.push(ud1.decor + ud1.str + ud2.str + ud1.decor);
       return [stack];
+    }},
+    'str-dequote': {expects: [{desc: 'source 1', ofType: 'string'}], effects:[0], 
+      desc: 'remove quotes around a string',
+      definition: function(stack) {
+      const ud1 = un_decorate_string(coerse_to_string(stack.pop()));
+      stack.push(ud1.str);
+      return [stack];
     }}
   };
   
