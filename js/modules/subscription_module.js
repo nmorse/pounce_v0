@@ -8,7 +8,9 @@
     const y = event.offsetY;
     const evt = { x, y };
     //console.log(evt);
-    pounce.run([evt, ...lookup[event.type][0]], lookup[event.type][1], lookup[event.type][2]);
+    const [_, resultstack] = pounce.run([evt, ...lookup[event.type][0]], lookup[event.type][1], lookup[event.type][2]);
+    // console.log(resultstack);
+    pounce.resumable.stack = [...pounce.resumable.stack, ...pounce.cloneItem(resultstack)];
   }
   let lookup = {};
 
