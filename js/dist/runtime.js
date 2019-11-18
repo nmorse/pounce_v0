@@ -150,6 +150,11 @@ var pounce = (function () {
         return [s, pl];
       }
     },
+    'log': {definition: (s) => {
+      console.log(s);
+      return [s];
+     } 
+    },
     'drop': {
       expects: [{ desc: 'some value', ofType: 'any' }], effects: [-1], tests: [], desc: 'remove one element from the top of the stack',
       definition: function (s) {
