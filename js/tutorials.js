@@ -79,7 +79,7 @@ const examples = [
     level: 5, tutorial: 'higher order words'
   }],
   [`[dup2 +] [fib] def
-  0 1 fib 8 repeat`,
+  0 1 [fib] 8 repeat`,
     {
       summary: 'define a word "fib"',
       desc: `[dup2 +] is two words in a list then use \`def\` is defined is as a word.
@@ -169,13 +169,13 @@ Try _disabling_ debugging before factoring any large numbers, try 510510 (made o
   [`list_module import
 [[dup] dip2 [dup] dip dup 4 bubble-up 3 bubble-up 2 bubble-up] [dup3] def
 4 [15] 6 dup3
-[4 push] dip`, {
+# [4 push] dip`, {
       summary: 'duplicate 3', desc: `
 ## Duplicate the top 3 items on the stack
 Each line on the program
  1. defined (dup3) duplicates the top 3 stack items.
  2. \`a [15] 6 dup3\` a quick test shows that it works
- 3. \`[4 push] dip\` and to show that it is truely a copy and not just an array reference
+ 3. \`[4 push] dip\` to show that it is truely a copy and not just an array reference
 `, level: 3, tutorial: 'your own words'
     }],
   [`{ named-args:[list1 list2]
@@ -269,7 +269,7 @@ Each line on the program
 ] [boxr] def
 [boxr push] 7 repeat
     
-[cb-box] map`
+[cb-box] map drop`
     , { summary: 'random composition', desc: 'draws random rectangles.', level: 7, tutorial: 'io on canvas' }]
 ];
 
