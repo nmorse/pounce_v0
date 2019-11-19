@@ -237,7 +237,7 @@ Each line on the program
     {color:{r:18 g:16 b:125 a:0.3} x:0 y:0 w:1 h:1} cb-box
     
   subscription_module import
-  [cb-box] [click] subscribe`, { summary: 'Input click on canvas', desc: 'setup a subscription to listen for click events and then draw a box on the canvas.', level: 5, tutorial: 'io on canvas' }]
+  [cb-box] [click] canvas subscribe`, { summary: 'Input click on canvas', desc: 'setup a subscription to listen for click events and then draw a box on the canvas.', level: 5, tutorial: 'io on canvas' }]
   ,
   [
     `canvas_basic_module import
@@ -246,7 +246,7 @@ Each line on the program
     {color:{r:18 g:163 b:25 a:0.3} x:0 y:0 w:1 h:1} cb-box
     
   subscription_module import
-  [cb-box] [mousemove] subscribe`, { summary: 'Input event mousemove', desc: 'draws a box on canvas when a mousemove event fires.', level: 6, tutorial: 'io on canvas' }]
+  [cb-box] [mousemove] canvas subscribe`, { summary: 'Input event mousemove', desc: 'draws a box on canvas when a mousemove event fires.', level: 6, tutorial: 'io on canvas' }]
   ,
   [
     `canvas_basic_module import
