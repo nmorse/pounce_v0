@@ -62,12 +62,21 @@
       return [stack];
     }},
     'str-append': {expects: [{desc: 'source 1', ofType: 'string'}, {desc: 'source 2', ofType: 'string'}], effects:[-1], tests: [
-      [`'hello' ' ' str-append 'world'`, ['hello world']]
+      [`'hello' ' world' str-append`, ['hello world']]
       ], desc: 'append two strings together',
       definition: function(stack) {
       const ud2 = un_decorate_string(coerse_to_string(stack.pop()));
       const ud1 = un_decorate_string(coerse_to_string(stack.pop()));
       stack.push(ud1.decor + ud1.str + ud2.str + ud1.decor);
+      return [stack];
+    }},
+    'str-split': {expects: [{desc: 's', ofType: 'string'}, {desc: 'delimiter', ofType: 'string'}], effects:[-1], tests: [
+      [`'hello' ' ' str-append 'world'`, ['hello world']]
+      ], desc: 'splits a string',
+      definition: function(stack) {
+      const delimPobj = un_decorate_string(coerse_to_string(stack.pop()));
+      const strPobj = un_decorate_string(coerse_to_string(stack.pop()));
+      stack = [...stack, ...strPobj.str.split(delimPobj.str)];
       return [stack];
     }},
     'str-dequote': {expects: [{desc: 'source 1', ofType: 'string'}], effects:[0], 
