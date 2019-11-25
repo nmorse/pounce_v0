@@ -262,7 +262,6 @@ var pounce = (function () {
       definition: function (s) {
         const radix = s.pop();
         const str = s.pop();
-        console.log(str, radix, "s2int");
         s.push(Number.parseInt(str, radix));
         return [s];
       }
