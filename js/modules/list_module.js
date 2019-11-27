@@ -2,6 +2,27 @@
   'use strict';
 
   const module_words = {
+    'peek': {
+      expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an index', ofType: 'integer' }], effects: [0], tests: [], desc: 'peek (read) an item at index',
+      definition: function (s) {
+        const index = s.pop();
+        const top = s.length - 1;
+        const list = s[top];
+        s.push(list[index]);
+        return [s];
+      }
+    },
+    'poke': {
+      expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an item', ofType: 'any' }, { desc: 'an index', ofType: 'integer' }], effects: [0], tests: [], desc: 'peek (read) an item at index',
+      definition: function (s) {
+        const index = s.pop();
+        const item = s.pop();
+        const top = s.length - 1;
+        let list = s[top];
+        list[index] = item;
+        return [s];
+      }
+    },
     'push': {
       expects: [{ desc: 'a', ofType: 'list' }, { desc: 'an item', ofType: 'any' }], effects: [-1], tests: [], desc: 'push an item on end of a list',
       definition: function (s) {
