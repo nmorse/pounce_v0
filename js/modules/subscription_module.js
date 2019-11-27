@@ -3,12 +3,13 @@
 
   function runSub(event) {
     // console.log(event);
-    // console.log(`event: ${event.type} run ${lookup[event.type]}`);
+    // console.log(`event: ${event.type} run ${lookup[event.type + event.target.id]}`, event);
     const x = event.offsetX;
     const y = event.offsetY;
     const evt = { x, y };
     //console.log(evt);
-    const [_, resultstack] = pounce.run([evt, ...lookup[event.type][0]], lookup[event.type][1], lookup[event.type][2]);
+    const key = event.type + event.target.id;
+    const [_, resultstack] = pounce.run([evt, ...lookup[key][0]], lookup[key][1], lookup[key][2]);
     // console.log(resultstack);
     pounce.resumable.stack = [...pounce.resumable.stack, ...pounce.cloneItem(resultstack)];
   }
@@ -26,7 +27,7 @@
         const eleId = s.pop();
         const [eventType] = s.pop();
         const definition = s.pop();
-        lookup[eventType] = [definition, s, wordstack];
+        lookup[eventType + eleId] = [definition, s, wordstack];
         const domEle = document.querySelector('#' + eleId);
         domEle.addEventListener(eventType, runSub, true);
         return [s];
