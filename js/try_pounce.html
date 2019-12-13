@@ -90,7 +90,8 @@
 </head>
 
 <body onhashchange="onHashChange()">
-  <div class="top-bar row-container" id="examples_section">Try Pounce
+  <div class="top-bar row-container" id="examples_section"><img src="dist/logo.png" style="padding-right:4px;"/>
+    <div class="top-bar-toutorial" style="padding:2px;" >Pounce</div>
     <div class="top-bar-toutorial" v-for="category in tutorials">
       <button v-on:click="show_example_toggle(category)">{{category}}</button>
       <div v-show="show_category === category" class="menu-drop">
@@ -119,7 +120,7 @@
       <canvas id="canvas" width="250" height="150" style="padding: 0;
       border: solid 1px rgb(190, 190, 190);
       margin: 10px;"></canvas>
-      <div id="output">test</div>
+      <div id="output">DOM div id="output"</div>
     </div>
     <div class="col-container">
       <div class="row-container">
