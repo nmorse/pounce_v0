@@ -140,7 +140,7 @@
       }
     },
 
-    // # usage example for cb-transform and cb-transform-restore
+    // # usage example for cb-transform-invoke and cb-transform-restore
     // canvas_basic_module import
     // canvas cb-init cb-clear
     // [
@@ -151,7 +151,7 @@
     //   cb-transform-restore
     // ] [draw-with-skew] def
     // draw-with-skew
-    'cb-transform': {
+    'cb-transform-invoke': {
       desc: 'transform it {xsc:1 ysc:1 xsk:0 ysk:0 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
       definition: function(s, pl, ws) {
         const tf = s.pop();
@@ -167,6 +167,33 @@
         const ctx = ws[0].ctx;
         ctx.restore();
         return [s];
+      }
+    },
+    // # usage example for cb-transform
+    // canvas_basic_module import
+    // canvas cb-init cb-clear
+    // [
+    //   {color:{r:127 g:127 b:127 a:0.5} x:10  y:30  w:100 h:70} cb-box
+    //   {color:{r:127 g:127 b:127 a:0.5} x:70 y:60 w:100 h:70} cb-box
+    //   {color:{r:127 g:127 b:127 a:0.5} x:130 y:90 w:100 h:70} cb-box
+    // ] {xsc:1 ysc:1 xsk:0 ysk:-0.2 xtr:0 ytr:0} cb-transform
+    
+    'cb-transform': {
+      expects: [{ desc: 'phrase', ofType: 'list' }, { desc: 'a scale skew translate record', ofType: 'record' }], effects: [-2], tests: [], desc: 'apply a transform on a phrase',
+      definition: function (s, pl, ws) {
+        const tf = s.pop();
+        const block = s.pop();
+        const ctx = ws[0].ctx;
+        ctx.save();
+        ctx.transform(tf.xsc, tf.ysk, tf.xsk, tf.ysc, tf.xtr, tf.ytr);
+        pl = ['cb-transform-restore'].concat(pl);
+        if (pounce.isArray(block)) {
+          pl = block.concat(pl);
+        }
+        else {
+          pl.unshift(block);
+        }
+        return [s, pl];
       }
     }
   };
