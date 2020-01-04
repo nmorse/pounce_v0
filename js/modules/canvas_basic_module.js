@@ -126,6 +126,48 @@
         ctx.drawImage(ctx.images[n], 0, 0);
         return [s];
       }
+    },
+    'cb-color-at': {
+      desc: 'get the pixel color at an x y location',
+      definition: function(s, pl, ws) {
+        const pt = s.pop();
+        const ctx = ws[0].ctx;
+        var pixel = ctx.getImageData(pt.x, pt.y, 1, 1);
+        var data = pixel.data;
+        var rgba = { r: data[0], g: data[1], b: data[2], a: (data[3] / 255)};
+        s.push(rgba);
+        return [s];
+      }
+    },
+
+    // # usage example for cb-transform and cb-transform-restore
+    // canvas_basic_module import
+    // canvas cb-init cb-clear
+    // [
+    //   {xsc:1 ysc:1 xsk:0 ysk:-0.5 xtr:-30 ytr:10} cb-transform
+    //   {color:{r:127 g:127 b:127 a:0.5} x:50  y:50  w:100 h:70} cb-box
+    //   {color:{r:127 g:127 b:127 a:0.5} x:100 y:100 w:100 h:70} cb-box
+    //   {color:{r:127 g:127 b:127 a:0.5} x:150 y:150 w:100 h:70} cb-box
+    //   cb-transform-restore
+    // ] [draw-with-skew] def
+    // draw-with-skew
+    'cb-transform': {
+      desc: 'transform it {xsc:1 ysc:1 xsk:0 ysk:0 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
+      definition: function(s, pl, ws) {
+        const tf = s.pop();
+        const ctx = ws[0].ctx;
+        ctx.save();
+        ctx.transform(tf.xsc, tf.ysk, tf.xsk, tf.ysc, tf.xtr, tf.ytr);
+        return [s];
+      }
+    },
+    'cb-transform-restore': {
+      desc: 'transform it {xsc:1 xsk:0 ysk:0 ysc:1 xtr:0 ytr:0} (sc)ale (sk)ew (tr)anslate',
+      definition: function(s, pl, ws) {
+        const ctx = ws[0].ctx;
+        ctx.restore();
+        return [s];
+      }
     }
   };
 
