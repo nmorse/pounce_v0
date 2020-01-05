@@ -2,21 +2,17 @@
   'use strict';
 
   function runSub(event) {
-    // console.log(event);
-    // console.log(`event: ${event.type} run ${lookup[event.type + event.target.id]}`, event);
     const x = event.offsetX;
     const y = event.offsetY;
-    const evt = { x, y };
-    //console.log(evt);
+    const buttons = event.buttons; // button state
+    const evt = { x, y, buttons };
     const key = event.type + event.target.id;
     const [_, resultstack] = pounce.run([evt, ...lookup[key][0]], lookup[key][1], lookup[key][2]);
-    // console.log(resultstack);
     pounce.resumable.stack = [...pounce.resumable.stack, ...pounce.cloneItem(resultstack)];
   }
+
   let lookup = {};
 
-  // eventTypes: ['mousemove', 'click', 'mousedown', ...]
-  // example: [{event:'mouse click' x:10 y:10 } { w:1 h:5 } merge box] [click] canvas subscribe
   const module_words = {
     'subscribe': {
       expects: [{ desc: 'word to run', ofType: 'list' }, 
