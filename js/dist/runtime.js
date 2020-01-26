@@ -151,7 +151,8 @@ var pounce = (function () {
       }
     },
     'log': {definition: (s) => {
-      console.log(s);
+      logStack = cloneItem(s);
+      console.log(logStack);
       return [s];
      } 
     },
@@ -506,8 +507,8 @@ var pounce = (function () {
       'named-args': ['c', 'q'],
       'local-words': {
         'init-a': [[[]], ['a'], 'local-def'],
-        'update-a': ['a', 'cons', [], 'cons', ['a'], 'local-def'],
-        'destructive-first': ['c', 'pop', 'swap', [], 'cons', ['c'], 'local-def'],
+        'update-a': ['a', 'swap', 'push', [], 'cons', ['a'], 'local-def'],
+        'destructive-first': ['c', 'uncons', [], 'cons', ['c'], 'local-def'],
         'maping': ['c', 'list-length', 0, '>',
           ['destructive-first', 'q', 'apply', 'update-a', 'maping'],
           [], 'if-else']

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <script src="dist/runtime.js"></script>
   <script src="modules/str-module.js"></script>
@@ -22,78 +23,90 @@
 
   <style>
     body {
-        margin: 0;
-        font-family: "helvetica neue", roboto;
-        color: #614c23;
-        background: #f0f0f0;
-      }
-      .top-bar {
-        padding: 5px;
-        margin: 0;
-        background: gray;
-        color:white;
-      }
-      .top-bar-toutorial {
-        padding-left: 5px;
-      }
-      .menu-drop {
-        position: fixed;
-        background-color: #808080;
-        margin-left: -6px;
-        padding: 6px;
-      }
-      .content-area {
-        padding: 2px 15px;
-      }
-      .box {
-        border: none;
-        background: rgba(0,0,0,0.05);
-        margin: 1px 1px 2px 1px;
-        padding: 1px 3px;
-      }
-      .col-container {
-        display: flex;
-        flex-flow: column wrap;
-      }
-      .stack-up {
-        display: flex;
-        flex-wrap: wrap;
-        flex-flow: column-reverse wrap;
-        align-content: flex-end;
-      }
-      .stack-down {
-        display: flex;
-        flex-wrap: wrap;
-        flex-flow: column;
-        align-content: flex-start;
-      }
-      .row-container {
-        display: flex;
-        flex-flow: row nowrap;
-        overflow-x: auto;
-      }
-      .scroll {
-         overflow-x: scroll;
-      }
-      
-      .pounce-program-list-color {
-         background-color: rgba(20, 80, 250, 0.2);
-      }
-      
-      td {
-        vertical-align: top;
-      }
-      button {
-        padding: 4px 7px;
-        background-color: rgba(0,0,0,0.1);
-        border: none;
-      }
-    </style>
+      margin: 0;
+      font-family: "helvetica neue", roboto;
+      color: #614c23;
+      background: #f0f0f0;
+    }
+
+    .top-bar {
+      padding: 5px;
+      margin: 0;
+      background: gray;
+      color: white;
+    }
+
+    .top-bar-toutorial {
+      padding-left: 5px;
+    }
+
+    .menu-drop {
+      position: fixed;
+      background-color: #808080;
+      margin-left: -6px;
+      padding: 6px;
+    }
+
+    .content-area {
+      padding: 2px 15px;
+    }
+
+    .box {
+      border: none;
+      background: rgba(0, 0, 0, 0.05);
+      margin: 1px 1px 2px 1px;
+      padding: 1px 3px;
+    }
+
+    .col-container {
+      display: flex;
+      flex-flow: column wrap;
+    }
+
+    .stack-up {
+      display: flex;
+      flex-wrap: wrap;
+      flex-flow: column-reverse wrap;
+      align-content: flex-end;
+    }
+
+    .stack-down {
+      display: flex;
+      flex-wrap: wrap;
+      flex-flow: column;
+      align-content: flex-start;
+    }
+
+    .row-container {
+      display: flex;
+      flex-flow: row nowrap;
+      overflow-x: auto;
+    }
+
+    .scroll {
+      overflow-x: scroll;
+    }
+
+    .pounce-program-list-color {
+      background-color: rgba(20, 80, 250, 0.2);
+      height: 293px;
+    }
+
+    td {
+      vertical-align: top;
+    }
+
+    button {
+      padding: 4px 7px;
+      background-color: rgba(0, 0, 0, 0.1);
+      border: none;
+    }
+  </style>
 </head>
 
 <body onhashchange="onHashChange()">
-  <div class="top-bar row-container" id="examples_section"><img src="dist/logo.png" style="padding-right:4px;"/>
-    <div class="top-bar-toutorial" style="padding:2px;" >Pounce</div>
+  <div class="top-bar row-container" id="examples_section"><img src="dist/logo.png" style="padding-right:4px;" />
+    <div class="top-bar-toutorial" style="padding:2px;">Pounce</div>
     <div class="top-bar-toutorial" v-for="category in tutorials">
       <button v-on:click="show_example_toggle(category)">{{category}}</button>
       <div v-show="show_category === category" class="menu-drop">
@@ -108,11 +121,7 @@
     <button v-if="exampleDesc && !exampleGotIt" v-on:click="exampleGotIt = true">OK got it</button>
     <div class="row-container">
       <div class="stack-up">
-        <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
-          <option v-for="word in Object.keys(words).sort()" v-bind:value="word">
-            {{ word }}
-          </option>
-        </select>
+
 
         <div>{{helpWordDef}}</div>
         <div class="box">{{helpWordDesc}}</div>
@@ -126,30 +135,39 @@
     </div>
     <div class="col-container">
       <div class="row-container">
-        <div class="box" style="min-width:100px;">
-          <canvas id="pounce-animation" width="100" height="61"></canvas>
+        <div class="col-container">
+          <select style="font-size:initial;" class="box" v-model="helpWord" v-on:change="lookupWord(helpWord)">
+            <option v-for="word in Object.keys(words).sort()" v-bind:value="word">
+              {{ word }}
+            </option>
+          </select>
+          <div class="stack-down  box" style="min-width:200px; min-height:300px;">
+            <div v-for="ele in vs" class="box">
+              {{ ele }} &nbsp;
+            </div>
+          </div>
         </div>
+        <!-- <div class="box" style="min-width:100px;">
+          <canvas id="pounce-animation" width="100" height="61"></canvas>
+        </div> -->
         <div class="col-container">
           <div>
-            &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()" v-model="runUpToCursor"
-                type="checkbox" />run, only to cursor</label>
-            &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode" type="checkbox" />debug
+            &nbsp;<label for="runUpToCursor"><input id="runUpToCursor" v-on:change="focusEditor()"
+                v-model="runUpToCursor" type="checkbox" />run, only to cursor</label>
+            &nbsp;<label for="debugMode"><input id="debugMode" v-on:change="focusEditor()" v-model="debugMode"
+                type="checkbox" />debug
               mode</label>
           </div>
           <div>
             <div v-show="false && tooltip">tooltip</div>
-            <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)" placeholder="Enter Pounce words here"
-              spellcheck="false" v-focus style="font-size:16px; margin:3px;" class="pounce-program-list-color" rows="3"
-              cols="80" wrap="hard"></textarea>
+            <textarea v-model="ps" v-on:keyup="runPounce($event)" v-on:click="runPounce($event)"
+              placeholder="Enter Pounce words here" spellcheck="false" v-focus 
+              style="font-size:16px; margin: 6px; padding: 3px;"
+              class="pounce-program-list-color" rows="3" cols="80" wrap="hard"></textarea>
           </div>
         </div>
       </div>
       <div class="row-container">
-        <div class="stack-down  box" style="min-width:200px; min-height:300px;">
-          <div v-for="ele in vs" class="box">
-            {{ ele }} &nbsp;
-          </div>
-        </div>
         <!--
               <div class="col-container box" style="height:300px; width: 600px;">
                 <div v-for="(value, key) in words" class="box" style="width:100px;">
@@ -161,10 +179,12 @@
           <div v-for="h_instance in vs_history" class="stack-down box">
             <!--
               -->
-            <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color" style="width:100px; overflow: hidden;">
+            <div v-for="pl_item in h_instance.pl" class="box pounce-program-list-color"
+              style="width:100px; overflow: hidden;">
               {{ pl_item }}&nbsp;
             </div>
-            <div v-if="h_instance.term" class="box" style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
+            <div v-if="h_instance.term" class="box"
+              style="width:100px; overflow: hidden; background-color:rgba(20, 20, 200, 0.3);">
               {{ h_instance.term }}
             </div>
             <div v-for="item in h_instance.stack" class="box" style="width:100px; overflow: hidden;">
@@ -408,7 +428,7 @@
             this.vs_history = [];
           }
           try {
-            this.pl = Pounce_ast.parse(pounce_script+' ', { actions: parser_actions.parser_actions });
+            this.pl = Pounce_ast.parse(pounce_script + ' ', { actions: parser_actions.parser_actions });
           }
           catch (syntax_error) {
             // console.log(syntax_error);
@@ -439,7 +459,7 @@
         }
         , 'scan_recall': function (ps) {
           if (ps.indexOf(' recall') >= 1) {
-            const pl = Pounce_ast.parse(ps+' ', { actions: parser_actions.parser_actions });
+            const pl = Pounce_ast.parse(ps + ' ', { actions: parser_actions.parser_actions });
             if (pl.length === 2) {
               let key = pl[0][0];
               this.ps = '[' + pounce.unParse(this.words[key]) + '] [' + key + '] ';

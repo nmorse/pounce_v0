@@ -111,6 +111,16 @@
         s.push(list);
         return [s];
       }
+    },
+    'concat': {
+      expects: [{ desc: 'a', ofType: 'list' }, { desc: 'b', ofType: 'list' }], effects: [-1], tests: [], desc: 'concatinate two lists',
+      definition: function (s) {
+        const list_b = s.pop();
+        const list_a = s.pop();
+        const new_list = list_a.concat(list_b);
+        s.push(new_list);
+        return [s];
+      }
     }
     ,
     'map': {

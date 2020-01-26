@@ -11,7 +11,7 @@
         var ctx = canvas.getContext('2d');
         ctx.strokeStyle = 'black';
         ctx.fillStyle = 'white';
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 2;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.images = [];
