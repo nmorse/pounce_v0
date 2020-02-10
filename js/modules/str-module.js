@@ -37,7 +37,7 @@
       [`'hello' str-first`, ['ello', 'h']]
       ], desc: 'extract the first character from a string',
       definition: function(stack) {
-      const ud = un_decorate_string(stack.pop());
+      const ud = un_decorate_string(stack.pop().toString());
       const first = ud.str.slice(0, 1);
       const last_part = ud.decor + ud.str.slice(1) + ud.decor;
       stack.push(last_part, first);

@@ -272,7 +272,7 @@ var pounce = (function () {
       definition: function (s) {
         const radix = s.pop();
         const n = s.pop();
-        s.push(n.toString(radix));
+        s.push(Math.round(n).toString(radix));
         return [s];
       }
     },
