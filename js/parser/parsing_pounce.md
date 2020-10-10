@@ -1,4 +1,6 @@
 ## Pounce parser made with canopy
+$ npm install -g canopy
+
 with a .peg file Pounce_ast.peg run 
 $ canopy --lang js Pounce_ast.peg
 
