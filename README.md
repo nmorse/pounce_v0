@@ -1,4 +1,10 @@
-# Pounce, a concatenative programming language
+# Pounce, a concatenative programming language v0
+
+### New work on the Pounce language has moved to @pounce-lang
+[pounce-lang repo](https://github.com/pounce-lang) has a core language npm package and a few other supporting, learning, documenting and exhibiting projects. 
+
+## This repo is now an archive of the initial Version 0
+
 Pounce is a programming language that targets the Browser, and limited resource processors such as edge server and IoT.
 The aim of Pounce is to help everyone explore stack-based, __conatenative__ programming. Since Pounce works in the browser, you can try it out easily (with zero installation). This [tutorial](https://nmorse.github.io/pounce/js/try_pounce.html) will get you coding in minutes. If you end up liking this style of programming, you may want to look at some other Pounce interpreters for Python and C that are in early planning / alpha development.
 
