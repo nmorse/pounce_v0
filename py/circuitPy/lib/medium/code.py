@@ -5,7 +5,7 @@ pounce.words.update(hw.words)
 
 #from pounce import parsed_tests as testing
 
-pounce.words['delayS'] = [0.5]
+pounce.words['delayS'] = [1.5]
 pounce.words['nap'] = ['dup', '>sec', '-', 'dup', 0.1, '-', 'delayS', '<', ['sleep>'], 'if']
 pounce.words['nap-for'] = [['dup', '>sec', '-', 'dup', 0.1, '-'], 'dip', '<', ['sleep>'], 'if']
 pounce.words['toggle'] = [False, True, 'if-else']
@@ -17,7 +17,8 @@ pounce.words['blink1'] = ['dup', '>sec', '<',
                         'if',
                         'blink1']
 pounce.words['blink2'] = ['dup', '>sec', '<',
-                            ['later', 'flash'],
+                            #['later', 'flash'],
+                            ['color', 300, '*', '+', 'flash'],
                             ['delayS', 'nap-for'],
                         'if-else',
                         'blink2']

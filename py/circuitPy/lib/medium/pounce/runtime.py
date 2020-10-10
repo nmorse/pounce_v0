@@ -30,10 +30,15 @@ def _sub(s, pl):
     b = s.pop()
     s.append(b - a)
     return [s, pl]
-def _prod(s, pl):
+def _mult(s, pl):
     a = s.pop()
     b = s.pop()
     s.append(a * b)
+    return [s, pl]
+def _divide(s, pl):
+    a = s.pop()
+    b = s.pop()
+    s.append(int(a / b))
     return [s, pl]
 def _n_prod(s, pl):
     if len(s) >= 2:
@@ -129,7 +134,8 @@ words = {
   'dup': _dup,
   '+': _add,
   '-': _sub,
-  '*': _prod,
+  '*': _mult,
+  '/': _divide,
   'n*': _n_prod,
   '==': _eq,
   '<': _lt,
