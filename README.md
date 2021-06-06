@@ -1,6 +1,6 @@
-# Pounce, a concatenative programming language v0
+# Pounce (discontinued), a concatenative programming language v0
 
-### New work on the Pounce language has moved to @pounce-lang
+### See @pounce-lang for new development of the Pounce programming language
 [pounce-lang repo](https://github.com/pounce-lang) has a core language npm package and a few other supporting, learning, documenting and exhibiting projects. 
 
 ## This repo is now an archive of the initial Version 0
